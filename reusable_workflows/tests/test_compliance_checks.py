@@ -315,7 +315,4 @@ def test_repo_permissions_team_name_not_found(get_team_name_mock):
 
     repo_permissions_check.check(helper)
     assert repo_permissions_check.succeeds is False
-    assert (
-        repo_permissions_check.message
-        == "Raised error: Only one team can be listed for repo-level codeowners."
-    )
+    assert repo_permissions_check.message == "Raised error: Only one team can be listed for repo-level codeowners."  # fmt: skip

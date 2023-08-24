@@ -81,7 +81,7 @@ def test_cla_is_incorrectly_signed(capfd):
     out, err = capfd.readouterr()
 
     assert response is False
-    assert out == "Comment created by username does not match CLA agreement.\nCLA is pending for username\n"  # noqa: E501
+    assert out == "Comment created by username does not match CLA agreement.\nCLA is pending for username\n"  # fmt: skip
 
 
 def test_cla_is_not_signed(capfd):
@@ -180,7 +180,7 @@ def test_handle_cla_signed_with_no_label(capfd):
         cla = CLAHandler(mock.Mock())
         cla.handle_cla_signed(issue, "username")
         out, err = capfd.readouterr()
-        assert out == "No cla labels found - manually check the cla issue to see what state it is in. Exiting program.\n"  # noqa: E501
+        assert out == "No cla labels found - manually check the cla issue to see what state it is in. Exiting program.\n"  # fmt: skip
 
 
 @mock.patch.dict(
