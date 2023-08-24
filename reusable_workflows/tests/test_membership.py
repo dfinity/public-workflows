@@ -15,7 +15,7 @@ def test_is_member():
 
     is_member = is_member_of_org(gh, "org", "external users")
 
-    assert is_member == True
+    assert is_member is True
 
 
 def test_not_member():
@@ -26,7 +26,7 @@ def test_not_member():
 
     is_member = is_member_of_org(gh, "org", "external users")
 
-    assert is_member == False
+    assert is_member is False
 
 
 @mock.patch.dict(

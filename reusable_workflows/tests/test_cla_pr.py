@@ -38,7 +38,7 @@ def test_bot_comment_exists():
 
     bot_comment = cla.check_comment_already_exists(comments_iterator)
 
-    assert bot_comment == True
+    assert bot_comment is True
 
 
 def test_no_bot_comment():
@@ -50,7 +50,7 @@ def test_no_bot_comment():
 
     bot_comment = cla.check_comment_already_exists(issue_comments)
 
-    assert bot_comment == False
+    assert bot_comment is False
 
 
 def test_cla_is_signed(capfd):
@@ -65,7 +65,7 @@ def test_cla_is_signed(capfd):
     response = cla.check_if_cla_signed(issue, "username")
     out, err = capfd.readouterr()
 
-    assert response == True
+    assert response is True
     assert out == "CLA has been agreed to by username\n"
 
 
@@ -80,11 +80,8 @@ def test_cla_is_incorrectly_signed(capfd):
     response = cla.check_if_cla_signed(issue, "username")
     out, err = capfd.readouterr()
 
-    assert response == False
-    assert (
-        out
-        == "Comment created by username does not match CLA agreement.\nCLA is pending for username\n"
-    )
+    assert response is False
+    assert out == "Comment created by username does not match CLA agreement.\nCLA is pending for username\n"  # noqa: E501
 
 
 def test_cla_is_not_signed(capfd):
@@ -97,7 +94,7 @@ def test_cla_is_not_signed(capfd):
     response = cla.check_if_cla_signed(issue, "username")
     out, err = capfd.readouterr()
 
-    assert response == False
+    assert response is False
     assert out == "CLA is pending for username\n"
 
 
@@ -121,7 +118,7 @@ def test_get_cla_issue_fails(capfd):
     cla_repo.issues.return_value = [mock.Mock(), issue]
     cla.cla_repo = cla_repo
 
-    assert cla.get_cla_issue("username") == None
+    assert cla.get_cla_issue("username") is None
     out, err = capfd.readouterr()
     assert out == "No CLA issue for username\n"
 
@@ -183,10 +180,7 @@ def test_handle_cla_signed_with_no_label(capfd):
         cla = CLAHandler(mock.Mock())
         cla.handle_cla_signed(issue, "username")
         out, err = capfd.readouterr()
-        assert (
-            out
-            == "No cla labels found - manually check the cla issue to see what state it is in. Exiting program.\n"
-        )
+        assert out == "No cla labels found - manually check the cla issue to see what state it is in. Exiting program.\n"  # noqa: E501
 
 
 @mock.patch.dict(

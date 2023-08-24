@@ -133,9 +133,9 @@ def test_check_code_owners_succeeds():
 
     code_owners_check.check(helper)
 
-    assert code_owners_check.succeeds == True
+    assert code_owners_check.succeeds is True
     assert code_owners_check.name == "code_owners"
-    assert code_owners_check.message == None
+    assert code_owners_check.message is None
 
 
 def test_check_code_owners_fails_not_found():
@@ -145,7 +145,7 @@ def test_check_code_owners_fails_not_found():
 
     code_owners_check.check(helper)
 
-    assert code_owners_check.succeeds == False
+    assert code_owners_check.succeeds is False
     assert code_owners_check.message == "Codeowners file could not be found."
 
 
@@ -156,7 +156,7 @@ def test_check_code_owners_fails_other_error():
 
     code_owners_check.check(helper)
 
-    assert code_owners_check.succeeds == False
+    assert code_owners_check.succeeds is False
     assert code_owners_check.message == "Raised error: some other error"
 
 
@@ -173,7 +173,7 @@ def test_branch_protection_enabled():
 
     assert repo.branch.called_with("main")
     assert branch_protection_check.name == "branch_protection"
-    assert branch_protection_check.succeeds == True
+    assert branch_protection_check.succeeds is True
 
 
 def test_branch_protection_disabled():
@@ -188,7 +188,7 @@ def test_branch_protection_disabled():
     branch_protection_check.check(helper)
 
     assert repo.branch.called_with("main")
-    assert branch_protection_check.succeeds == False
+    assert branch_protection_check.succeeds is False
 
 
 def test_check_license_exists():
@@ -200,7 +200,7 @@ def test_check_license_exists():
 
     license_check.check(helper)
 
-    assert license_check.succeeds == True
+    assert license_check.succeeds is True
     assert license_check.name == "license"
 
 
@@ -213,7 +213,7 @@ def test_check_license_is_missing():
 
     license_check.check(helper)
 
-    assert license_check.succeeds == False
+    assert license_check.succeeds is False
     assert license_check.message == "No license file found"
 
 
@@ -226,7 +226,7 @@ def test_check_license_other_error():
 
     license_check.check(helper)
 
-    assert license_check.succeeds == False
+    assert license_check.succeeds is False
     assert license_check.message == "Raised error: some exception"
 
 
@@ -239,7 +239,7 @@ def test_check_readme_exists():
 
     readme_check.check(helper)
 
-    assert readme_check.succeeds == True
+    assert readme_check.succeeds is True
     assert readme_check.name == "readme"
 
 
@@ -252,7 +252,7 @@ def test_check_readme_is_missing():
 
     readme_check.check(helper)
 
-    assert readme_check.succeeds == False
+    assert readme_check.succeeds is False
 
 
 def test_check_readme_other_error():
@@ -264,7 +264,7 @@ def test_check_readme_other_error():
 
     readme_check.check(helper)
 
-    assert readme_check.succeeds == False
+    assert readme_check.succeeds is False
     assert readme_check.message == "Raised error: some exception"
 
 
@@ -291,7 +291,7 @@ def test_repo_permissions_succesds(get_team_name_mock):
     repo_permissions_check.check(helper)
 
     assert repo_permissions_check.name == "repo_permissions"
-    assert repo_permissions_check.succeeds == True
+    assert repo_permissions_check.succeeds is True
     org.team_by_name.assert_called_with("my_team")
     team.permissions_for.assert_called_with("my_org/my_repo")
     get_team_name_mock.assert_called_with("code_owners_path", "my_org")
@@ -314,7 +314,7 @@ def test_repo_permissions_team_name_not_found(get_team_name_mock):
     repo_permissions_check = RepoPermissions()
 
     repo_permissions_check.check(helper)
-    assert repo_permissions_check.succeeds == False
+    assert repo_permissions_check.succeeds is False
     assert (
         repo_permissions_check.message
         == "Raised error: Only one team can be listed for repo-level codeowners."
