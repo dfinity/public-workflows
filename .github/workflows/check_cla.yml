@@ -27,7 +27,7 @@ jobs:
   check-membership:
     name: Check Membership
     runs-on: ubuntu-latest
-    if: ${{ github.event.pull_request.user.login != 'dependabot[bot]' && github.event.pull_request.user.login != 'github-actions[bot]' }} 
+    if: ${{ github.event.pull_request.user.login != 'dependabot[bot]' && github.event.pull_request.user.login != 'github-actions[bot]' && github.event_name != 'pull_request' }} 
     outputs:
       is_member: ${{ steps.check-membership.outputs.is_member}}
     steps:
