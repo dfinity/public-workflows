@@ -29,13 +29,13 @@ jobs:
       run: pip install -r requirements.txt
 
     - name: Run tests
-      run: pytest .github/
+      run: pytest reusable_workfows/
     
     - name: Run linter
       run: |
-        mypy .github/custom_python_actions/
-        black .github/custom_python_actions/
-        flake8 .github/custom_python_actions/
+        mypy reusable_workfows/
+        black reusable_workfows/
+        flake8 reusable_workfows/
 
     - name: Run all tests
-      run: pytest --runslow .github/
+      run: pytest --runslow reusable_workfows/

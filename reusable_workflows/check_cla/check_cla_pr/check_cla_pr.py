@@ -4,7 +4,7 @@ from typing import Optional, TypeAlias
 
 import github3
 
-import messages
+from shared import messages
 
 GHIssue: TypeAlias = github3.issues.issue.Issue
 GHPullRequest: TypeAlias = github3.github.pulls.PullRequest
