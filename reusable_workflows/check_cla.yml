@@ -38,7 +38,7 @@ jobs:
 
       - name: Check Membership
         id:  check-membership
-        uses: ./.github/actions/check_membership/
+        uses: ./reusable_workflows/check_membership/
         with:
           github-token: ${{ secrets.CLA_READ_ORG_MEMBERSHIP }}
 
@@ -54,7 +54,7 @@ jobs:
           repository: 'dfinity/repositories-open-to-contributions'
       - name: Check if accepting external contributions
         id: accepts_external_contrib
-        uses: ./.github/actions/check_external_contrib/
+        uses: ./reusable_workflows/check_external_contrib/
 
       - name: Checkout
         uses: actions/checkout@v3
@@ -86,7 +86,7 @@ jobs:
 
       - name: Check CLA
         id:  check-cla
-        uses: ./.github/actions/check_cla_pr/
+        uses: ./reusable_workflows/check_cla_pr/
         if: ${{ steps.accepts_external_contrib.outputs.accepts_contrib != 'false' }}
         with:
           github-token: ${{ secrets.CLA_COMMENT_ON_PRS }}
