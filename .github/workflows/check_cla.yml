@@ -5,22 +5,11 @@ name: CLA Check
 on:
   # because the cla workflow will run on worflows generated from forks, they do not have access to secrets
   # pull_request_target only runs the workflow on the master branch but allows access to secrets
-
-  # the one downside of this approach is that making changes to the cla workflow itself is more tedious. For development purposes
-  # the cla workflow will need to be manually tested using workflow_dispatch in the actions tab.
   pull_request_target:
     branches:
       - 'master'
       - 'main'
-  # Workflows that are in required checks have to run in merge queue.
-  # Otherwise their status is not reported and merge fails:
-  # https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/configuring-pull-request-merges/managing-a-merge-queue#triggering-merge-group-checks-with-github-actions
-  merge_group:
-  # It is currently required to also have pull_request trigger for merge_group to work:
-  # https://github.com/orgs/community/discussions/51120#discussioncomment-6312578
-  # However, pull_request does not allow access to secrets for forked PRs, which is why we exclude the trigger in the check-membership workflow
-  pull_request:
-  # Allows you to run this workflow manually from the Actions tab
+  # we do not need this workflow to run on merge_group because its whole purpose is to check if the PR is mergeable
   workflow_dispatch:
 
 jobs:
