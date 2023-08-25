@@ -1,0 +1,40 @@
+# Workflow to run linting and tests on python code
+
+name: Python Workflow
+
+on:
+  pull_request:
+    paths:
+      - reusable_workflows/**
+  merge_group:
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+
+jobs:
+  python-test-and-lint:
+    name: Test and Lint python code
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Install Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+
+    - name: Install Dependencies
+      run: pip install -r requirements.txt
+
+    - name: Run tests
+      run: pytest reusable_workflows/
+    
+    - name: Run linter
+      run: |
+        mypy reusable_workflows/
+        black reusable_workflows/
+        flake8 reusable_workflows/
+
+    - name: Run all tests
+      run: pytest --runslow reusable_workflows/
