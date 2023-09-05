@@ -25,7 +25,7 @@ runs:
       shell: bash
     - name: Check Compliance
       id: check_compliance
-      run: python .github/custom_python_actions/check_compliance.py
+      run: python reusable_workflows/compliance/check_compliance/check_compliance.py
       shell: bash
       env:
         GH_ORG: ${{ inputs.org }}

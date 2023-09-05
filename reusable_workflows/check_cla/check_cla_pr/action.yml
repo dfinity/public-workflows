@@ -30,7 +30,7 @@ runs:
       shell: bash
     - name: Check CLA
       id: check_cla
-      run: python .github/custom_python_actions/check_cla_pr.py
+      run: python reusable_workflows/check_cla/check_cla_pr/check_cla_pr.py
       shell: bash
       env:
         GH_ORG: ${{ inputs.org }}
