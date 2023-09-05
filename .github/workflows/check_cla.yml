@@ -11,6 +11,7 @@ on:
       - 'main'
   # we do not need this workflow to run on merge_group because its whole purpose is to check if the PR is mergeable
   # to test changes to this workflow, it needs to be manually run on the specific branch
+  pull_request:
   workflow_dispatch:
 
 jobs:
@@ -28,7 +29,7 @@ jobs:
 
       - name: Check Membership
         id:  check-membership
-        uses: ./reusable_workflows/check_membership/
+        uses: ./reusable_workflows/check_membership/check_membership/
         with:
           github-token: ${{ secrets.CLA_READ_ORG_MEMBERSHIP }}
 
@@ -44,7 +45,7 @@ jobs:
           repository: 'dfinity/repositories-open-to-contributions'
       - name: Check if accepting external contributions
         id: accepts_external_contrib
-        uses: ./reusable_workflows/check_external_contrib/
+        uses: ./reusable_workflows/check_membership/check_external_contrib/
 
       - name: Checkout
         uses: actions/checkout@v3
@@ -76,7 +77,7 @@ jobs:
 
       - name: Check CLA
         id:  check-cla
-        uses: ./reusable_workflows/check_cla_pr/
+        uses: ./reusable_workflows/check_cla/check_cla_pr/
         if: ${{ steps.accepts_external_contrib.outputs.accepts_contrib != 'false' }}
         with:
           github-token: ${{ secrets.CLA_COMMENT_ON_PRS }}
