@@ -24,7 +24,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
         with:
-          repository: 'dfinity/internal-workflows'
+          repository: 'dfinity/public-workflows'
 
       - name: Check Membership
         id:  check-membership
@@ -41,7 +41,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
         with:
-          repository: 'dfinity/repositories-open-to-contributions'
+          repository: 'dfinity/public-workflows'
       - name: Check if accepting external contributions
         id: accepts_external_contrib
         uses: ./reusable_workflows/check_membership/check_external_contrib/
