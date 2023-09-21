@@ -27,9 +27,10 @@ runs:
     - name: Check External Contribution
       id: check-external-contrib
       run: |
-        echo "$HOME/reusable_workflows/" >> $GITHUB_PATH
+        echo "$PYTHONPATH"
         python reusable_workflows/check_membership/check_external_contrib/check_external_contrib.py
       shell: bash
       env:
         REPO: ${{ inputs.repo-name }}
         GH_TOKEN: ${{ inputs.github-token }}
+        PYTHONPATH: "$HOME/reusable_workflows/"
