@@ -28,6 +28,7 @@ runs:
       id: check-external-contrib
       run: |
         export PYTHONPATH="$HOME/reusable_workflows/"
+        ls
         echo "$PYTHONPATH"
         python reusable_workflows/check_membership/check_external_contrib/check_external_contrib.py
       shell: bash
