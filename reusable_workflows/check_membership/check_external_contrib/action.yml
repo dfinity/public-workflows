@@ -27,7 +27,6 @@ runs:
     - name: Check External Contribution
       id: check-external-contrib
       run: |
-   #     export PYTHONPATH="$PWD/reusable_workflows/"
         python reusable_workflows/check_membership/check_external_contrib/check_external_contrib.py
       shell: bash
       env:
