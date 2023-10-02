@@ -22,7 +22,7 @@ jobs:
     # Dont run this workflow if it was triggered by one of these bots
     # Don't run it during a merge queue, as it can't correctly identify the actor
     if:  |
-      (contains(fromJson('["dependabot[bot]", "github-actions[bot]"), github.actor) == false) &&
+      github.actor != "dependabot[bot]" && github.actor != "github-actions[bot]" &&
       github.event_name != 'merge_group'
     outputs:
       is_member: ${{ steps.check-membership.outputs.is_member}}
