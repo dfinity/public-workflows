@@ -20,7 +20,8 @@ jobs:
     name: Check Membership
     runs-on: ubuntu-latest
     # Dont run this workflow if it was triggered by one of these bots
-    if: contains(fromJson('["dependabot[bot]", "github-actions[bot]", "github-merge-queue[bot]"]'), github.actor) == false
+    # Don't run it during a merge queue, as it can't correctly identify the actor
+    if:  ${{ github.actor != 'dependabot[bot]' && github.actor != 'github-actions[bot]' && github.event_name != 'merge_group' }}
     outputs:
       is_member: ${{ steps.check-membership.outputs.is_member}}
     steps:
