@@ -1,14 +1,5 @@
 name: 'Check External Contribution'
 description: 'Check if the repository accepts external contributions.'
-inputs:
-  repo-name:
-    description: "The name of the repository"
-    default: ${{github.event.repository.name}}
-    required: false
-  github-token:
-    description: 'Github token of the repository (automatically created by Github)'
-    default: ${{ github.token }}
-    required: false
 outputs:
   accepts_contrib:
     value: ${{ steps.check-external-contrib.outputs.accepts_contrib }}
@@ -30,6 +21,3 @@ runs:
         export PYTHONPATH="$PWD/reusable_workflows/"
         python reusable_workflows/check_membership/check_external_contrib/check_external_contrib.py
       shell: bash
-      env:
-        REPO: ${{ inputs.repo-name }}
-        GH_TOKEN: ${{ inputs.github-token }}
