@@ -23,7 +23,9 @@ runs:
       shell: bash
     - name: Check CLA
       id: check_cla
-      run: python reusable_workflows/check_cla/check_cla_issue/check_cla_issue.py
+      run: |
+        export PYTHONPATH="$PWD/reusable_workflows/"
+        python reusable_workflows/check_cla/check_cla_issue/check_cla_issue.py
       shell: bash
       env:
         GH_TOKEN: ${{ inputs.github-token }}
