@@ -1,14 +1,5 @@
 name: 'Check Membership'
 description: 'Check if the user is a member of the org'
-inputs:
-  org:
-    description: "Organization of the repository"
-    default: ${{ github.repository_owner }}
-    required: false
-  user:
-    description: "The username"
-    default: ${{ github.event.pull_request.user.login }}
-    required: false
 outputs:
   is_member:
     value: ${{ steps.check-membership.outputs.is_member }}
@@ -29,6 +20,3 @@ runs:
       id: check-membership
       run: python reusable_workflows/check_membership/check_membership/check_membership.py
       shell: bash
-      env:
-        GH_ORG: ${{ inputs.org }}
-        USER: ${{ inputs.user }}
