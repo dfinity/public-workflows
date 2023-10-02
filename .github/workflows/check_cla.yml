@@ -19,8 +19,6 @@ jobs:
   check-membership:
     name: Check Membership
     runs-on: ubuntu-latest
-    env:
-      GITHUB_TOKEN: ${{ secrets.CLA_READ_ORG_MEMBERSHIP }}
     # Dont run this workflow if it was triggered by one of these bots
     # Don't run it during a merge queue, as it can't correctly identify the actor
     if:  ${{ github.actor != 'dependabot[bot]' && github.actor != 'github-actions[bot]' && github.event_name != 'merge_group' }}
@@ -35,6 +33,8 @@ jobs:
       - name: Check Membership
         id:  check-membership
         uses: ./reusable_workflows/check_membership/check_membership/
+        env:
+          GITHUB_TOKEN: ${{ secrets.CLA_READ_ORG_MEMBERSHIP }}
 
   check-external-contributions:
     name: Check External Contributions
@@ -64,7 +64,7 @@ jobs:
           — The DFINITY Foundation"
           gh pr close ${{ github.event.number }} --comment "$message"
         env:
-          GH_TOKEN: ${{ github.token }}
+          GITHUB_TOKEN: ${{ github.token }}
 
       - name: Add Label
         uses: actions-ecosystem/action-add-labels@v1
