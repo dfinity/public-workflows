@@ -5,9 +5,6 @@ inputs:
     description: "Organization of the repository"
     default: ${{ github.repository_owner }}
     required: false
-  github-token:
-    description: 'Personal Access Token generated with necessary permissions'
-    required: true
   user:
     description: "The username"
     default: ${{ github.event.pull_request.user.login }}
@@ -34,5 +31,4 @@ runs:
       shell: bash
       env:
         GH_ORG: ${{ inputs.org }}
-        GH_TOKEN: ${{ inputs.github-token }}
         USER: ${{ inputs.user }}
