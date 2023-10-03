@@ -1,22 +1,5 @@
 name: 'Check CLA'
 description: 'Check if the user is a member or if external, needs to sign CLA agreement. Runs on every PR in the organization.'
-inputs:
-  org:
-    description: "Organization of the repository"
-    default: ${{ github.repository_owner }}
-    required: false
-  github-token:
-    description: 'Personal Access Token generated with necessary permissions'
-    required: true
-  repo-name:
-    description: "The name of this repository"
-    default: ${{ github.event.repository.name }}
-    required: false
-  pr-id:
-    description: "The id of the current PR"
-    default: ${{ github.event.number }}
-    required: false
-
 
 runs:
   using: 'composite'
@@ -34,8 +17,3 @@ runs:
         export PYTHONPATH="$PWD/reusable_workflows/"
         python reusable_workflows/check_cla/check_cla_pr/check_cla_pr.py
       shell: bash
-      env:
-        GH_ORG: ${{ inputs.org }}
-        GH_TOKEN: ${{ inputs.github-token }}
-        REPO: ${{ inputs.repo-name }}
-        PR_ID: ${{ inputs.pr-id }}
