@@ -8,7 +8,7 @@ from shared.messages import (
     CLA_AGREEMENT_MESSAGE,
     USER_AGREEMENT_MESSAGE,
 )
-from check_cla.check_cla_pr.check_cla_pr import CLAHandler, main
+from check_cla.check_cla_pr import CLAHandler, main
 
 
 def test_init():
@@ -188,7 +188,7 @@ def test_handle_cla_signed_with_no_label(capfd):
     {"GH_ORG": "my_org", "GH_TOKEN": "secret", "REPO": "repo-name", "PR_ID": "1"},
 )
 @mock.patch("github3.login")
-@mock.patch("check_cla.check_cla_pr.check_cla_pr.CLAHandler")
+@mock.patch("check_cla.check_cla_pr.CLAHandler")
 def test_end_to_end_env_vars_set(cla_mock, gh_login_mock):
     gh = mock.Mock()
     gh_login_mock.return_value = gh
@@ -211,7 +211,7 @@ def test_end_to_end_env_vars_set(cla_mock, gh_login_mock):
     {"GH_ORG": "my_org", "GH_TOKEN": "secret", "REPO": "repo-name", "PR_ID": "1"},
 )
 @mock.patch("github3.login")
-@mock.patch("check_cla.check_cla_pr.check_cla_pr.CLAHandler")
+@mock.patch("check_cla.check_cla_pr.CLAHandler")
 def test_end_to_end_no_issue(cla_mock, gh_login_mock):
     gh = mock.Mock()
     gh_login_mock.return_value = gh
@@ -234,7 +234,7 @@ def test_end_to_end_no_issue(cla_mock, gh_login_mock):
     {"GH_ORG": "my_org", "GH_TOKEN": "secret", "REPO": "repo-name", "PR_ID": "1"},
 )
 @mock.patch("github3.login")
-@mock.patch("check_cla.check_cla_pr.check_cla_pr.CLAHandler")
+@mock.patch("check_cla.check_cla_pr.CLAHandler")
 def test_end_to_end_cla_not_signed(cla_mock, gh_login_mock, capfd):
     gh = mock.Mock()
     gh_login_mock.return_value = gh
@@ -262,7 +262,7 @@ def test_end_to_end_cla_not_signed(cla_mock, gh_login_mock, capfd):
     {"GH_ORG": "my_org", "GH_TOKEN": "secret", "REPO": "repo-name", "PR_ID": "1"},
 )
 @mock.patch("github3.login")
-@mock.patch("check_cla.check_cla_pr.check_cla_pr.CLAHandler")
+@mock.patch("check_cla.check_cla_pr.CLAHandler")
 def test_end_to_end_cla_signed(cla_mock, gh_login_mock, capfd):
     gh = mock.Mock()
     gh_login_mock.return_value = gh
