@@ -3,7 +3,7 @@ from unittest import mock
 
 import pytest
 
-from check_membership.check_external_contrib.check_external_contrib import (
+from check_membership.check_external_contrib import (
     get_repos_open_to_contributions,
     main,
 )  # noqa

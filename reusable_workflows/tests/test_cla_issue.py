@@ -3,7 +3,7 @@ from unittest import mock
 
 import pytest
 
-from check_cla.check_cla_issue.check_cla_issue import main
+from check_cla.check_cla_issue import main
 from shared.messages import USER_AGREEMENT_MESSAGE
 
 
@@ -12,7 +12,7 @@ from shared.messages import USER_AGREEMENT_MESSAGE
     {"GH_TOKEN": "secret", "ISSUE_ID": "1"},
 )
 @mock.patch("github3.login")
-@mock.patch("check_cla.check_cla_issue.check_cla_issue.CLAHandler")
+@mock.patch("check_cla.check_cla_issue.CLAHandler")
 def test_end_to_end_cla_signed(cla_mock, gh_login_mock):
     gh = mock.Mock()
     gh_login_mock.return_value = gh
@@ -42,7 +42,7 @@ def test_end_to_end_cla_signed(cla_mock, gh_login_mock):
     {"GH_TOKEN": "secret", "ISSUE_ID": "1"},
 )
 @mock.patch("github3.login")
-@mock.patch("check_cla.check_cla_issue.check_cla_issue.CLAHandler")
+@mock.patch("check_cla.check_cla_issue.CLAHandler")
 def test_end_to_end_cla_not_signed(cla_mock, gh_login_mock):
     gh = mock.Mock()
     gh_login_mock.return_value = gh
