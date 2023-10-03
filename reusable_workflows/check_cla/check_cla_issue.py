@@ -2,7 +2,7 @@ import os
 
 import github3
 
-from check_cla.check_cla_pr.check_cla_pr import CLAHandler
+from check_cla.check_cla_pr import CLAHandler
 
 
 def main() -> None:
