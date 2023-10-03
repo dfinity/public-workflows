@@ -1,10 +1,6 @@
 name: 'Check CLA'
 description: 'From within the CLA repo, check if the specific CLA issue has been correctly signed.'
 inputs:
-  github-token:
-    description: 'Github token of the repository (automatically created by Github)'
-    default: ${{ github.token }}
-    required: false
   issue-id:
     description: "The id of the current PR"
     default: ${{ github.event.number }}
@@ -28,5 +24,5 @@ runs:
         python reusable_workflows/check_cla/check_cla_issue/check_cla_issue.py
       shell: bash
       env:
-        GH_TOKEN: ${{ inputs.github-token }}
+        GH_TOKEN: ${{ github.token }}
         ISSUE_ID: ${{ inputs.issue-id }}

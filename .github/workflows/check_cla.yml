@@ -51,6 +51,9 @@ jobs:
       - name: Check if accepting external contributions
         id: accepts_external_contrib
         uses: ./reusable_workflows/check_membership/check_external_contrib/
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          REPO: ${{ github.event.repository.name }}
 
       - name: Checkout
         uses: actions/checkout@v3
@@ -67,7 +70,6 @@ jobs:
           gh pr close ${{ github.event.number }} --comment "$message"
         env:
           GITHUB_TOKEN: ${{ github.token }}
-          REPO: ${{ github.event.repository.name }}
 
       - name: Add Label
         uses: actions-ecosystem/action-add-labels@v1
@@ -85,5 +87,8 @@ jobs:
         id:  check-cla
         uses: ./reusable_workflows/check_cla/check_cla_pr/
         if: ${{ steps.accepts_external_contrib.outputs.accepts_contrib != 'false' }}
-        with:
-          github-token: ${{ secrets.CLA_COMMENT_ON_PRS }}
+        env:
+          GH_ORG: ${{ github.repository_owner }}
+          GH_TOKEN: ${{ secrets.CLA_COMMENT_ON_PRS }}
+          REPO: ${{ github.event.repository.name }}
+          PR_ID: ${{ github.event.number }}
