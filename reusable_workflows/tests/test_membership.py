@@ -4,7 +4,7 @@ from unittest import mock
 from github3.exceptions import NotFoundError
 import pytest
 
-from check_membership.check_membership.check_membership import is_member_of_org, main
+from check_membership.check_membership import is_member_of_org, main
 
 
 def test_is_member():
