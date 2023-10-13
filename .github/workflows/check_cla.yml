@@ -70,7 +70,7 @@ jobs:
         id: accepts_external_contrib
         run: |
           export PYTHONPATH="$PWD/reusable_workflows/"
-          python reusable_workflows/check_membership/check_external_contrib/check_external_contrib.py
+          python reusable_workflows/check_membership/check_external_contrib.py
         shell: bash
         env:
           GITHUB_TOKEN: ${{ github.token }}
@@ -108,7 +108,7 @@ jobs:
         id:  check-cla
         run: |
           export PYTHONPATH="$PWD/reusable_workflows/"
-          python reusable_workflows/check_cla/check_cla_pr/check_cla_pr.py
+          python reusable_workflows/check_cla/check_cla_pr.py
         shell: bash
         if: ${{ steps.accepts_external_contrib.outputs.accepts_contrib != 'false' }}
         env:
