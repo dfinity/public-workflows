@@ -43,7 +43,7 @@ jobs:
         run: python reusable_workflows/check_membership/check_membership.py
         shell: bash
         env:
-          GITHUB_TOKEN: ${{ secrets.CLA_READ_ORG_MEMBERSHIP }}
+          GH_TOKEN: ${{ secrets.CLA_READ_ORG_MEMBERSHIP }}
           GH_ORG: ${{ github.repository_owner }}
           USER: ${{ github.event.pull_request.user.login }}
 
@@ -73,7 +73,7 @@ jobs:
           python reusable_workflows/check_membership/check_external_contrib.py
         shell: bash
         env:
-          GITHUB_TOKEN: ${{ github.token }}
+          GH_TOKEN: ${{ github.token }}
           REPO: ${{ github.event.repository.name }}
 
       - name: Checkout
@@ -90,7 +90,7 @@ jobs:
           — The DFINITY Foundation"
           gh pr close ${{ github.event.number }} --comment "$message"
         env:
-          GITHUB_TOKEN: ${{ github.token }}
+          GH_TOKEN: ${{ github.token }}
 
       - name: Add Label
         uses: actions-ecosystem/action-add-labels@v1
