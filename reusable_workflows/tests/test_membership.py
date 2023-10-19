@@ -98,7 +98,7 @@ def test_github_token_not_passed_in(github_login_mock, capfd):
     main()
     out, err = capfd.readouterr()
 
-    assert out == "username is member of my_org and can contribute.\n"
+    assert out == "username is an external contributor.\n"
 
     # Todo: switch back once exception is added back
     # with pytest.raises(Exception) as exc:
