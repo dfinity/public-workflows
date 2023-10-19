@@ -18,9 +18,12 @@ def main() -> None:
     gh = github3.login(token=gh_token)
 
     if not gh:
-        raise Exception("github login failed - maybe GH_TOKEN was not correctly set")
+        # Todo: change to Exception once GH_TOKEN can be passed in from forked repositories
+        print("github login failed - maybe GH_TOKEN was not correctly set")
+        is_member = False
 
-    is_member = is_member_of_org(gh, org, user)
+    else:
+        is_member = is_member_of_org(gh, org, user)
 
     if is_member:
         print(f"{user} is member of {org} and can contribute.")
