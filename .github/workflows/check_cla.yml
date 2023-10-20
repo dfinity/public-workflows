@@ -19,6 +19,7 @@ jobs:
   check-fork:
     name: Check External
     runs-on: ubuntu-latest
+    permissions: write-all
     outputs:
       is_external: ${{ steps.check-fork.outputs.is_external }}
     steps:
