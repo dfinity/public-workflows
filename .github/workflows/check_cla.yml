@@ -20,7 +20,7 @@ jobs:
     name: Check External
     runs-on: ubuntu-latest
     outputs:
-      is_external: ${{ steps.check-fork.outputs.is_external}}
+      is_external: ${{ steps.check-fork.outputs.is_external }}
     steps:
       - name: Check Fork
         id: check-fork
@@ -33,6 +33,11 @@ jobs:
           fi
           echo $is_external
           echo "is_external=${is_external}" >> "$GITHUB_OUTPUT"
+      - name: DEBUG
+        id: debug
+        shell: bash
+        run: |
+          echo {{ needs.check-fork.outputs.is_external }}
 
   check-external-contributions:
     name: Check External Contributions
