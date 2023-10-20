@@ -37,7 +37,7 @@ jobs:
         id: debug
         shell: bash
         run: |
-          echo {{ needs.check-fork.outputs.is_external }}
+          echo ${{ needs.check-fork.outputs.is_external }}
 
   check-external-contributions:
     name: Check External Contributions
