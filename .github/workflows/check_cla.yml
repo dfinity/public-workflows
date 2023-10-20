@@ -90,6 +90,8 @@ jobs:
               repo: context.repo.repo,
               body: '👋 Thanks for reporting!'
             })
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Close Pull Request
         id: close_pr
