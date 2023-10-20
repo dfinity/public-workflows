@@ -32,7 +32,7 @@ jobs:
             is_external="false"
           fi
           echo $is_external
-          echo "is_external=${is_external}" >> "$GITHUB_OUTPUT"
+          echo "is_external=$is_external >> $GITHUB_OUTPUT"
       - name: DEBUG
         id: debug
         shell: bash
