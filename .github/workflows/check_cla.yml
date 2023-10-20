@@ -16,49 +16,29 @@ on:
   workflow_dispatch:
 
 jobs:
-  check-membership:
-    name: Check Membership
+  check-external:
+    name: Check External
     runs-on: ubuntu-latest
-    # Dont run this workflow if it was triggered by one of these bots
-    # Don't run it during a merge queue, as it can't correctly identify the actor
-    if:  ${{ github.event.pull_request.user.login != 'dependabot[bot]' && github.event.pull_request.user.login != 'github-actions[bot]' && github.event_name != 'merge_group' }}
     outputs:
-      is_member: ${{ steps.check-membership.outputs.is_member}}
+      is_external: ${{ steps.check-fork.outputs.is_external}}
     steps:
       - name: Check Fork
         id: check-fork
         shell: bash
         run: |
-          echo "${{ github.event.repository.name }}"
-          echo "${{ github.event.pull_request.head.repo.full_name }}"
+          if [ ${{ github.event.repository.name }} != github.event.pull_request.head.repo.full_name ]; then
+            is_external = "true"
+          else 
+            is_external = "false"
+          fi
+          echo 'is_external={$is_external}' >> $GITHUB_OUTPUT
           exit 1
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          repository: 'dfinity/public-workflows'
-
-      - name: Install Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.10'
-
-      - name: Install Dependencies
-        run: pip install -r requirements.txt
-        
-      - name: Check Membership
-        id:  check-membership
-        run: python reusable_workflows/check_membership/check_membership.py
-        shell: bash
-        env:
-          GH_TOKEN: ${{ secrets.CLA_READ_ORG_MEMBERSHIP }}
-          GH_ORG: ${{ github.repository_owner }}
-          USER: ${{ github.event.pull_request.user.login }}
 
   check-external-contributions:
     name: Check External Contributions
     runs-on: ubuntu-latest
-    needs: check-membership
-    if: ${{ needs.check-membership.outputs.is_member != 'true' && needs.check-membership.result == 'success' }}
+    needs: check-external
+    if: ${{ needs.check-external.outputs.is_external != 'true' && needs.check-external.result == 'success' }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
