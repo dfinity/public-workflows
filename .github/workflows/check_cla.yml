@@ -16,6 +16,18 @@ on:
   workflow_dispatch:
 
 jobs:
+  check-external:
+    name: Check Forked Repo
+    runs-on: ubuntu-latest
+    outputs:
+      is_external: ${{ steps.check-fork.outputs.is_external }}
+    steps:
+      - name: Check Fork
+        id: check-fork
+        shell: bash
+        run: 
+  
+
   check-membership:
     name: Check Membership
     runs-on: ubuntu-latest
@@ -40,8 +52,11 @@ jobs:
         
       - name: Check Membership
         id:  check-membership
-        run: python reusable_workflows/check_membership/check_membership.py
         shell: bash
+        run: |
+          echo "${{ github.event.repository.name }}"
+          echo "${{ github.event.pull_request.head.repo.full_name }}"
+          exit 1
         env:
           GH_TOKEN: ${{ secrets.CLA_READ_ORG_MEMBERSHIP }}
           GH_ORG: ${{ github.repository_owner }}
