@@ -25,9 +25,11 @@ jobs:
       - name: Check Fork
         id: check-fork
         shell: bash
-        run: 
+        run: |
+          echo "${{ github.event.repository.name }}"
+          echo "${{ github.event.pull_request.head.repo.full_name }}"
+          exit 1
   
-
   check-membership:
     name: Check Membership
     runs-on: ubuntu-latest
@@ -53,10 +55,6 @@ jobs:
       - name: Check Membership
         id:  check-membership
         shell: bash
-        run: |
-          echo "${{ github.event.repository.name }}"
-          echo "${{ github.event.pull_request.head.repo.full_name }}"
-          exit 1
         env:
           GH_TOKEN: ${{ secrets.CLA_READ_ORG_MEMBERSHIP }}
           GH_ORG: ${{ github.repository_owner }}
