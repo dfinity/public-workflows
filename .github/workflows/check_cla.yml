@@ -91,7 +91,7 @@ jobs:
           — The DFINITY Foundation"
           gh pr close ${{ github.event.number }} --comment "$message"
         env:
-          GH_TOKEN: ${{ github.token }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Add Label
         uses: actions-ecosystem/action-add-labels@v1
