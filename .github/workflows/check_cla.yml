@@ -88,12 +88,11 @@ jobs:
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body:
-              "This repository does not accept external contributions yet.
+              body: 'This repository does not accept external contributions yet.
 
               We are therefore closing this Pull Request, thank you for your understanding.
 
-              — The DFINITY Foundation"
+              — The DFINITY Foundation'
             })
 
       - name: Close Pull Request
