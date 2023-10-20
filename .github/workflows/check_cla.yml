@@ -26,12 +26,12 @@ jobs:
         id: check-fork
         shell: bash
         run: |
-          if [ ${{ github.event.repository.name }} != github.event.pull_request.head.repo.full_name ]; then
-            is_external = "true"
+          if [ ${{ github.event.repository.name }} != ${{ github.event.pull_request.head.repo.full_name }} ]; then
+            is_external="true"
           else 
-            is_external = "false"
+            is_external="false"
           fi
-          echo 'is_external={$is_external}' >> $GITHUB_OUTPUT
+          echo 'is_external=${is_external}' >> $GITHUB_OUTPUT
           exit 1
 
   check-external-contributions:
