@@ -47,6 +47,7 @@ jobs:
         
       - name: Check Membership
         id:  check-membership
+        run: python reusable_workflows/check_membership/check_membership.py
         shell: bash
         env:
           GH_TOKEN: ${{ secrets.CLA_READ_ORG_MEMBERSHIP }}
