@@ -81,17 +81,11 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Close Pull Request
-        id: close_pr
-        if: ${{ steps.accepts_external_contrib.outputs.accepts_contrib != 'true' }}
-        run: |
-          message="This repository does not accept external contributions yet.
-
-          We are therefore closing this Pull Request, thank you for your understanding.
-
-          — The DFINITY Foundation"
-          gh pr close ${{ github.event.number }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: peter-evans/close-fork-pulls@v2
+        with:
+          comment: |
+            Sorry. Pull requests are not accepted for this repository.
+            Auto-closing this pull request.
 
       - name: Add Label
         uses: actions-ecosystem/action-add-labels@v1
