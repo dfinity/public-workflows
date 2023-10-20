@@ -16,20 +16,6 @@ on:
   workflow_dispatch:
 
 jobs:
-  check-external:
-    name: Check Forked Repo
-    runs-on: ubuntu-latest
-    outputs:
-      is_external: ${{ steps.check-fork.outputs.is_external }}
-    steps:
-      - name: Check Fork
-        id: check-fork
-        shell: bash
-        run: |
-          echo "${{ github.event.repository.name }}"
-          echo "${{ github.event.pull_request.head.repo.full_name }}"
-          exit 1
-  
   check-membership:
     name: Check Membership
     runs-on: ubuntu-latest
@@ -39,6 +25,13 @@ jobs:
     outputs:
       is_member: ${{ steps.check-membership.outputs.is_member}}
     steps:
+      - name: Check Fork
+        id: check-fork
+        shell: bash
+        run: |
+          echo "${{ github.event.repository.name }}"
+          echo "${{ github.event.pull_request.head.repo.full_name }}"
+          exit 1
       - name: Checkout
         uses: actions/checkout@v3
         with:
