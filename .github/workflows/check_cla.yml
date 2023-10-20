@@ -16,7 +16,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  check-external:
+  check-fork:
     name: Check External
     runs-on: ubuntu-latest
     outputs:
@@ -32,7 +32,7 @@ jobs:
             is_external="false"
           fi
           echo $is_external
-          echo "is_external=$is_external >> $GITHUB_OUTPUT"
+          echo "'is_external=$is_external' >> $GITHUB_OUTPUT"
       - name: DEBUG
         id: debug
         shell: bash
@@ -42,9 +42,9 @@ jobs:
   check-external-contributions:
     name: Check External Contributions
     runs-on: ubuntu-latest
-    needs: check-external
+    needs: check-fork
     permissions: write-all
-    if: ${{ needs.check-external.outputs.is_external == 'true' && needs.check-external.result == 'success' }}
+    if: ${{ needs.check-fork.outputs.is_external == 'true' && needs.check-fork.result == 'success' }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
