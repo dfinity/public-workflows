@@ -31,8 +31,7 @@ jobs:
           else 
             is_external="false"
           fi
-          echo 'is_external=${is_external}' >> $GITHUB_OUTPUT
-          exit 1
+          echo 'is_external=$is_external' >> $GITHUB_OUTPUT
 
   check-external-contributions:
     name: Check External Contributions
