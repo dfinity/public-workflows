@@ -13,5 +13,5 @@ on:
 
 jobs:
   call-check-cla:
-    uses: dfinity/public-workflows/.github/workflows/check_cla.yml@create-reusable-workflow
+    uses: dfinity/public-workflows/.github/workflows/check_cla.yml@main
     secrets: inherit
