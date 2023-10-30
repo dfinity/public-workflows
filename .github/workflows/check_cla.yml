@@ -11,9 +11,9 @@ on:
       - 'main'
   pull_request:
     paths:
-      - .github/workflows/**
-      - reusable_workflows/**
-      - requirements.txt
+      - .github/workflows/check_cla.yml
+      - reusable_workflows/check_cla/**
+      - reusable_workflows/check_membership/**
   merge_group:
   # we do not need this workflow to run on merge_group because its whole purpose is to check if the PR is mergeable
   # to test changes to this workflow, it needs to be manually run on the specific branch
