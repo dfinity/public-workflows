@@ -92,7 +92,6 @@ jobs:
           We are therefore closing this Pull Request, thank you for your understanding.
 
           — The DFINITY Foundation"
-          gh pr close ${{ github.event.number }} --comment "$message"
 
       - name: Add Label
         uses: actions-ecosystem/action-add-labels@v1
