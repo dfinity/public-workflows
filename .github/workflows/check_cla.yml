@@ -11,6 +11,7 @@ on:
       - 'main'
   pull_request:
     paths:
+      - .github/workflows/**
       - reusable_workflows/**
       - requirements.txt
   merge_group:
