@@ -87,11 +87,11 @@ jobs:
         uses: superbrothers/close-pull-request@v3
         with:
           comment: |
-          "This repository does not accept external contributions yet.
-
-          We are therefore closing this Pull Request, thank you for your understanding.
-
-          — The DFINITY Foundation"
+            "This repository does not accept external contributions yet.
+  
+            We are therefore closing this Pull Request, thank you for your understanding.
+  
+            — The DFINITY Foundation"
 
       - name: Add Label
         uses: actions-ecosystem/action-add-labels@v1
