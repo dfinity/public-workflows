@@ -9,6 +9,10 @@ on:
     branches:
       - 'master'
       - 'main'
+  pull_request:
+    paths:
+      - reusable_workflows/**
+      - requirements.txt
   merge_group:
   # we do not need this workflow to run on merge_group because its whole purpose is to check if the PR is mergeable
   # to test changes to this workflow, it needs to be manually run on the specific branch
