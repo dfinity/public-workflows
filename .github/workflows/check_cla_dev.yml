@@ -9,4 +9,4 @@ on:
 
 jobs:
   call-check-cla:
-    uses: dfinity/public-workflows/.github/workflows/check_cla.yml@main
+    uses: dfinity/public-workflows/.github/workflows/check_cla.yml@create-reusable-workflow
