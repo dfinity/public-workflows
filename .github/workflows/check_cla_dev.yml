@@ -1,0 +1,15 @@
+# Runs only when changes are made to the workflow itself
+
+name: CLA Check Dev
+
+on:
+  pull_request:
+    paths:
+      - .github/workflows/check_cla.yml
+      - reusable_workflows/check_cla/**
+      - reusable_workflows/check_membership/**
+
+jobs:
+  call-check-cla:
+    uses: ./.github/workflows/check_cla.yml
+    secrets: inherit

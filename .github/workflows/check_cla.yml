@@ -1,18 +1,9 @@
 # Workflow to check if a user is eligible to contribute or needs to sign the CLA
 
-name: CLA Check
+name: CLA Check Reusable Workflow
 
 on:
-  # because the cla workflow will run on worflows generated from forks, they do not have access to secrets
-  # pull_request_target only runs the workflow on the master branch but allows access to secrets
-  pull_request_target:
-    branches:
-      - 'master'
-      - 'main'
-  merge_group:
-  # we do not need this workflow to run on merge_group because its whole purpose is to check if the PR is mergeable
-  # to test changes to this workflow, it needs to be manually run on the specific branch
-  workflow_dispatch:
+  workflow_call:
 
 jobs:
   check-membership:
