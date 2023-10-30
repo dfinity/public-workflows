@@ -85,10 +85,16 @@ jobs:
             — The DFINITY Foundation"
 
       - name: Add Label
-        uses: actions-ecosystem/action-add-labels@v1
+        uses: actions/github-script@v6
         if: ${{ steps.accepts_external_contrib.outputs.accepts_contrib != 'false' }}
         with:
-          labels: external-contributor
+          script: |
+            github.rest.issues.addLabels({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              labels: ["external-contributor"]
+            })
 
       - name: Checkout
         uses: actions/checkout@v3
