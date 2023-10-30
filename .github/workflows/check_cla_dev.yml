@@ -1,5 +1,7 @@
 # Runs only when changes are made to the workflow itself
 
+name: CLA Check Dev
+
 on:
   pull_request:
     paths:
@@ -10,3 +12,4 @@ on:
 jobs:
   call-check-cla:
     uses: dfinity/public-workflows/.github/workflows/check_cla.yml@create-reusable-workflow
+    secrets: inherit

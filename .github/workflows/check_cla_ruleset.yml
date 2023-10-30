@@ -1,5 +1,7 @@
 # triggered on all repositories via rulesets
 
+name: CLA Check Ruleset
+
 on:
   # because the cla workflow will run on worflows generated from forks, they do not have access to secrets
   # pull_request_target only runs the workflow on the master branch but allows access to secrets
@@ -12,3 +14,4 @@ on:
 jobs:
   call-check-cla:
     uses: dfinity/public-workflows/.github/workflows/check_cla.yml@create-reusable-workflow
+    secrets: inherit
