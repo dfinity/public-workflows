@@ -10,8 +10,7 @@ jobs:
     name: Check Membership
     runs-on: ubuntu-latest
     # Dont run this workflow if it was triggered by one of these bots
-    # Don't run it during a merge queue, as it can't correctly identify the actor
-    if:  ${{ github.event.pull_request.user.login != 'dependabot[bot]' && github.event.pull_request.user.login != 'github-actions[bot]' && github.event.pull_request.user.login != 'sa-github-api' && github.event_name != 'merge_group' }}
+    if:  ${{ github.event.pull_request.user.login != 'dependabot[bot]' && github.event.pull_request.user.login != 'github-actions[bot]' && github.event.pull_request.user.login != 'sa-github-api' }}
     outputs:
       is_member: ${{ steps.check-membership.outputs.is_member}}
     steps:
