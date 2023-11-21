@@ -73,19 +73,20 @@ class CLAHandler:
             ),
         )
         # replace with PENDING, once new bot has been released
-        issue.add_labels(GH_WORKFLOW_LABEL)
+        issue.add_labels(PENDING_LABEL)
         return issue
 
     def handle_cla_signed(self, issue: GHIssue, user: str) -> None:
         for label in issue.original_labels:
             if label.name == APPROVED_LABEL:
                 return
-            elif label.name == GH_WORKFLOW_LABEL:
-                agreement_message = messages.AGREED_MESSAGE.format(user)
-                issue.create_comment(agreement_message)
-                issue.remove_label(GH_WORKFLOW_LABEL)
-                issue.add_labels(APPROVED_LABEL)
-                return
+            for pending_label in [GH_WORKFLOW_LABEL, PENDING_LABEL]:
+                if label.name == pending_label:
+                    agreement_message = messages.AGREED_MESSAGE.format(user)
+                    issue.create_comment(agreement_message)
+                    issue.remove_label(pending_label)
+                    issue.add_labels(APPROVED_LABEL)
+                    return
         print(
             "No cla labels found - manually check the cla issue to see what state it is in. Exiting program."  # noqa
         )
