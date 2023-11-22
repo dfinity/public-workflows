@@ -72,7 +72,6 @@ class CLAHandler:
                 user, self.cla_link, user_agreement_message
             ),
         )
-        # replace with PENDING, once new bot has been released
         issue.add_labels(PENDING_LABEL)
         return issue
 
