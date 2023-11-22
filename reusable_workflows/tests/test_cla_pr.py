@@ -142,6 +142,7 @@ def test_create_cla_issue():
         "cla: @username",
         body=cla_agreement_message,
     )
+    issue.add_labels.assert_called_with("cla:pending")
 
 
 def test_handle_cla_signed_with_agreed_label():
@@ -171,6 +172,19 @@ def test_handle_cla_signed_with_pending_label():
     issue.remove_label.assert_called_once()
     issue.add_labels.assert_called_once()
 
+def test_handle_cla_signed_with_new_pending_label():
+    issue = mock.Mock()
+    label = mock.Mock()
+    label.name = "cla:pending"
+    issue.original_labels = [label]
+    agreement_message = AGREED_MESSAGE.format("username")
+
+    cla = CLAHandler(mock.Mock())
+    cla.handle_cla_signed(issue, "username")
+
+    issue.create_comment.assert_called_with(agreement_message)
+    issue.remove_label.assert_called_once()
+    issue.add_labels.assert_called_once()
 
 def test_handle_cla_signed_with_no_label(capfd):
     issue = mock.Mock()
