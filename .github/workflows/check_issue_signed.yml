@@ -4,32 +4,29 @@ name: Check Issue Signed
 
 on:
   issue_comment:
-  pull_request:
 
 jobs:
   check-signed:
     name: Check CLA signed
     runs-on: ubuntu-latest
-   # if: ${{ github.event.pull_request.head.repo.full_name }} == "cla"
+    if: ${{ github.event.pull_request.head.repo.full_name }} == "dfinity/cla"
     steps:
-      - name: debug
-        run: echo ${{ github.event.pull_request.head.repo.full_name }}
-      # - name: Checkout
-      #   uses: actions/checkout@v3
-      #   with:
-      #     repository: dfinity/public-workflows
-      # - name: Install Python
-      #   uses: actions/setup-python@v4
-      #   with:
-      #     python-version: '3.10'
-      # - name: Install Dependencies
-      #   run: pip install -q -r requirements.txt
-      #   shell: bash
-      # - name: Check CLA issue
-      #   run: |
-      #     export PYTHONPATH="$PWD/reusable_workflows/"
-      #     python reusable_workflows/check_cla/check_cla_issue.py
-      #   shell: bash
-      #   env:
-      #     GH_TOKEN: ${{ github.token }}
-      #     ISSUE_ID: ${{ github.event.issue.number }}
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          repository: dfinity/public-workflows
+      - name: Install Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+      - name: Install Dependencies
+        run: pip install -q -r requirements.txt
+        shell: bash
+      - name: Check CLA issue
+        run: |
+          export PYTHONPATH="$PWD/reusable_workflows/"
+          python reusable_workflows/check_cla/check_cla_issue.py
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          ISSUE_ID: ${{ github.event.issue.number }}
