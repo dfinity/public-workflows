@@ -61,7 +61,7 @@ class CLAHandler:
                 DFINITY_BOT_NAME_OLD,
             ]:
                 return issue
-        print(f"No CLA issue for {user}")
+        print(f"No1 CLA issue for {user}")
         return None  # to make linter happy
 
     def create_cla_issue(self, user: str) -> GHIssue:
