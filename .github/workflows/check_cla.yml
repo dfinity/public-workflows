@@ -15,7 +15,7 @@ jobs:
       is_member: ${{ steps.check-membership.outputs.is_member}}
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           repository: 'dfinity/public-workflows'
 
@@ -43,7 +43,7 @@ jobs:
     if: ${{ needs.check-membership.outputs.is_member != 'true' && needs.check-membership.result == 'success' }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           repository: 'dfinity/public-workflows'
 
@@ -66,7 +66,7 @@ jobs:
           REPO: ${{ github.event.repository.name }}
 
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           ref: ${{ github.event.pull_request.head.ref }}
           repository: ${{ github.event.pull_request.head.repo.full_name }}
@@ -96,7 +96,7 @@ jobs:
             })
 
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         if: ${{ steps.accepts_external_contrib.outputs.accepts_contrib != 'false' }}
         with:
           repository: 'dfinity/public-workflows'
