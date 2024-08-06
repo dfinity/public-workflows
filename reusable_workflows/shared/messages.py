@@ -3,7 +3,7 @@ CLOSING_MESSAGE = """Dear @{},
 
 Thank you for contributing! Unfortunately this repository does not accept external contributions yet.
 
-We are working on enabling this by aligning our internal processes and our CI setup to handle external contributions. However this will take some time to set up so in the mean time we unfortunately have to close this Pull Request.
+We are working on enabling this by aligning our internal processes and our CI setup to handle external contributions. However this will take some time to set up so in the meantime we unfortunately have to close this Pull Request.
 
 We hope you understand and will come back once we accept external PRs.
 
