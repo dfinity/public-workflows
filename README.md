@@ -13,4 +13,4 @@ If a new change needs to be deployed a new tag needs to be created. Currently th
 git tag <tagname>
 git push origin --tags
 ```
-This will allow you to test out the workflow first if you'd like (we have a ruleset called CLA check (dev)), otherwise update the main ruleset CLA-check with the correct tag.
+Then update the tag in the workflow `.github/workflows/check_cla_ruleset.yml`.
