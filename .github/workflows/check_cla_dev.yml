@@ -6,6 +6,7 @@ on:
   pull_request:
     paths:
       - .github/workflows/check_cla.yml
+      - .github/workflows/check_cla_dev.yml
       - reusable_workflows/check_cla/**
       - reusable_workflows/check_membership/**
 
