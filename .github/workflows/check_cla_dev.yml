@@ -11,5 +11,5 @@ on:
 
 jobs:
   call-check-cla:
-    uses: ./.github/workflows/check_cla.yml
+    uses: ./.github/workflows/check_cla.yml@manual-05-09-2024
     secrets: inherit
