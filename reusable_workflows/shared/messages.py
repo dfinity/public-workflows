@@ -1,13 +1,4 @@
 # Messages
-CLOSING_MESSAGE = """Dear @{},
-
-This repository does not accept external contributions yet.
-
-We are therefore closing this Pull Request, thank you for your understanding.
-
-
-— The DFINITY Foundation"""
-
 USER_AGREEMENT_MESSAGE = "I, {}, hereby agree to the DFINITY Foundation's CLA."
 
 CLA_MESSAGE = """Dear @{},
