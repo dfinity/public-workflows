@@ -14,6 +14,12 @@ jobs:
     outputs:
       is_member: ${{ steps.check-membership.outputs.is_member}}
     steps:
+      - uses: actions/create-github-app-token@v1
+        id: app-token
+        with:
+          app-id: ${{ vars.CLA_BOT_APP_ID }}
+          private-key: ${{ secrets.CLA_BOT_PRIVATE_KEY }}
+    
       - name: Checkout
         uses: actions/checkout@v4
         with:
@@ -32,7 +38,7 @@ jobs:
         run: python reusable_workflows/check_membership/check_membership.py
         shell: bash
         env:
-          GH_TOKEN: ${{ secrets.CLA_READ_ORG_MEMBERSHIP }}
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
           GH_ORG: ${{ github.repository_owner }}
           USER: ${{ github.event.pull_request.user.login }}
 
@@ -112,6 +118,6 @@ jobs:
         if: ${{ steps.accepts_external_contrib.outputs.accepts_contrib != 'false' }}
         env:
           GH_ORG: ${{ github.repository_owner }}
-          GH_TOKEN: ${{ secrets.CLA_COMMENT_ON_PRS }}
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
           REPO: ${{ github.event.repository.name }}
           PR_ID: ${{ github.event.number }}
