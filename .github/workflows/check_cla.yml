@@ -14,7 +14,8 @@ jobs:
     outputs:
       is_member: ${{ steps.check-membership.outputs.is_member}}
     steps:
-      - uses: actions/create-github-app-token@v1
+      - name: Create GitHub App Token
+        uses: actions/create-github-app-token@v1
         id: app-token
         with:
           app-id: ${{ vars.CLA_BOT_APP_ID }}
@@ -48,6 +49,13 @@ jobs:
     needs: check-membership
     if: ${{ needs.check-membership.outputs.is_member != 'true' && needs.check-membership.result == 'success' }}
     steps:
+      - name: Create GitHub App Token
+        uses: actions/create-github-app-token@v1
+        id: app-token
+        with:
+          app-id: ${{ vars.CLA_BOT_APP_ID }}
+          private-key: ${{ secrets.CLA_BOT_PRIVATE_KEY }}
+    
       - name: Checkout
         uses: actions/checkout@v4
         with:
