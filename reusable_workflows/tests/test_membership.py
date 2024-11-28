@@ -4,7 +4,7 @@ from unittest import mock
 from github3.exceptions import NotFoundError
 import pytest
 
-from check_membership.check_membership import is_member_of_org, main
+from check_membership.check_membership import is_approved_bot, is_member_of_org, main
 
 
 def test_is_member():
@@ -29,6 +29,15 @@ def test_not_member():
     assert is_member is False
 
 
+def test_is_approved_bot():
+    assert is_approved_bot("dependabot[bot]") is True
+    assert is_approved_bot("github-actions[bot]") is True
+    assert is_approved_bot("sa-github-api") is True
+    assert is_approved_bot("pr-automation-bot-public[bot]") is True
+    assert is_approved_bot("pr-automation-bot-private[bot]") is True
+    assert is_approved_bot("random_user") is False
+
+
 @mock.patch.dict(
     os.environ, {"GH_ORG": "my_org", "GH_TOKEN": "secret", "USER": "username"}
 )
@@ -48,7 +57,27 @@ def test_end_to_end_is_member(os_system, github_login_mock, capfd):
     gh.organization.assert_called_with("my_org")
     gh_org.is_member.assert_called_with("username")
     assert out == "username is member of my_org and can contribute.\n"
-    os_system.assert_called_once_with("echo 'is_member=True' >> $GITHUB_OUTPUT")
+    os_system.assert_called_once_with("echo 'org_member=True' >> $GITHUB_OUTPUT")
+
+
+@mock.patch.dict(
+    os.environ, {"GH_ORG": "my_org", "GH_TOKEN": "secret", "USER": "dependabot[bot]"}
+)
+@mock.patch("github3.login")
+@mock.patch("os.system")
+def test_end_to_end_is_approved_bot(os_system, github_login_mock, capfd):
+    gh = mock.Mock()
+    gh_org = mock.Mock()
+    gh.organization.return_value = gh_org
+    gh_org.is_member.return_value = True
+    github_login_mock.return_value = gh
+
+    main()
+    out, err = capfd.readouterr()
+
+    github_login_mock.assert_called_with(token="secret")
+    assert out == "dependabot[bot] is an approved bot and can contribute..\n"
+    os_system.assert_called_once_with("echo 'org_member=True' >> $GITHUB_OUTPUT")
 
 
 @mock.patch.dict(
@@ -70,7 +99,7 @@ def test_end_to_end_is_not_member(os_system, github_login_mock, capfd):
     gh.organization.assert_called_with("my_org")
     gh_org.is_member.assert_called_with("username")
     assert out == "username is an external contributor.\n"
-    os_system.assert_called_once_with("echo 'is_member=False' >> $GITHUB_OUTPUT")
+    os_system.assert_called_once_with("echo 'org_member=False' >> $GITHUB_OUTPUT")
 
 
 @mock.patch.dict(
@@ -90,9 +119,7 @@ def test_end_to_end_api_fails(os_system, github_login_mock):
         os_system.assert_not_called()
 
 
-@mock.patch.dict(
-    os.environ, {"GH_ORG": "my_org", "GH_TOKEN": "", "USER": "username"}
-)
+@mock.patch.dict(os.environ, {"GH_ORG": "my_org", "GH_TOKEN": "", "USER": "username"})
 @mock.patch("github3.login")
 def test_github_token_not_passed_in(github_login_mock):
     github_login_mock.return_value = None
