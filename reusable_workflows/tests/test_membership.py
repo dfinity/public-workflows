@@ -69,7 +69,7 @@ def test_end_to_end_is_approved_bot(os_system, github_login_mock, capfd):
     gh = mock.Mock()
     gh_org = mock.Mock()
     gh.organization.return_value = gh_org
-    gh_org.is_member.return_value = True
+    gh_org.is_member.return_value = False
     github_login_mock.return_value = gh
 
     main()
