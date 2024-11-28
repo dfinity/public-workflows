@@ -171,7 +171,7 @@ def test_branch_protection_enabled():
 
     branch_protection_check.check(helper)
 
-    assert repo.branch.called_with("main")
+    assert repo.branch.assert_called_with("main")
     assert branch_protection_check.name == "branch_protection"
     assert branch_protection_check.succeeds is True
 
@@ -187,7 +187,7 @@ def test_branch_protection_disabled():
 
     branch_protection_check.check(helper)
 
-    assert repo.branch.called_with("main")
+    assert repo.branch.assert_called_with("main")
     assert branch_protection_check.succeeds is False
 
 
