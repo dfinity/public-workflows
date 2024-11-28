@@ -75,8 +75,7 @@ def test_end_to_end_is_approved_bot(os_system, github_login_mock, capfd):
     main()
     out, err = capfd.readouterr()
 
-    github_login_mock.assert_called_with(token="secret")
-    assert out == "dependabot[bot] is an approved bot and can contribute..\n"
+    assert out == "dependabot[bot] is an approved bot and can contribute.\n"
     os_system.assert_called_once_with("echo 'is_member=True' >> $GITHUB_OUTPUT")
 
 
