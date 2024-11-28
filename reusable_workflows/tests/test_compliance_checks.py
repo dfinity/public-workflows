@@ -166,12 +166,13 @@ def test_branch_protection_enabled():
     repo.default_branch = "main"
     branch = mock.Mock()
     branch.protected = True
+    helper.repo = repo
     helper.repo.branch.return_value = branch
     branch_protection_check = BranchProtection()
 
     branch_protection_check.check(helper)
 
-    assert repo.branch.called_with("main")
+    helper.repo.branch.assert_called_with("main")
     assert branch_protection_check.name == "branch_protection"
     assert branch_protection_check.succeeds is True
 
@@ -182,12 +183,13 @@ def test_branch_protection_disabled():
     repo.default_branch = "main"
     branch = mock.Mock()
     branch.protected = False
+    helper.repo = repo
     helper.repo.branch.return_value = branch
     branch_protection_check = BranchProtection()
 
     branch_protection_check.check(helper)
 
-    assert repo.branch.called_with("main")
+    helper.repo.branch.assert_called_with("main")
     assert branch_protection_check.succeeds is False
 
 

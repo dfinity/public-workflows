@@ -5,3 +5,15 @@ This repository contains a set of internal workflows used at DFINITY. So far thi
 1. [CLA Workflow](CLA-workflow.md)
 
 This repository is not open to external contributions.
+
+## updating pip requirements
+Start a venv:
+```
+python -m venv .venv
+source /path/to/venv/bin/activate
+```
+Install pip-tools and run pip-compile:
+```
+pip install pip-tools
+pip-compile requirements.in
+```

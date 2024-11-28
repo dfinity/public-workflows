@@ -14,7 +14,7 @@ def test_download_file_succeeds_first_try():
     data = download_gh_file(repo, "file_path")
 
     assert data == "file_contents"
-    assert repo.file_contents.called_with("file_path")
+    repo.file_contents.assert_called_with("file_path")
     assert repo.file_contents.call_count == 1
 
 
@@ -30,7 +30,7 @@ def test_download_file_succeeds_third_try():
     data = download_gh_file(repo, "file_path")
 
     assert data == "file_contents"
-    assert repo.file_contents.called_with("file_path")
+    repo.file_contents.assert_called_with("file_path")
     assert repo.file_contents.call_count == 3
 
 
