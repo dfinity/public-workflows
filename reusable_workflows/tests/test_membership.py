@@ -57,7 +57,7 @@ def test_end_to_end_is_member(os_system, github_login_mock, capfd):
     gh.organization.assert_called_with("my_org")
     gh_org.is_member.assert_called_with("username")
     assert out == "username is member of my_org and can contribute.\n"
-    os_system.assert_called_once_with("echo 'org_member=True' >> $GITHUB_OUTPUT")
+    os_system.assert_called_once_with("echo 'is_member=True' >> $GITHUB_OUTPUT")
 
 
 @mock.patch.dict(
@@ -77,7 +77,7 @@ def test_end_to_end_is_approved_bot(os_system, github_login_mock, capfd):
 
     github_login_mock.assert_called_with(token="secret")
     assert out == "dependabot[bot] is an approved bot and can contribute..\n"
-    os_system.assert_called_once_with("echo 'org_member=True' >> $GITHUB_OUTPUT")
+    os_system.assert_called_once_with("echo 'is_member=True' >> $GITHUB_OUTPUT")
 
 
 @mock.patch.dict(
@@ -99,7 +99,7 @@ def test_end_to_end_is_not_member(os_system, github_login_mock, capfd):
     gh.organization.assert_called_with("my_org")
     gh_org.is_member.assert_called_with("username")
     assert out == "username is an external contributor.\n"
-    os_system.assert_called_once_with("echo 'org_member=False' >> $GITHUB_OUTPUT")
+    os_system.assert_called_once_with("echo 'is_member=False' >> $GITHUB_OUTPUT")
 
 
 @mock.patch.dict(
