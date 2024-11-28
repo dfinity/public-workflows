@@ -37,11 +37,11 @@ def main() -> None:
         raise Exception("github login failed - maybe GH_TOKEN was not correctly set")
 
     is_member = is_member_of_org(gh, org, user)
-    is_approved_bot = is_approved_bot(user)
+    is_bot = is_approved_bot(user)
 
-    org_member = is_member or is_approved_bot
+    org_member = is_member or is_bot
 
-    if is_approved_bot:
+    if is_bot:
         print(f"{user} is an approved bot and can contribute.")
     if is_member:
         print(f"{user} is member of {org} and can contribute.")
