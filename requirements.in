@@ -3,3 +3,4 @@ mypy
 black
 flake8
 pytest
+typing-extensions>=4.6.0

@@ -62,8 +62,10 @@ requests==2.32.0
     # via github3-py
 six==1.16.0
     # via python-dateutil
-typing-extensions==4.5.0
-    # via mypy
+typing-extensions==4.12.2
+    # via
+    #   -r requirements.in
+    #   mypy
 uritemplate==4.1.1
     # via github3-py
 urllib3==1.26.19
