@@ -172,6 +172,7 @@ def test_handle_cla_signed_with_pending_label():
     issue.remove_label.assert_called_once()
     issue.add_labels.assert_called_once()
 
+
 def test_handle_cla_signed_with_new_pending_label():
     issue = mock.Mock()
     label = mock.Mock()
@@ -185,6 +186,7 @@ def test_handle_cla_signed_with_new_pending_label():
     issue.create_comment.assert_called_with(agreement_message)
     issue.remove_label.assert_called_once()
     issue.add_labels.assert_called_once()
+
 
 def test_handle_cla_signed_with_no_label(capfd):
     issue = mock.Mock()
