@@ -132,10 +132,10 @@ def test_create_cla_issue():
     cla.cla_link = "cla_repo_link"
     user_agreement_message = USER_AGREEMENT_MESSAGE.format("username")
     cla_agreement_message = CLA_AGREEMENT_MESSAGE.format(
-        "username", cla.cla_link, user_agreement_message
+        "username", cla.cla_link, user_agreement_message, "pr_url"
     )
 
-    new_issue = cla.create_cla_issue("username")
+    new_issue = cla.create_cla_issue("username", "pr_url")
 
     assert new_issue == issue
     cla_repo.create_issue.assert_called_with(
