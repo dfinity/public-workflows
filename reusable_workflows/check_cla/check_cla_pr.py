@@ -25,7 +25,7 @@ class CLAHandler:
         self, comments: github3.structs.GitHubIterator
     ) -> bool:
         for comment in comments:
-            if comment.user.login == DFINITY_BOT_NAME:
+            if comment.user.login in CLA_BOT_NAMES:
                 return True
         return False
 
