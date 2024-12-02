@@ -12,8 +12,8 @@ PENDING_LABEL = "cla:pending"
 APPROVED_LABEL = "cla:agreed"
 GH_WORKFLOW_LABEL = "cla:gh-wf-pending"
 
-DFINITY_BOT_NAME = "sa-github-api"
-DFINITY_BOT_NAME_OLD = "dfinity-droid-prod[bot]"
+# keep all old bot names for backwards compatibility
+CLA_BOT_NAMES = ["cla-idx-bot[bot]", "sa-github-api", "dfinity-droid-prod[bot]"]
 
 
 class CLAHandler:
@@ -25,7 +25,7 @@ class CLAHandler:
         self, comments: github3.structs.GitHubIterator
     ) -> bool:
         for comment in comments:
-            if comment.user.login == DFINITY_BOT_NAME:
+            if comment.user.login in CLA_BOT_NAMES:
                 return True
         return False
 
@@ -56,10 +56,7 @@ class CLAHandler:
 
     def get_cla_issue(self, user: str) -> Optional[GHIssue]:
         for issue in self.cla_repo.issues():
-            if issue.title == f"cla: @{user}" and issue.user.login in [
-                DFINITY_BOT_NAME,
-                DFINITY_BOT_NAME_OLD,
-            ]:
+            if issue.title == f"cla: @{user}" and issue.user.login in CLA_BOT_NAMES:
                 return issue
         print(f"No CLA issue for {user}")
         return None  # to make linter happy
