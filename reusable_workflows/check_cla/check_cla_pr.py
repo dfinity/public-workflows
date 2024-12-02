@@ -61,12 +61,12 @@ class CLAHandler:
         print(f"No CLA issue for {user}")
         return None  # to make linter happy
 
-    def create_cla_issue(self, user: str) -> GHIssue:
+    def create_cla_issue(self, user: str, pr_url: str) -> GHIssue:
         user_agreement_message = messages.USER_AGREEMENT_MESSAGE.format(user)
         issue = self.cla_repo.create_issue(
             f"cla: @{user}",
             body=messages.CLA_AGREEMENT_MESSAGE.format(
-                user, self.cla_link, user_agreement_message
+                user, self.cla_link, user_agreement_message, pr_url
             ),
         )
         issue.add_labels(PENDING_LABEL)
@@ -106,7 +106,7 @@ def main() -> None:
 
     issue = cla.get_cla_issue(user)
     if not issue:
-        issue = cla.create_cla_issue(user)
+        issue = cla.create_cla_issue(user, pr.html_url)
 
     cla_signed = cla.check_if_cla_signed(issue, user)
     if cla_signed:

@@ -16,7 +16,9 @@ In order to potentially merge your code in this open-source repository and there
 If you decide to agree with it, please reply with the following message:
 > {}
 
-— The DFINITY Foundation"""
+— The DFINITY Foundation
+
+[PR link]({})"""
 
 AGREED_MESSAGE = """Dear @{},
 
