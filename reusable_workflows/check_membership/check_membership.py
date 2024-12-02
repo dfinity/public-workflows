@@ -6,9 +6,10 @@ import github3
 APPROVED_BOT_LIST = [
     "dependabot[bot]",
     "github-actions[bot]",
-    "sa-github-api",
+    "mergify[bot]",
     "pr-automation-bot-public[bot]",
     "pr-automation-bot-private[bot]",
+    "sa-github-api",
 ]
 
 
