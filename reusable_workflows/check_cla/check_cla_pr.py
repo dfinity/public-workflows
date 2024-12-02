@@ -13,7 +13,7 @@ APPROVED_LABEL = "cla:agreed"
 GH_WORKFLOW_LABEL = "cla:gh-wf-pending"
 
 # keep all old bot names for backwards compatibility
-CLA_BOT_NAMES = ["cla-idx-bot", "sa-github-api", "dfinity-droid-prod[bot]"]
+CLA_BOT_NAMES = ["cla-idx-bot[bot]", "sa-github-api", "dfinity-droid-prod[bot]"]
 
 
 class CLAHandler:
