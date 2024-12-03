@@ -27,14 +27,15 @@ def is_member_of_org(gh: github3.login, org: str, user: str) -> bool:
     return gh.organization(org).is_member(user)
 
 
-def is_approved_member():
-    if is_member_of_org():
+def is_approved_member(gh: github3.login, org: str, user: str):
+    if is_member_of_org(gh, org, user):
         print(f"{user} is member of {org} and can contribute.")
         return True
-    if is_approved_bot():
+    if is_approved_bot(user):
         print(f"{user} is an approved bot and can contribute.")
         return True
-    return False
+    else:
+        return False
 
 
 def main() -> None:
