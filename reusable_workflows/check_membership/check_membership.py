@@ -31,10 +31,11 @@ def is_approved_member(gh: github3.login, org: str, user: str):
     if is_member_of_org(gh, org, user):
         print(f"{user} is member of {org} and can contribute.")
         return True
-    if is_approved_bot(user):
+    elif is_approved_bot(user):
         print(f"{user} is an approved bot and can contribute.")
         return True
     else:
+        print(f"{user} is an external contributor.")
         return False
 
 
