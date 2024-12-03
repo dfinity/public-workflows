@@ -27,6 +27,16 @@ def is_member_of_org(gh: github3.login, org: str, user: str) -> bool:
     return gh.organization(org).is_member(user)
 
 
+def is_approved_member():
+    if is_member_of_org():
+        print(f"{user} is member of {org} and can contribute.")
+        return True
+    if is_approved_bot():
+        print(f"{user} is an approved bot and can contribute.")
+        return True
+    return False
+
+
 def main() -> None:
     org = os.environ["GH_ORG"]
     gh_token = os.environ["GH_TOKEN"]
@@ -37,17 +47,7 @@ def main() -> None:
     if not gh:
         raise Exception("github login failed - maybe GH_TOKEN was not correctly set")
 
-    is_member = is_member_of_org(gh, org, user)
-    is_bot = is_approved_bot(user)
-
-    org_member = is_member or is_bot
-
-    if is_bot:
-        print(f"{user} is an approved bot and can contribute.")
-    if is_member:
-        print(f"{user} is member of {org} and can contribute.")
-    elif not org_member:
-        print(f"{user} is an external contributor.")
+    org_member = is_approved_member(gh, org, user)
 
     os.system(f"""echo 'is_member={org_member}' >> $GITHUB_OUTPUT""")
 
