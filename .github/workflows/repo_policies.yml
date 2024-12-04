@@ -15,6 +15,9 @@ jobs:
         with:
           repository: dfinity/public-workflows
 
+      - name: Python Setup
+        uses: ./.github/workflows/python-setup
+
       - name: Bot Checks
         id:  bot-checks
         run: python reusable_workflows/repo_policies/bot_checks/check_bot_approved_files.py
