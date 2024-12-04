@@ -86,7 +86,7 @@ def main() -> None:
 
     else:
         print(
-            f"{user} is not an approved bot. Letting CLA check handle contribution decision."
+            f"{user} is not a bot. Letting CLA check handle contribution decision."
         )
         block_pr = False
 
