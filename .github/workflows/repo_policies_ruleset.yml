@@ -1,12 +1,12 @@
 # triggered on all repositories via rulesets
 
-name: CLA Check Ruleset
+name: Repo Policies Ruleset
 
 on:
   pull_request:
   merge_group:
 
 jobs:
-  call-check-cla:
+  call-repo-policies:
     uses: dfinity/public-workflows/.github/workflows/repo_policies.yml@create-workflow-for-repo-policies
     secrets: inherit
