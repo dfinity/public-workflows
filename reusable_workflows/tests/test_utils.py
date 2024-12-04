@@ -1,8 +1,9 @@
+import os
 from unittest import mock
 
 import pytest
 
-from shared.utils import download_gh_file
+from shared.utils import download_gh_file, load_env_vars
 
 
 def test_download_file_succeeds_first_try():
@@ -46,3 +47,18 @@ def test_download_file_fails(mock_get):
 
     assert repo.file_contents.call_count == 5
     file_content_obj.decoded.assert_not_called
+
+
+@mock.patch.dict(os.environ, {"REPO": "repo-1", "GH_TOKEN": "token"})
+def test_load_env_vars_succeeds(capfd):
+    env_vars = load_env_vars(["REPO", "GH_TOKEN"])
+
+    assert env_vars == {"REPO": "repo-1", "GH_TOKEN": "token"}
+
+
+@mock.patch.dict(os.environ, {"REPO": "repo-1"}, clear=True)
+def test_load_env_vars_fails(capfd):
+    with pytest.raises(Exception) as exc:
+        env_vars = load_env_vars(["REPO", "GH_TOKEN"])
+        print(env_vars)
+    assert str(exc.value) == "Environment variable 'GH_TOKEN' is not set."

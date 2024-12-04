@@ -1,3 +1,4 @@
+import os
 import time
 
 import github3
@@ -22,3 +23,13 @@ def download_gh_file(repo: github3.github.repo, file_path: str) -> str:
 
     file_decoded = file_content.decoded.decode()
     return file_decoded
+
+
+def load_env_vars(var_names: list[str]) -> dict:
+    env_vars = {}
+    for var in var_names:
+        try:
+            env_vars[var] = os.environ[var]
+        except KeyError:
+            raise Exception(f"Environment variable '{var}' is not set.")
+    return env_vars
