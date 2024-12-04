@@ -49,8 +49,8 @@ def test_get_approved_files_config_fails(download_gh_file):
         get_approved_files_config(repo)
 
     assert (
-        str(exc.value)
-        == f"No config file found. Make sure you have a file saved at {BOT_APPROVED_FILES_PATH}"
+        # fmt: off
+        str(exc.value) == f"No config file found. Make sure you have a file saved at {BOT_APPROVED_FILES_PATH}"
     )
 
 
@@ -112,7 +112,7 @@ def test_pr_is_blocked_false(gh_login, get_approved_files_config, get_changed_fi
 
     blocked = pr_is_blocked(env_vars)
 
-    assert blocked == False
+    assert blocked is False
     get_changed_files.assert_called_once_with("base", "head")
     get_approved_files_config.assert_called_once_with(repo)
 
@@ -139,7 +139,7 @@ def test_pr_is_blocked_true(gh_login, get_approved_files_config, get_changed_fil
 
     blocked = pr_is_blocked(env_vars)
 
-    assert blocked == True
+    assert blocked is True
     get_changed_files.assert_called_once_with("base", "head")
     get_approved_files_config.assert_called_once_with(repo)
 
