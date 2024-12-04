@@ -12,10 +12,12 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          repository: dfinity/public-workflows
 
       - name: Bot Checks
         id:  bot-checks
-        run: python reusable_workflows/repo_bot_policies/bot_checks/check_bot_approved_files.py
+        run: python reusable_workflows/repo_policies/bot_checks/check_bot_approved_files.py
         shell: bash
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
