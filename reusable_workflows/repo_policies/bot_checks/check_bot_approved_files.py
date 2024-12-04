@@ -7,7 +7,7 @@ from check_membership.check_membership import is_approved_bot
 from shared.utils import download_gh_file, load_env_vars
 
 BOT_APPROVED_FILES_PATH = ".github/repo_policies/bot_approved_files.json"
-REQUIRED_VARS = [
+REQUIRED_ENV_VARS = [
     "USER",
     "GH_TOKEN",
     "GH_ORG",
@@ -18,6 +18,9 @@ REQUIRED_VARS = [
 
 
 def get_changed_files(merge_base_sha: str, branch_head_sha: str) -> list[str]:
+    """
+    Compares the files changed in the current branch to the merge base.
+    """
     commit_range = f"{merge_base_sha}..{branch_head_sha}"
     result = subprocess.run(
         ["git", "diff", "--name-only", commit_range], stdout=subprocess.PIPE, text=True
@@ -27,6 +30,9 @@ def get_changed_files(merge_base_sha: str, branch_head_sha: str) -> list[str]:
 
 
 def get_approved_files_config(repo: github3.github.repo) -> str:
+    """
+    Loads the config from the repository that contains the list of approved files.
+    """
     try:
         config_file = download_gh_file(repo, BOT_APPROVED_FILES_PATH)
         return config_file
@@ -37,6 +43,9 @@ def get_approved_files_config(repo: github3.github.repo) -> str:
 
 
 def get_approved_files(config_file: str) -> list[str]:
+    """
+    Extracts the list of approved files from the config file.
+    """
     try:
         config = json.loads(config_file)
     except json.JSONDecodeError:
@@ -52,6 +61,9 @@ def get_approved_files(config_file: str) -> list[str]:
 
 
 def pr_is_blocked(env_vars: dict) -> bool:
+    """
+    Logic to check if the Bot's PR can be merged or should be blocked.
+    """
     gh = github3.login(token=env_vars["GH_TOKEN"])
     repo = gh.repository(owner=env_vars["GH_ORG"], repository=env_vars["REPO"])
     changed_files = get_changed_files(
@@ -64,7 +76,7 @@ def pr_is_blocked(env_vars: dict) -> bool:
 
 
 def main() -> None:
-    env_vars = load_env_vars(REQUIRED_VARS)
+    env_vars = load_env_vars(REQUIRED_ENV_VARS)
     user = env_vars["USER"]
 
     is_bot = is_approved_bot(user)
