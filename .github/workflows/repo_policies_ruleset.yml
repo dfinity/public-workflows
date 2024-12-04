@@ -8,5 +8,5 @@ on:
 
 jobs:
   call-repo-policies:
-    uses: dfinity/public-workflows/.github/workflows/repo_policies.yml@create-workflow-for-repo-policies
+    uses: dfinity/public-workflows/.github/workflows/repo_policies.yml@main
     secrets: inherit
