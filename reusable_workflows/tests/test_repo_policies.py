@@ -159,3 +159,19 @@ def test_main_succeeds(subprocess_run, pr_is_blocked, is_approved_bot, load_env_
     subprocess_run.assert_called_once_with(
         "echo 'block_pr=False' >> $GITHUB_OUTPUT", shell=True
     )
+
+@mock.patch("repo_policies.bot_checks.check_bot_approved_files.load_env_vars")
+@mock.patch("repo_policies.bot_checks.check_bot_approved_files.is_approved_bot")
+@mock.patch("repo_policies.bot_checks.check_bot_approved_files.pr_is_blocked")
+@mock.patch("subprocess.run")
+def test_main_not_a_bot(subprocess_run, pr_is_blocked, is_approved_bot, load_env_vars):
+    env_vars = {"GH_TOKEN": "token", "USER": "user"}
+    load_env_vars.return_value = env_vars
+    is_approved_bot.return_value = False
+
+    main()
+
+    subprocess_run.assert_called_once_with(
+        "echo 'block_pr=False' >> $GITHUB_OUTPUT", shell=True
+    )
+    pr_is_blocked.assert_not_called()
