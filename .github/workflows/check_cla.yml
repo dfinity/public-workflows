@@ -26,13 +26,8 @@ jobs:
         with:
           repository: 'dfinity/public-workflows'
 
-      - name: Install Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
-
-      - name: Install Dependencies
-        run: pip install -r requirements.txt
+      - name: Python Setup
+        uses: ./.github/workflows/python-setup
         
       - name: Check Membership
         id:  check-membership
@@ -61,13 +56,8 @@ jobs:
         with:
           repository: 'dfinity/public-workflows'
 
-      - name: Install Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.12'
-
-      - name: Install Dependencies
-        run: pip install -r requirements.txt
+      - name: Python Setup
+        uses: ./.github/workflows/python-setup
 
       - name: Check if accepting external contributions
         id: accepts_external_contrib
