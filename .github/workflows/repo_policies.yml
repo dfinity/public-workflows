@@ -1,0 +1,26 @@
+name: Repository Policies
+
+on:
+  workflow_call:
+
+jobs:
+  check-bot-policies:
+    name: Check Bot Policies
+    runs-on: ubuntu-latest
+    # Dont run this workflow on merge queue
+    if:  ${{ github.event_name != 'merge_group' }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Bot Checks
+        id:  bot-checks
+        run: python reusable_workflows/repo_bot_policies/bot_checks/check_bot_approved_files.py
+        shell: bash
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_ORG: ${{ github.repository_owner }}
+          USER: ${{ github.event.pull_request.user.login }}
+          REPO: ${{ github.repository }}
+          MERGE_BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          BRANCH_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
