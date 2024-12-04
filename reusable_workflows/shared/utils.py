@@ -5,7 +5,9 @@ import github3
 
 
 def download_gh_file(repo: github3.github.repo, file_path: str) -> str:
-    # sometimes the request does not work the first time, so set a retry
+    """
+    Handles the download of a file from a GitHub repository. Retries 4 times if the request fails.
+    """
     for attempt in range(5):
         try:
             file_content = repo.file_contents(file_path)
@@ -26,6 +28,9 @@ def download_gh_file(repo: github3.github.repo, file_path: str) -> str:
 
 
 def load_env_vars(var_names: list[str]) -> dict:
+    """
+    Loads required env vars and returns them as a dictionary.
+    """
     env_vars = {}
     for var in var_names:
         try:
