@@ -72,6 +72,13 @@ def pr_is_blocked(env_vars: dict) -> bool:
     config = get_approved_files_config(repo)
     approved_files = get_approved_files(config)
     block_pr = not all(file in approved_files for file in changed_files)
+    if block_pr:
+        print(
+            f"""Blocking PR because the changed files are not in the list of approved files.
+                Update config at: {BOT_APPROVED_FILES_PATH} if necessary.
+            """
+        )
+
     return block_pr
 
 
