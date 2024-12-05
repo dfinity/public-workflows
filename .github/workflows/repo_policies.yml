@@ -28,6 +28,6 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GH_ORG: ${{ github.repository_owner }}
           USER: ${{ github.event.pull_request.user.login }}
-          REPO: ${{ github.repository }}
+          REPO: ${{ github.event.repository.name }}
           MERGE_BASE_SHA: ${{ github.event.pull_request.base.sha }}
           BRANCH_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
