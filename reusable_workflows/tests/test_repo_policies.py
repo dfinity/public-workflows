@@ -63,15 +63,6 @@ def test_get_approved_files():
     assert approved_files == ["file1", "file2"]
 
 
-def test_get_approved_files_empty():
-    config_file = ""
-
-    with pytest.raises(ValueError) as exc:
-        get_approved_files(config_file)
-
-    assert str(exc.value) == "No approved files found in config file"
-
-
 @mock.patch("repo_policies.bot_checks.check_bot_approved_files.get_changed_files")
 @mock.patch(
     "repo_policies.bot_checks.check_bot_approved_files.get_approved_files_config"

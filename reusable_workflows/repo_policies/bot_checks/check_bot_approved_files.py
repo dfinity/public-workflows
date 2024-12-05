@@ -48,8 +48,6 @@ def get_approved_files(config_file: str) -> list[str]:
     approved_files = [
         line for line in config_file.splitlines() if not line.strip().startswith("#")
     ]
-    if len(approved_files) == 0:
-        raise ValueError("No approved files found in config file")
     return approved_files
 
 
