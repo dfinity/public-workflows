@@ -1,4 +1,3 @@
-import json
 import subprocess
 
 import github3
@@ -6,7 +5,7 @@ import github3
 from check_membership.check_membership import is_approved_bot
 from shared.utils import download_gh_file, load_env_vars
 
-BOT_APPROVED_FILES_PATH = ".github/repo_policies/bot_approved_files.json"
+BOT_APPROVED_FILES_PATH = ".github/repo_policies/BOT_APPROVED_FILES"
 REQUIRED_ENV_VARS = [
     "USER",
     "GH_TOKEN",
@@ -46,17 +45,9 @@ def get_approved_files(config_file: str) -> list[str]:
     """
     Extracts the list of approved files from the config file.
     """
-    try:
-        config = json.loads(config_file)
-    except json.JSONDecodeError:
-        raise Exception("Config file is not a valid JSON file")
-    try:
-        approved_files = config["approved_files"]
-    except KeyError:
-        raise Exception("No approved_files key found in config file")
-
-    if len(approved_files) == 0:
-        raise Exception("No approved files found in config file")
+    approved_files = [
+        line for line in config_file.splitlines() if not line.strip().startswith("#")
+    ]
     return approved_files
 
 
@@ -92,9 +83,7 @@ def main() -> None:
         block_pr = pr_is_blocked(env_vars)
 
     else:
-        print(
-            f"{user} is not a bot. Letting CLA check handle contribution decision."
-        )
+        print(f"{user} is not a bot. Letting CLA check handle contribution decision.")
         block_pr = False
 
     subprocess.run(f"""echo 'block_pr={block_pr}' >> $GITHUB_OUTPUT""", shell=True)
