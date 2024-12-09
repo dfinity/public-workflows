@@ -6,6 +6,7 @@ import pytest
 from shared.messages import (
     AGREED_MESSAGE,
     CLA_AGREEMENT_MESSAGE,
+    FAILED_COMMENT,
     USER_AGREEMENT_MESSAGE,
 )
 from check_cla.check_cla_pr import CLAHandler, main
@@ -50,6 +51,17 @@ def test_no_bot_comment():
     bot_comment = cla.check_if_comment_already_exists("comment2", issue_comments)
 
     assert bot_comment is False
+
+
+def test_leave_failed_comment_on_issue():
+    cla = CLAHandler(mock.Mock())
+    issue = mock.Mock()
+    issue.comments.return_value = mock.Mock()
+    cla.check_if_comment_already_exists = mock.Mock(return_value=False)
+
+    cla.leave_failed_comment_on_issue(issue)
+
+    issue.create_comment.assert_called_once_with(FAILED_COMMENT)
 
 
 def test_cla_is_signed(capfd):
