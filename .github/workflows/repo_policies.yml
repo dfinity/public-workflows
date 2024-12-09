@@ -20,6 +20,8 @@ jobs:
         # Then switch back to this repository to make sure it's run from current
       - name: Checkout Original Repository
         uses: actions/checkout@v4
+        with:
+          path: current-repo # if a different path isn't specified, the previous one is overwritten
 
       - name: Python Setup
         uses: ./public-workflows/.github/workflows/python-setup
