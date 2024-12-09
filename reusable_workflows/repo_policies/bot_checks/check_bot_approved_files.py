@@ -24,8 +24,6 @@ def get_changed_files(merge_base_sha: str, branch_head_sha: str) -> list[str]:
     result = subprocess.run(
         ["git", "diff", "--name-only", commit_range], capture_output=True, text=True,
     )
-    if result.returncode != 0:
-        raise RuntimeError(f"git diff failed: {result.stderr}")
     changed_files = result.stdout.strip().split("\n")
     return changed_files
 
