@@ -1,0 +1,19 @@
+on:
+  pull_request:
+
+jobs:
+  test-multiple-checkouts:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          repository: dfinity/cla
+          path: cla
+
+      - name: Checkout Original Repository
+        uses: actions/checkout@v4
+
+      - name: Debug
+        shell: bash
+        run: ls -la 
