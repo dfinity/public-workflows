@@ -28,15 +28,14 @@ def test_bot_comment_exists():
     cla = CLAHandler(mock.Mock())
     comments_iterator = mock.Mock()
     comment1 = mock.Mock()
-    comment1.user.login = "username"
+    comment1.body = "comment1"
     comment2 = mock.Mock()
-    comment2.user.login = "sa-github-api"
+    comment2.body = "comment2"
     comments_iterator.__iter__ = mock.Mock(
-        return_value=iter([comment1, comment2, comment1])
+        return_value=iter([comment1, comment2])
     )
-    #  comments_iterator.return_value = [comment1, comment2, comment1]
 
-    bot_comment = cla.check_comment_already_exists(comments_iterator)
+    bot_comment = cla.check_if_comment_already_exists("comment1", comments_iterator)
 
     assert bot_comment is True
 
@@ -45,10 +44,10 @@ def test_no_bot_comment():
     cla = CLAHandler(mock.Mock())
     issue_comments = mock.Mock()
     comment1 = mock.Mock()
-    comment1.user.login = "username"
-    issue_comments.__iter__ = mock.Mock(return_value=iter([comment1, comment1]))
+    comment1.body = "comment"
+    issue_comments.__iter__ = mock.Mock(return_value=iter([comment1]))
 
-    bot_comment = cla.check_comment_already_exists(issue_comments)
+    bot_comment = cla.check_if_comment_already_exists("comment2", issue_comments)
 
     assert bot_comment is False
 
@@ -103,7 +102,6 @@ def test_get_cla_issue_success():
     cla_repo = mock.Mock()
     issue = mock.Mock()
     issue.title = "cla: @username"
-    issue.user.login = "sa-github-api"
     cla_repo.issues.return_value = [mock.Mock(), issue]
     cla.cla_repo = cla_repo
 

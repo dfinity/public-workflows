@@ -19,7 +19,7 @@ class CLAHandler:
         self.cla_link = f"{self.cla_repo.html_url}/blob/main/CLA.md"
 
     @staticmethod
-    def check_comment_already_exists(
+    def check_if_comment_already_exists(
         search_comment: str, comments: github3.structs.GitHubIterator
     ) -> bool:
         for comment in comments:
@@ -30,12 +30,12 @@ class CLAHandler:
     def leave_failed_comment_on_issue(self, issue: GHIssue) -> None:
         # check if bot has already left a message to avoid spam
         issue_comments = issue.comments()
-        if not self.check_comment_already_exists(messages.FAILED_COMMENT, issue_comments):
+        if not self.check_if_comment_already_exists(messages.FAILED_COMMENT, issue_comments):
             issue.create_comment(messages.FAILED_COMMENT)
 
     def comment_on_pr(self, pr: GHPullRequest, pr_comment: str) -> None:
         pr_comments = pr.comments()
-        if not self.check_comment_already_exists(pr_comment, pr_comments):
+        if not self.check_if_comment_already_exists(pr_comment, pr_comments):
             pr.create_comment(pr_comment)
 
     def check_if_cla_signed(self, issue: GHIssue, user: str) -> bool:
@@ -53,7 +53,7 @@ class CLAHandler:
 
     def get_cla_issue(self, user: str) -> Optional[GHIssue]:
         for issue in self.cla_repo.issues():
-            if issue.title == f"cla: @{user}" and issue.user.login in CLA_BOT_NAMES:
+            if issue.title == f"cla: @{user}":
                 return issue
         print(f"No CLA issue for {user}")
         return None  # to make linter happy
