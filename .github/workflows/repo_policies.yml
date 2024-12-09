@@ -10,18 +10,26 @@ jobs:
     # Dont run this workflow on merge queue
     if:  ${{ github.event_name != 'merge_group' }}
     steps:
+        # First check out code from public-workflows
       - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          repository: dfinity/public-workflows
+          path: public-workflows
+
+        # Then switch back to this repository to make sure it's run from current
+      - name: Checkout Original Repository
         uses: actions/checkout@v4
 
       - name: Python Setup
-        uses: ./.github/workflows/python-setup
+        uses: ./public-workflows/.github/workflows/python-setup
 
       - name: Bot Checks
         id:  bot-checks
         run: |
           set -euo pipefail
-          export PYTHONPATH="$PWD/reusable_workflows/"
-          python reusable_workflows/repo_policies/bot_checks/check_bot_approved_files.py
+          export PYTHONPATH="$PWD/public-workflows/reusable_workflows/"
+          python public-workflows/reusable_workflows/repo_policies/bot_checks/check_bot_approved_files.py
         shell: bash
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
