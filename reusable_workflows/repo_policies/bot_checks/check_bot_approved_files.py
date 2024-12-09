@@ -25,8 +25,7 @@ def get_changed_files(merge_base_sha: str, branch_head_sha: str, repo_path: Opti
     commit_range = f"{merge_base_sha}..{branch_head_sha}"
     # debug
     current_branch = subprocess.run(["git", "branch"], capture_output=True, cwd=repo_path)
-    print(f"current branch: {current_branch.stdout}"
-    )
+    print(f"current branch: {current_branch.stdout}")
     result = subprocess.run(
         ["git", "diff", "--name-only", commit_range],
         capture_output=True,
