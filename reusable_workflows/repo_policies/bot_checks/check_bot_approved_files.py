@@ -25,11 +25,6 @@ def get_changed_files(
     Compares the files changed in the current branch to the merge base.
     """
     commit_range = f"{merge_base_sha}..{branch_head_sha}"
-    # debug
-    current_branch = subprocess.run(
-        ["git", "branch"], capture_output=True, text=True, cwd=repo_path
-    )
-    print(f"current branch: {current_branch.stdout}")
     result = subprocess.run(
         ["git", "diff", "--name-only", commit_range],
         capture_output=True,
