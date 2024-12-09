@@ -18,13 +18,17 @@ REQUIRED_ENV_VARS = [
 ]
 
 
-def get_changed_files(merge_base_sha: str, branch_head_sha: str, repo_path: Optional[str] = None) -> list[str]:
+def get_changed_files(
+    merge_base_sha: str, branch_head_sha: str, repo_path: Optional[str] = None
+) -> list[str]:
     """
     Compares the files changed in the current branch to the merge base.
     """
     commit_range = f"{merge_base_sha}..{branch_head_sha}"
     # debug
-    current_branch = subprocess.run(["git", "branch"], capture_output=True, cwd=repo_path)
+    current_branch = subprocess.run(
+        ["git", "branch"], capture_output=True, text=True, cwd=repo_path
+    )
     print(f"current branch: {current_branch.stdout}")
     result = subprocess.run(
         ["git", "diff", "--name-only", commit_range],
@@ -33,7 +37,9 @@ def get_changed_files(merge_base_sha: str, branch_head_sha: str, repo_path: Opti
         cwd=repo_path,
     )
     if result.returncode != 0:
-        raise RuntimeError(f"git diff failed with exit code {result.returncode}: {result.stderr}")
+        raise RuntimeError(
+            f"git diff failed with exit code {result.returncode}: {result.stderr}"
+        )
     changed_files = result.stdout.strip().split("\n")
     return changed_files
 
