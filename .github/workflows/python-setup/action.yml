@@ -4,7 +4,7 @@ inputs:
   working-directory:
     description: 'The path to the workspace'
     required: false
-    default: '.'
+    default: ${{ github.workspace }}
 
 runs:
   using: composite
