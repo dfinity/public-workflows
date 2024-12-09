@@ -22,10 +22,7 @@ def get_changed_files(merge_base_sha: str, branch_head_sha: str) -> list[str]:
     """
     commit_range = f"{merge_base_sha}..{branch_head_sha}"
     result = subprocess.run(
-        ["git", "diff", "--name-only", commit_range],
-        stdout=subprocess.DEVNULL,
-        stderr=subprocess.DEVNULL,
-        text=True,
+        ["git", "diff", "--name-only", commit_range], capture_output=True, text=True,
     )
     if result.returncode != 0:
         raise RuntimeError(f"git diff failed: {result.stderr}")

@@ -25,8 +25,7 @@ def test_get_changed_files(mock_subprocess_run):
     assert changed_files == ["file1.py", "file2.py"]
     mock_subprocess_run.assert_called_once_with(
         ["git", "diff", "--name-only", "merge_base_sha..branch_head_sha"],
-        stdout=subprocess.DEVNULL,
-        stderr=subprocess.DEVNULL,
+        capture_output=True,
         text=True,
     )
 
