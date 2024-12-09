@@ -22,8 +22,13 @@ def get_changed_files(merge_base_sha: str, branch_head_sha: str) -> list[str]:
     """
     commit_range = f"{merge_base_sha}..{branch_head_sha}"
     result = subprocess.run(
-        ["git", "diff", "--name-only", commit_range], stdout=subprocess.PIPE, text=True
+        ["git", "diff", "--name-only", commit_range],
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL,
+        text=True,
     )
+    if result.returncode != 0:
+        raise RuntimeError(f"git diff failed: {result.stderr}")
     changed_files = result.stdout.strip().split("\n")
     return changed_files
 
@@ -51,7 +56,7 @@ def get_approved_files(config_file: str) -> list[str]:
     return approved_files
 
 
-def pr_is_blocked(env_vars: dict) -> bool:
+def check_if_pr_is_blocked(env_vars: dict) -> None:
     """
     Logic to check if the Bot's PR can be merged or should be blocked.
     """
@@ -64,13 +69,12 @@ def pr_is_blocked(env_vars: dict) -> bool:
     approved_files = get_approved_files(config)
     block_pr = not all(file in approved_files for file in changed_files)
     if block_pr:
-        print(
-            f"""Blocking PR because the changed files are not in the list of approved files.
+        message = f"""Blocking PR because the changed files are not in the list of approved files.
                 Update config at: {BOT_APPROVED_FILES_PATH} if necessary.
             """
-        )
-
-    return block_pr
+        raise SystemExit(message)
+    else:
+        print("Changed files are in list of approved files.")
 
 
 def main() -> None:
@@ -80,13 +84,10 @@ def main() -> None:
     is_bot = is_approved_bot(user)
 
     if is_bot:
-        block_pr = pr_is_blocked(env_vars)
+        check_if_pr_is_blocked(env_vars)
 
     else:
         print(f"{user} is not a bot. Letting CLA check handle contribution decision.")
-        block_pr = False
-
-    subprocess.run(f"""echo 'block_pr={block_pr}' >> $GITHUB_OUTPUT""", shell=True)
 
 
 if __name__ == "__main__":
