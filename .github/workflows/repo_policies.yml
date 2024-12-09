@@ -12,8 +12,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          repository: dfinity/public-workflows
 
       - name: Python Setup
         uses: ./.github/workflows/python-setup
