@@ -21,6 +21,7 @@ jobs:
       - name: Bot Checks
         id:  bot-checks
         run: |
+          set -euo pipefail
           export PYTHONPATH="$PWD/reusable_workflows/"
           python reusable_workflows/repo_policies/bot_checks/check_bot_approved_files.py
         shell: bash
