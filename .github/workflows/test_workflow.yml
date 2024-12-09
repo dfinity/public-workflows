@@ -5,15 +5,19 @@ jobs:
   test-multiple-checkouts:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Checkout CLA
         uses: actions/checkout@v4
         with:
           repository: dfinity/cla
           path: cla
+
+      - name: Debug
+        shell: bash
+        run: ls -la
 
       - name: Checkout Original Repository
         uses: actions/checkout@v4
 
       - name: Debug
         shell: bash
-        run: ls -la 
+        run: ls -la
