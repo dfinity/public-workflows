@@ -33,7 +33,7 @@ def test_end_to_end_cla_signed(cla_mock, gh_login_mock):
     main()
 
     cla.check_if_cla_signed.assert_called_with(issue, "username")
-    cla.comment_on_issue.assert_not_called()
+    cla.leave_failed_comment_on_issue.assert_not_called()
     cla.handle_cla_signed.assert_called_once()
 
 
@@ -56,7 +56,7 @@ def test_end_to_end_cla_not_signed(cla_mock, gh_login_mock):
     main()
 
     cla.check_if_cla_signed.assert_called_with(issue, "username")
-    cla.comment_on_issue.assert_called_once()
+    cla.leave_failed_comment_on_issue.assert_called_once()
     cla.handle_cla_signed.assert_not_called()
 
 
