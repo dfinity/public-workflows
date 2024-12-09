@@ -22,6 +22,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           path: current-repo # need to specify another path to avoid overwriting the first checkout
+          ref: ${{ github.head_ref }}
 
       - name: Python Setup
         uses: ./public-workflows/.github/workflows/python-setup
