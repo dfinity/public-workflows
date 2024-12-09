@@ -1,4 +1,5 @@
 import subprocess
+from typing import Optional
 
 import github3
 
@@ -11,12 +12,13 @@ REQUIRED_ENV_VARS = [
     "GH_TOKEN",
     "GH_ORG",
     "REPO",
+    "REPO_PATH",
     "MERGE_BASE_SHA",
     "BRANCH_HEAD_SHA",
 ]
 
 
-def get_changed_files(merge_base_sha: str, branch_head_sha: str) -> list[str]:
+def get_changed_files(merge_base_sha: str, branch_head_sha: str, repo_path: Optional[str] = None) -> list[str]:
     """
     Compares the files changed in the current branch to the merge base.
     """
@@ -25,6 +27,7 @@ def get_changed_files(merge_base_sha: str, branch_head_sha: str) -> list[str]:
         ["git", "diff", "--name-only", commit_range],
         capture_output=True,
         text=True,
+        cwd=repo_path,
     )
     if result.returncode != 0:
         raise RuntimeError(f"git diff failed with exit code {result.returncode}: {result.stderr}")
@@ -61,8 +64,9 @@ def check_if_pr_is_blocked(env_vars: dict) -> None:
     """
     gh = github3.login(token=env_vars["GH_TOKEN"])
     repo = gh.repository(owner=env_vars["GH_ORG"], repository=env_vars["REPO"])
+    repo_path = env_vars["REPO_PATH"]
     changed_files = get_changed_files(
-        env_vars["MERGE_BASE_SHA"], env_vars["BRANCH_HEAD_SHA"]
+        env_vars["MERGE_BASE_SHA"], env_vars["BRANCH_HEAD_SHA"], repo_path
     )
     config = get_approved_files_config(repo)
     approved_files = get_approved_files(config)

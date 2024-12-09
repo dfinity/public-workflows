@@ -26,6 +26,7 @@ def test_get_changed_files(mock_subprocess_run):
         ["git", "diff", "--name-only", "merge_base_sha..branch_head_sha"],
         capture_output=True,
         text=True,
+        cwd=None,
     )
 
 
@@ -74,6 +75,7 @@ def test_pr_is_blocked_false(gh_login, get_approved_files_config, get_changed_fi
         "GH_TOKEN": "token",
         "GH_ORG": "org",
         "REPO": "repo",
+        "REPO_PATH": "path",
         "MERGE_BASE_SHA": "base",
         "BRANCH_HEAD_SHA": "head",
     }
@@ -89,7 +91,7 @@ def test_pr_is_blocked_false(gh_login, get_approved_files_config, get_changed_fi
 
     check_if_pr_is_blocked(env_vars)
 
-    get_changed_files.assert_called_once_with("base", "head")
+    get_changed_files.assert_called_once_with("base", "head", "path")
     get_approved_files_config.assert_called_once_with(repo)
 
 
@@ -103,6 +105,7 @@ def test_pr_is_blocked_true(gh_login, get_approved_files_config, get_changed_fil
         "GH_TOKEN": "token",
         "GH_ORG": "org",
         "REPO": "repo",
+        "REPO_PATH": "path",
         "MERGE_BASE_SHA": "base",
         "BRANCH_HEAD_SHA": "head",
     }
@@ -119,7 +122,7 @@ def test_pr_is_blocked_true(gh_login, get_approved_files_config, get_changed_fil
     with pytest.raises(SystemExit):
         check_if_pr_is_blocked(env_vars)
 
-    get_changed_files.assert_called_once_with("base", "head")
+    get_changed_files.assert_called_once_with("base", "head", "path")
     get_approved_files_config.assert_called_once_with(repo)
 
 
