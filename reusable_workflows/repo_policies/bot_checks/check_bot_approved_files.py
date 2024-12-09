@@ -12,7 +12,7 @@ REQUIRED_ENV_VARS = [
     "GH_TOKEN",
     "GH_ORG",
     "REPO",
-    "REPO_PATH"
+    "REPO_PATH",
     "MERGE_BASE_SHA",
     "BRANCH_HEAD_SHA",
 ]
