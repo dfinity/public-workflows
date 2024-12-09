@@ -41,7 +41,6 @@ jobs:
           GH_ORG: ${{ github.repository_owner }}
           USER: ${{ github.event.pull_request.user.login }}
           REPO: ${{ github.event.repository.name }}
-          BRANCH: ${{ github.event.pull_request.head.ref }}
           MERGE_BASE_SHA: ${{ github.event.pull_request.base.sha }}
           BRANCH_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
           REPO_PATH: current-repo
