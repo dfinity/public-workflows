@@ -68,8 +68,8 @@ class CLAHandler:
             body=messages.CLA_AGREEMENT_MESSAGE.format(
                 user, self.cla_link, user_agreement_message, pr_url
             ),
+            labels=[PENDING_LABEL]
         )
-        issue.add_labels(PENDING_LABEL)
         return issue
 
     def handle_cla_signed(self, issue: GHIssue, user: str) -> None:
