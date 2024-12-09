@@ -17,7 +17,11 @@ jobs:
 
       - name: Checkout Original Repository
         uses: actions/checkout@v4
+        with:
+          path: public-workflows
 
       - name: Debug
         shell: bash
-        run: ls -la
+        run: |
+          ls -la cla
+          ls -la public-workflows
