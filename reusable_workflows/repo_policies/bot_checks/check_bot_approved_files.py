@@ -26,6 +26,8 @@ def get_changed_files(merge_base_sha: str, branch_head_sha: str) -> list[str]:
         capture_output=True,
         text=True,
     )
+    if result.returncode != 0:
+        raise RuntimeError(f"git diff failed with exit code {result.returncode}: {result.stderr}")
     changed_files = result.stdout.strip().split("\n")
     return changed_files
 
@@ -65,6 +67,8 @@ def check_if_pr_is_blocked(env_vars: dict) -> None:
     config = get_approved_files_config(repo)
     approved_files = get_approved_files(config)
     block_pr = not all(file in approved_files for file in changed_files)
+    print(f"changed_files: {changed_files}")
+    print(f"approved_files: {approved_files}")
     if block_pr:
         message = f"""Blocking PR because the changed files are not in the list of approved files.
                 Update config at: {BOT_APPROVED_FILES_PATH} if necessary.
