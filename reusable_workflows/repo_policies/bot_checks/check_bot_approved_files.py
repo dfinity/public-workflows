@@ -18,7 +18,7 @@ REQUIRED_ENV_VARS = [
 ]
 
 
-def get_changed_files(merge_base_sha: str, branch_head_sha: str, repo_path : Optional[str] = None) -> list[str]:
+def get_changed_files(merge_base_sha: str, branch_head_sha: str, repo_path: Optional[str] = None) -> list[str]:
     """
     Compares the files changed in the current branch to the merge base.
     """
