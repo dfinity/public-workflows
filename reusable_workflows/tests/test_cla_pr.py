@@ -87,7 +87,6 @@ def test_cla_is_not_signed(capfd):
     cla = CLAHandler(mock.Mock())
     issue = mock.Mock()
     comment = mock.Mock()
-    comment.user.login = "bot"
     issue.comments.return_value = [mock.Mock(), comment]
 
     response = cla.check_if_cla_signed(issue, "username")
