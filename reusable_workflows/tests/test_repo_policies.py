@@ -153,7 +153,7 @@ def test_main_not_a_bot(check_if_pr_is_blocked, is_approved_bot, load_env_vars, 
 
     captured = capfd.readouterr()
     assert (
-        "user is not a bot. Letting CLA check handle contribution decision."
+        "user is not a bot. Skipping bot checks."
         in captured.out
     )
     check_if_pr_is_blocked.assert_not_called()
