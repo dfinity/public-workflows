@@ -90,6 +90,11 @@ def main() -> None:
     env_vars = load_env_vars(REQUIRED_ENV_VARS)
     user = env_vars["USER"]
 
+    # For now skip checks from dependabot until we decide how to handle them
+    if user == "dependabot[bot]":
+        print("Skipping checks for dependabot.")
+        return
+
     is_bot = is_approved_bot(user)
 
     if is_bot:
