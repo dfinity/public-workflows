@@ -96,7 +96,7 @@ def main() -> None:
         check_if_pr_is_blocked(env_vars)
 
     else:
-        print(f"{user} is not a bot. Letting CLA check handle contribution decision.")
+        print(f"{user} is not a bot. Skipping bot checks.")
 
 
 if __name__ == "__main__":
