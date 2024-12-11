@@ -1,5 +1,10 @@
 name: Python Setup
 description: Installs Python and necessary dependencies
+inputs:
+  working-directory:
+    description: 'The path to the workspace'
+    required: false
+    default: ${{ github.workspace }}
 
 runs:
   using: composite
@@ -12,3 +17,4 @@ runs:
     - name: Install Dependencies
       run: pip install -r requirements.txt
       shell: bash
+      working-directory: ${{ inputs.working-directory }}
