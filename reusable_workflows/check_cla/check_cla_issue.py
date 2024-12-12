@@ -20,7 +20,7 @@ def main() -> None:
 
     cla_signed = cla.check_if_cla_signed(issue, user)
     if not cla_signed:
-        cla.leave_failed_comment_on_issue(issue)
+        cla.comment_on_issue(issue)
     else:
         cla.handle_cla_signed(issue, user)
 
