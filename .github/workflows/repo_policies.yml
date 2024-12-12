@@ -10,19 +10,32 @@ jobs:
     # Dont run this workflow on merge queue
     if:  ${{ github.event_name != 'merge_group' }}
     steps:
+        # First check out code from public-workflows
       - name: Checkout
         uses: actions/checkout@v4
         with:
           repository: dfinity/public-workflows
+          path: public-workflows
+
+        # Then switch back to this repository to make sure it's run from current
+      - name: Checkout Original Repository
+        uses: actions/checkout@v4
+        with:
+          path: current-repo # need to specify another path to avoid overwriting the first checkout
+          ref: ${{ github.head_ref }}
+          fetch-depth: 50
 
       - name: Python Setup
-        uses: ./.github/workflows/python-setup
+        uses: ./public-workflows/.github/workflows/python-setup
+        with:
+          working-directory: public-workflows
 
       - name: Bot Checks
         id:  bot-checks
         run: |
-          export PYTHONPATH="$PWD/reusable_workflows/"
-          python reusable_workflows/repo_policies/bot_checks/check_bot_approved_files.py
+          set -euo pipefail
+          export PYTHONPATH="$PWD/public-workflows/reusable_workflows/"
+          python public-workflows/reusable_workflows/repo_policies/bot_checks/check_bot_approved_files.py
         shell: bash
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -31,3 +44,4 @@ jobs:
           REPO: ${{ github.event.repository.name }}
           MERGE_BASE_SHA: ${{ github.event.pull_request.base.sha }}
           BRANCH_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          REPO_PATH: current-repo
