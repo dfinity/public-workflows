@@ -1,0 +1,5 @@
+mypy
+black
+flake8
+pytest
+typing-extensions>=4.6.0 # causes issues with python 3.12 if not specified

@@ -10,10 +10,11 @@ This repository is not open to external contributions.
 Start a venv:
 ```
 python -m venv .venv
-source /path/to/venv/bin/activate
+source .venv/bin/activate
 ```
 Install pip-tools and run pip-compile:
 ```
 pip install pip-tools
-pip-compile requirements.in
+pip-compile requirements.in --upgrade
+pip-compile --output-file=requirements-test.txt requirements-test.in requirements.in --upgrade
 ```

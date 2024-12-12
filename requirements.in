@@ -1,6 +1,1 @@
-github3.py
-mypy
-black
-flake8
-pytest
-typing-extensions>=4.6.0 # causes issues with python 3.12 if not specified
+github3-py==3.2.0
