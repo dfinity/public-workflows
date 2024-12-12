@@ -28,7 +28,6 @@ jobs:
     - name: Install Dependencies
       run: pip install -r requirements-test.txt
       shell: bash
-      working-directory: ${{ inputs.working-directory }}
 
     - name: Run tests
       run: pytest reusable_workflows/
