@@ -69,24 +69,22 @@ class CLAHandler:
                 user, self.cla_link, user_agreement_message, pr_url
             ),
         )
-        issue.add_labels(PENDING_LABEL)
         return issue
 
     def handle_cla_signed(self, issue: GHIssue, user: str) -> None:
         for label in issue.original_labels:
             if label.name == APPROVED_LABEL:
                 return
+
+            # if a pending label exists, remove it
             for pending_label in [GH_WORKFLOW_LABEL, PENDING_LABEL]:
                 if label.name == pending_label:
-                    agreement_message = messages.AGREED_MESSAGE.format(user)
-                    issue.create_comment(agreement_message)
                     issue.remove_label(pending_label)
-                    issue.add_labels(APPROVED_LABEL)
-                    return
-        print(
-            "No cla labels found - manually check the cla issue to see what state it is in. Exiting program."  # noqa
-        )
-        sys.exit(1)
+
+        # once all pending labels have been removed and no approved label was found, add the agreement message with an approved label
+        agreement_message = messages.AGREED_MESSAGE.format(user)
+        issue.create_comment(agreement_message)
+        issue.add_labels(APPROVED_LABEL)
 
 
 def main() -> None:
