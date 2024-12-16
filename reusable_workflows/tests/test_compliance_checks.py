@@ -328,3 +328,13 @@ def test_get_code_owners():
     code_owners = get_code_owners(repo)
 
     assert code_owners == "* @dfinity/test\n"
+
+@pytest.mark.integration
+def test_get_repo_permissions():
+    gh = github3.login(token=os.getenv("GH_TOKEN"))
+    repo = gh.repository("dfinity", "test-compliant-repository-public")
+    org = gh.organization("dfinity")
+    helper = ComplianceCheckHelper(repo, org)
+    repo_permissions_check = RepoPermissions(helper)
+
+    repo_permissions_check.check()
