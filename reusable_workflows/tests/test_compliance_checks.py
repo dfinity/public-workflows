@@ -2,7 +2,9 @@ import io
 import sys
 from unittest import mock
 
+import os
 import pytest
+import github3
 from github3.exceptions import NotFoundError
 
 from compliance.check_compliance.compliance_checks import (
@@ -318,3 +320,11 @@ def test_repo_permissions_team_name_not_found(get_team_name_mock):
     repo_permissions_check.check(helper)
     assert repo_permissions_check.succeeds is False
     assert repo_permissions_check.message == "Raised error: Only one team can be listed for repo-level codeowners."  # fmt: skip
+
+@pytest.mark.integration
+def test_get_code_owners():
+    gh = github3.login(token=os.getenv("GH_TOKEN"))
+    repo = gh.repository("dfinity", "test-compliant-repository-public")
+    code_owners = get_code_owners(repo)
+
+    assert code_owners == "* @dfinity/idx\n"
