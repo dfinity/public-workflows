@@ -1,6 +1,7 @@
 import os
 from unittest import mock
 
+import github3
 import pytest
 
 from shared.messages import (
@@ -308,3 +309,29 @@ def test_github_token_not_passed_in(github_login_mock):
     assert (
         str(exc.value) == "github login failed - maybe GH_TOKEN was not correctly set"
     )
+
+@pytest.mark.integration
+def test_cla_signed():
+    gh = github3.login(token=os.getenv("GH_TOKEN"))
+    cla = CLAHandler(gh)
+    issue = cla.get_cla_issue("droid-uexternal")
+
+    # because the issue can change states, we don't check the status, just that it throws no errors
+    cla.check_if_cla_signed(issue, "droid-uexternal")
+
+@pytest.mark.integration
+def get_cla_issue():
+    gh = github3.login(token=os.getenv("GH_TOKEN"))
+    cla = CLAHandler(gh)
+    issue = cla.get_cla_issue("droid-uexternal")
+
+    assert issue is not None
+    assert issue.title == "cla: @droid-uexternal"
+
+@pytest.mark.integration
+def test_pr_comments_accessible():
+    gh = github3.login(token=os.getenv("GH_TOKEN"))
+    pr = gh.pull_request("dfinity", "test-compliant-repository-public", 4)
+    comments = pr.issue_comments()
+
+    assert len(comments) > 0
