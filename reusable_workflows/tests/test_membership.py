@@ -1,6 +1,7 @@
 import os
 from unittest import mock
 
+import github3
 from github3.exceptions import NotFoundError
 import pytest
 
@@ -129,3 +130,11 @@ def test_github_token_not_passed_in(github_login_mock):
     assert (
         str(exc.value) == "github login failed - maybe GH_TOKEN was not correctly set"
     )
+
+@pytest.mark.integration
+def test_is_member_of_org():
+    gh = github3.login(token=os.getenv("GH_TOKEN"))
+
+    is_member = is_member_of_org(gh, "dfinity", "sa-github-api")
+
+    assert is_member is True

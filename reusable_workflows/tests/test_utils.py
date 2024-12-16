@@ -19,7 +19,7 @@ def test_download_file_succeeds_first_try():
     assert repo.file_contents.call_count == 1
 
 
-@pytest.mark.slow
+@pytest.mark.integration
 def test_download_file_succeeds_third_try():
     repo = mock.MagicMock()
     file_content_obj = mock.Mock()
@@ -35,7 +35,7 @@ def test_download_file_succeeds_third_try():
     assert repo.file_contents.call_count == 3
 
 
-@pytest.mark.slow
+@pytest.mark.integration
 @mock.patch("requests.get")
 def test_download_file_fails(mock_get):
     repo = mock.MagicMock()
