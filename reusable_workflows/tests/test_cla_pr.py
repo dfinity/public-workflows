@@ -334,4 +334,4 @@ def test_pr_comments_accessible():
     pr = gh.pull_request("dfinity", "test-compliant-repository-public", 4)
     comments = pr.issue_comments()
 
-    assert len(comments) > 0
+    assert comments.total_count > 0
