@@ -339,5 +339,5 @@ def test_get_repo_permissions():
 
     check = repo_permissions_check.check(helper)
 
-    assert check.succeeds == True
+    assert check.succeeds is True
     assert check.message == "Team idx has write permissions."
