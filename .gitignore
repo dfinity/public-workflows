@@ -1,3 +1,4 @@
 sorting/target
 **/__pycache__
 .env/**
+.venv/**

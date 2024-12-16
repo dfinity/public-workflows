@@ -1,6 +1,7 @@
 import os
 from unittest import mock
 
+import github3
 import pytest
 
 from check_membership.check_external_contrib import (
@@ -53,3 +54,9 @@ def test_github_token_not_passed_in(github_login_mock):
     assert (
         str(exc.value) == "github login failed - maybe GH_TOKEN was not correctly set"
     )
+
+@pytest.mark.integration
+def test_check_repos_open_to_contributions_accessible():
+    gh = github3.login(token=os.getenv("GH_TOKEN"))
+
+    get_repos_open_to_contributions(gh)

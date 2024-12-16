@@ -33,4 +33,6 @@ jobs:
         flake8 reusable_workflows/
 
     - name: Run all tests
-      run: pytest --runslow reusable_workflows/
+      run: pytest --integration-tests reusable_workflows/
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

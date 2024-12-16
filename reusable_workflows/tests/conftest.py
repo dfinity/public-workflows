@@ -3,19 +3,19 @@ import pytest
 
 def pytest_addoption(parser):
     parser.addoption(
-        "--runslow", action="store_true", default=False, help="run slow tests"
+        "--integration-tests", action="store_true", default=False, help="run integration tests"
     )
 
 
 def pytest_configure(config):
-    config.addinivalue_line("markers", "slow: mark test as slow to run")
+    config.addinivalue_line("markers", "integration: mark test as integration test")
 
 
 def pytest_collection_modifyitems(config, items):
-    if config.getoption("--runslow"):
-        # --runslow given in cli: do not skip slow tests
+    if config.getoption("--integration-tests"):
+        # --integration-tests given in cli: do not skip integration tests
         return
-    skip_slow = pytest.mark.skip(reason="need --runslow option to run")
+    skip_integration = pytest.mark.skip(reason="need --integration-tests option to run")
     for item in items:
-        if "slow" in item.keywords:
-            item.add_marker(skip_slow)
+        if "integration" in item.keywords:
+            item.add_marker(skip_integration)
