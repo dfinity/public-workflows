@@ -337,7 +337,7 @@ def test_get_repo_permissions():
     helper = ComplianceCheckHelper(repo, org)
     repo_permissions_check = RepoPermissions()
 
-    check = repo_permissions_check.check(helper)
+    repo_permissions_check.check(helper)
 
-    assert check.succeeds is True
-    assert check.message == "Team idx has write permissions."
+    assert repo_permissions_check.succeeds is True
+    assert repo_permissions_check.message == "Team idx has write permissions."
