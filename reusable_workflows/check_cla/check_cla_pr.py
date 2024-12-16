@@ -34,7 +34,7 @@ class CLAHandler:
             issue.create_comment(messages.FAILED_COMMENT)
 
     def comment_on_pr(self, pr: GHPullRequest, pr_comment: str) -> None:
-        pr_comments = pr.comments()
+        pr_comments = pr.issue_comments()
         if not self.check_if_comment_already_exists(pr_comment, pr_comments):
             pr.create_comment(pr_comment)
 
