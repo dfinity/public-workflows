@@ -327,4 +327,4 @@ def test_get_code_owners():
     repo = gh.repository("dfinity", "test-compliant-repository-public")
     code_owners = get_code_owners(repo)
 
-    assert code_owners == "* @dfinity/idx\n"
+    assert code_owners == "* @dfinity/test\n"
