@@ -321,23 +321,55 @@ def test_repo_permissions_team_name_not_found(get_team_name_mock):
     assert repo_permissions_check.succeeds is False
     assert repo_permissions_check.message == "Raised error: Only one team can be listed for repo-level codeowners."  # fmt: skip
 
-@pytest.mark.integration
-def test_get_code_owners():
+
+def integration_test_setup() -> ComplianceCheckHelper:
     gh = github3.login(token=os.getenv("GH_TOKEN"))
     repo = gh.repository("dfinity", "test-compliant-repository-public")
-    code_owners = get_code_owners(repo)
+    org = gh.organization("dfinity")
+    helper = ComplianceCheckHelper(repo, org)
+    return helper
+
+@pytest.mark.integration
+def test_get_code_owners():
+    helper = integration_test_setup()
+
+    code_owners = helper.get_code_owners()
 
     assert code_owners == "* @dfinity/idx\n"
 
 @pytest.mark.integration
 def test_get_repo_permissions():
-    gh = github3.login(token=os.getenv("GH_TOKEN"))
-    repo = gh.repository("dfinity", "test-compliant-repository-public")
-    org = gh.organization("dfinity")
-    helper = ComplianceCheckHelper(repo, org)
-    repo_permissions_check = RepoPermissions()
+    helper = integration_test_setup()
+    repo_permissions = RepoPermissions()
 
-    repo_permissions_check.check(helper)
+    repo_permissions.check(helper)
 
-    assert repo_permissions_check.succeeds is True
-    assert repo_permissions_check.message == "Team idx has write permissions."
+    assert repo_permissions.succeeds is True
+    assert repo_permissions.message == "Team idx has write permissions."
+
+@pytest.mark.integration
+def test_branch_protection():
+    helper = integration_test_setup()
+    branch_protection = BranchProtection()
+
+    branch_protection.check(helper)
+
+    assert branch_protection.succeeds is True
+
+@pytest.mark.integration
+def test_license():
+    helper = integration_test_setup()
+    license = License()
+
+    license.check(helper)
+
+    assert license.succeeds is True
+
+@pytest.mark.integration
+def test_readme():
+    helper = integration_test_setup()
+    readme = Readme()
+
+    readme.check(helper)
+
+    assert readme.succeeds is True
