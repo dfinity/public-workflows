@@ -345,7 +345,7 @@ def test_get_repo_permissions():
     repo_permissions.check(helper)
 
     assert repo_permissions.succeeds is True
-    assert repo_permissions.message == "Team idx has write permissions."
+    assert repo_permissions.message == "Team idx has maintain permissions."
 
 @pytest.mark.integration
 def test_branch_protection():
