@@ -107,9 +107,9 @@ class RepoPermissions(ComplianceCheck):
         except github3.exceptions.NotFoundError:
             self.message = "Repository Permissions could not be found"
             return
-        # except Exception as error:
-        #     self.message = f"Raised error: {error}"
-        #     return
+        except Exception as error:
+            self.message = f"Raised error: {error}"
+            return
 
         if role in ["maintain", "write"]:
             self.succeeds = True
