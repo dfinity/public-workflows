@@ -32,5 +32,14 @@ jobs:
         black reusable_workflows/
         flake8 reusable_workflows/
 
+    - name: Create GitHub App Token
+      uses: actions/create-github-app-token@v1
+      id: app-token
+      with:
+        app-id: ${{ vars.CLA_BOT_APP_ID }}
+        private-key: ${{ secrets.CLA_BOT_PRIVATE_KEY }}
+
     - name: Run all tests
-      run: pytest --runslow reusable_workflows/
+      run: pytest --integration-tests reusable_workflows/
+      env:
+        GH_TOKEN: ${{ steps.app-token.outputs.token }}
