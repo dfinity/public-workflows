@@ -327,7 +327,7 @@ def test_get_code_owners():
     repo = gh.repository("dfinity", "test-compliant-repository-public")
     code_owners = get_code_owners(repo)
 
-    assert code_owners == "* @dfinity/test\n"
+    assert code_owners == "* @dfinity/idx\n"
 
 @pytest.mark.integration
 def test_get_repo_permissions():
@@ -335,6 +335,6 @@ def test_get_repo_permissions():
     repo = gh.repository("dfinity", "test-compliant-repository-public")
     org = gh.organization("dfinity")
     helper = ComplianceCheckHelper(repo, org)
-    repo_permissions_check = RepoPermissions(helper)
+    repo_permissions_check = RepoPermissions()
 
-    repo_permissions_check.check()
+    repo_permissions_check.check(helper)
