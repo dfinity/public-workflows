@@ -22,10 +22,7 @@ class CLAHandler:
     def check_if_comment_already_exists(
         search_comment: str, comments: github3.structs.GitHubIterator
     ) -> bool:
-        for comment in comments:
-            if search_comment == comment.body:
-                return True
-        return False
+        return any(search_comment == comment.body for comment in comments)
 
     def leave_failed_comment_on_issue(self, issue: GHIssue) -> None:
         # check if bot has already left a message to avoid spam
