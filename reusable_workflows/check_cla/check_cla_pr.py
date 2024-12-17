@@ -12,33 +12,27 @@ PENDING_LABEL = "cla:pending"
 APPROVED_LABEL = "cla:agreed"
 GH_WORKFLOW_LABEL = "cla:gh-wf-pending"
 
-# keep all old bot names for backwards compatibility
-CLA_BOT_NAMES = ["cla-idx-bot[bot]", "sa-github-api", "dfinity-droid-prod[bot]"]
-
 
 class CLAHandler:
     def __init__(self, gh: github3.login) -> None:
         self.cla_repo = gh.repository(owner="dfinity", repository="cla")
         self.cla_link = f"{self.cla_repo.html_url}/blob/main/CLA.md"
 
-    def check_comment_already_exists(
-        self, comments: github3.structs.GitHubIterator
+    @staticmethod
+    def check_if_comment_already_exists(
+        search_comment: str, comments: github3.structs.GitHubIterator
     ) -> bool:
-        for comment in comments:
-            if comment.user.login in CLA_BOT_NAMES:
-                return True
-        return False
+        return any(search_comment == comment.body for comment in comments)
 
-    def comment_on_issue(self, issue: GHIssue):
+    def leave_failed_comment_on_issue(self, issue: GHIssue) -> None:
         # check if bot has already left a message to avoid spam
         issue_comments = issue.comments()
-        bot_comment = self.check_comment_already_exists(issue_comments)
-        if not bot_comment:
+        if not self.check_if_comment_already_exists(messages.FAILED_COMMENT, issue_comments):
             issue.create_comment(messages.FAILED_COMMENT)
 
-    def comment_on_pr(self, pr: GHPullRequest, pr_comment):
-        bot_comment = self.check_comment_already_exists(pr.issue_comments())
-        if not bot_comment:
+    def comment_on_pr(self, pr: GHPullRequest, pr_comment: str) -> None:
+        pr_comments = pr.issue_comments()
+        if not self.check_if_comment_already_exists(pr_comment, pr_comments):
             pr.create_comment(pr_comment)
 
     def check_if_cla_signed(self, issue: GHIssue, user: str) -> bool:
@@ -56,7 +50,7 @@ class CLAHandler:
 
     def get_cla_issue(self, user: str) -> Optional[GHIssue]:
         for issue in self.cla_repo.issues():
-            if issue.title == f"cla: @{user}" and issue.user.login in CLA_BOT_NAMES:
+            if issue.title == f"cla: @{user}":
                 return issue
         print(f"No CLA issue for {user}")
         return None  # to make linter happy

@@ -1,11 +1,13 @@
 import os
 from unittest import mock
 
+import github3
 import pytest
 
 from shared.messages import (
     AGREED_MESSAGE,
     CLA_AGREEMENT_MESSAGE,
+    FAILED_COMMENT,
     USER_AGREEMENT_MESSAGE,
 )
 from check_cla.check_cla_pr import CLAHandler, main
@@ -28,15 +30,14 @@ def test_bot_comment_exists():
     cla = CLAHandler(mock.Mock())
     comments_iterator = mock.Mock()
     comment1 = mock.Mock()
-    comment1.user.login = "username"
+    comment1.body = "comment1"
     comment2 = mock.Mock()
-    comment2.user.login = "sa-github-api"
+    comment2.body = "comment2"
     comments_iterator.__iter__ = mock.Mock(
-        return_value=iter([comment1, comment2, comment1])
+        return_value=iter([comment1, comment2])
     )
-    #  comments_iterator.return_value = [comment1, comment2, comment1]
 
-    bot_comment = cla.check_comment_already_exists(comments_iterator)
+    bot_comment = cla.check_if_comment_already_exists("comment1", comments_iterator)
 
     assert bot_comment is True
 
@@ -45,12 +46,23 @@ def test_no_bot_comment():
     cla = CLAHandler(mock.Mock())
     issue_comments = mock.Mock()
     comment1 = mock.Mock()
-    comment1.user.login = "username"
-    issue_comments.__iter__ = mock.Mock(return_value=iter([comment1, comment1]))
+    comment1.body = "comment"
+    issue_comments.__iter__ = mock.Mock(return_value=iter([comment1]))
 
-    bot_comment = cla.check_comment_already_exists(issue_comments)
+    bot_comment = cla.check_if_comment_already_exists("comment2", issue_comments)
 
     assert bot_comment is False
+
+
+def test_leave_failed_comment_on_issue():
+    cla = CLAHandler(mock.Mock())
+    issue = mock.Mock()
+    issue.comments.return_value = mock.Mock()
+    cla.check_if_comment_already_exists = mock.Mock(return_value=False)
+
+    cla.leave_failed_comment_on_issue(issue)
+
+    issue.create_comment.assert_called_once_with(FAILED_COMMENT)
 
 
 def test_cla_is_signed(capfd):
@@ -88,7 +100,6 @@ def test_cla_is_not_signed(capfd):
     cla = CLAHandler(mock.Mock())
     issue = mock.Mock()
     comment = mock.Mock()
-    comment.user.login = "bot"
     issue.comments.return_value = [mock.Mock(), comment]
 
     response = cla.check_if_cla_signed(issue, "username")
@@ -103,7 +114,6 @@ def test_get_cla_issue_success():
     cla_repo = mock.Mock()
     issue = mock.Mock()
     issue.title = "cla: @username"
-    issue.user.login = "sa-github-api"
     cla_repo.issues.return_value = [mock.Mock(), issue]
     cla.cla_repo = cla_repo
 
@@ -299,3 +309,29 @@ def test_github_token_not_passed_in(github_login_mock):
     assert (
         str(exc.value) == "github login failed - maybe GH_TOKEN was not correctly set"
     )
+
+@pytest.mark.integration
+def test_cla_signed():
+    gh = github3.login(token=os.getenv("GH_TOKEN"))
+    cla = CLAHandler(gh)
+    issue = cla.get_cla_issue("droid-uexternal")
+
+    # because the issue can change states, we don't check the status, just that it throws no errors
+    cla.check_if_cla_signed(issue, "droid-uexternal")
+
+@pytest.mark.integration
+def get_cla_issue():
+    gh = github3.login(token=os.getenv("GH_TOKEN"))
+    cla = CLAHandler(gh)
+    issue = cla.get_cla_issue("droid-uexternal")
+
+    assert issue is not None
+    assert issue.title == "cla: @droid-uexternal"
+
+@pytest.mark.integration
+def test_pr_comments_accessible():
+    gh = github3.login(token=os.getenv("GH_TOKEN"))
+    pr = gh.pull_request("dfinity", "test-compliant-repository-public", 4)
+    comments = pr.issue_comments()
+
+    assert len(list(comments)) > 0
