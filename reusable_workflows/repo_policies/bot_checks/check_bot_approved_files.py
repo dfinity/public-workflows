@@ -57,7 +57,7 @@ def get_approved_files(config_file: str) -> list[str]:
     Extracts the list of approved files from the config file.
     """
     approved_files = [
-        line for line in config_file.splitlines() if not line.strip().startswith("#")
+        line for line in config_file.splitlines() if line.strip() and not line.strip().startswith("#")
     ]
     return approved_files
 
