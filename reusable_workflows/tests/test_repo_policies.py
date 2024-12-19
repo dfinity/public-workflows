@@ -84,6 +84,11 @@ def test_check_files_in_approved_list_succeeds():
 
     assert check_files_in_approved_list(changed_files, approved_files)
 
+    changed_files = ["file1", "file2", "folder/subfolder/file3.txt"]
+    approved_files = get_test_approved_files()
+
+    assert check_files_in_approved_list(changed_files, approved_files)
+
 def test_check_files_in_approved_list_fails():
     changed_files = ["file1", "file2", "folder/file3.txt", 'folder/file4.py']
     approved_files = get_test_approved_files()
