@@ -1,3 +1,4 @@
+import fnmatch
 import subprocess
 from typing import Optional
 
@@ -61,6 +62,15 @@ def get_approved_files(config_file: str) -> list[str]:
     ]
     return approved_files
 
+def check_files_in_approved_list(changed_files: list[str], approved_files: list[str]) -> bool:
+    """
+    Checks if all the changed files are in the list of approved files.
+    """
+    return all(
+        any(fnmatch.fnmatch(changed_file, pattern) for pattern in approved_files)
+        for changed_file in changed_files
+    )
+
 
 def check_if_pr_is_blocked(env_vars: dict) -> None:
     """
@@ -74,7 +84,7 @@ def check_if_pr_is_blocked(env_vars: dict) -> None:
     )
     config = get_approved_files_config(repo)
     approved_files = get_approved_files(config)
-    block_pr = not all(file in approved_files for file in changed_files)
+    block_pr = not check_files_in_approved_list(changed_files, approved_files)
     print(f"changed_files: {changed_files}")
     print(f"approved_files: {approved_files}")
     if block_pr:
