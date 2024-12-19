@@ -5,6 +5,7 @@ import pytest
 
 from repo_policies.bot_checks.check_bot_approved_files import (
     BOT_APPROVED_FILES_PATH,
+    check_files_in_approved_list,
     check_if_pr_is_blocked,
     get_approved_files,
     get_approved_files_config,
@@ -62,7 +63,32 @@ def test_get_approved_files():
     ).read()
     approved_files = get_approved_files(config_file)
 
-    assert approved_files == ["file1", "file2"]
+    assert approved_files == ["file1", "file2", "folder/*.txt"]
+
+
+def get_test_approved_files():
+    config_file = open(
+        "reusable_workflows/tests/test_data/BOT_APPROVED_FILES", "r"
+    ).read()
+    approved_files = get_approved_files(config_file)
+    return approved_files
+
+
+def test_check_files_in_approved_list_succeeds():
+    changed_files = ["file1", "file2", "folder/file3.txt"]
+    approved_files = get_test_approved_files()
+
+    assert check_files_in_approved_list(changed_files, approved_files)
+
+    changed_files = ["file1", "file2"]
+
+    assert check_files_in_approved_list(changed_files, approved_files)
+
+def test_check_files_in_approved_list_fails():
+    changed_files = ["file1", "file2", "folder/file3.txt", 'folder/file4.py']
+    approved_files = get_test_approved_files()
+
+    assert not check_files_in_approved_list(changed_files, approved_files)
 
 
 @mock.patch("repo_policies.bot_checks.check_bot_approved_files.get_changed_files")
