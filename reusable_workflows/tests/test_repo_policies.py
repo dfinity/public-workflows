@@ -53,7 +53,7 @@ def test_get_approved_files_config_fails(download_gh_file):
 
     assert (
         # fmt: off
-        str(exc.value) == f"No config file found. Make sure you have a file saved at {BOT_APPROVED_FILES_PATH} on base branch"
+        str(exc.value) == f"No config file found. Make sure you have a file saved at {BOT_APPROVED_FILES_PATH} on default branch"
     )
 
 
