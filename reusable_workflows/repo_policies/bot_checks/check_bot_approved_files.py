@@ -49,7 +49,7 @@ def get_approved_files_config(repo: github3.github.repo) -> str:
         return config_file
     except github3.exceptions.NotFoundError:
         raise Exception(
-            f"No config file found. Make sure you have a file saved at {BOT_APPROVED_FILES_PATH}"
+            f"No config file found. Make sure you have a file saved at {BOT_APPROVED_FILES_PATH} in the default branch"
         )
 
 
