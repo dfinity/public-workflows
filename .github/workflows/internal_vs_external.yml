@@ -45,7 +45,7 @@ jobs:
   revoke-approvals:
     name: Revoke Approvals
     runs-on: ubuntu-latest
-    needs: check-membership
+  #  needs: check-membership
   #  if: ${{ needs.check-membership.outputs.is_member != 'true' && needs.check-membership.result == 'success' }}
     steps:
       - name: Create GitHub App Token
