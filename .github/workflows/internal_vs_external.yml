@@ -58,7 +58,7 @@ jobs:
       - name: Dismiss Pull Request Reviews
         run: |
           #!/bin/bash
-          set -euo pipefail
+          set -euox pipefail # REMOVE -x later!
           reviews=$(curl -s -H "Authorization: token ${GH_TOKEN}" \
             "https://api.github.com/repos/${GH_ORG}/${REPO}/pulls/${PULL_NUMBER}/reviews")
 
