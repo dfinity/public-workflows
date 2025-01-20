@@ -60,23 +60,21 @@ jobs:
           #!/bin/bash
           set -euo pipefail
 
-          gh auth status
+          reviews=$(curl -s -H "Authorization: token ${GH_TOKEN}" \
+            "https://api.github.com/repos/${GH_ORG}/${REPO}/pulls/${PULL_NUMBER}/reviews")
 
-          # reviews=$(curl -s -H "Authorization: token ${GH_TOKEN}" \
-          #   "https://api.github.com/repos/${GH_ORG}/${REPO}/pulls/${PULL_NUMBER}/reviews")
-
-          # for review_id in $(echo "${reviews}" | jq -r '.[] | select(.state == "APPROVED") | .id'); do
-          #   curl -s -X PUT -H "Authorization: token ${GH_TOKEN}" \
-          #     -H "Accept: application/vnd.github.v3+json" \
-          #     -d '{"message": "Review dismissed by automation script."}' \
-          #     "https://api.github.com/repos/${GH_ORG}/${REPO}/pulls/${PULL_NUMBER}/reviews/${review_id}/dismissals"
-          #   if [ "$response" -eq 200 ]; then
-          #     echo "Dismissed review ${review_id}"
-          #   else
-          #     echo "Failed to dismiss review ${review_id}, HTTP status code: $response"
-          #     exit 1
-          #   fi
-          # done
+          for review_id in $(echo "${reviews}" | jq -r '.[] | select(.state == "APPROVED") | .id'); do
+            curl -s -X PUT -H "Authorization: token ${GH_TOKEN}" \
+              -H "Accept: application/vnd.github.v3+json" \
+              -d '{"message": "Review dismissed by automation script."}' \
+              "https://api.github.com/repos/${GH_ORG}/${REPO}/pulls/${PULL_NUMBER}/reviews/${review_id}/dismissals"
+            if [ "$response" -eq 200 ]; then
+              echo "Dismissed review ${review_id}"
+            else
+              echo "Failed to dismiss review ${review_id}, HTTP status code: $response"
+              exit 1
+            fi
+          done
         shell: bash
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
