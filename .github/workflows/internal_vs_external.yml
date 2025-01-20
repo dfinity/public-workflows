@@ -78,7 +78,6 @@ jobs:
         shell: bash
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
-     #     GH_TOKEN: ${{ steps.app-token.outputs.token }}
           GH_ORG: ${{ github.repository_owner }}
           REPO: ${{ github.event.repository.name }}
           PULL_NUMBER: ${{ github.event.pull_request.number }}          
