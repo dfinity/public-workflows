@@ -59,8 +59,8 @@ jobs:
         run: |
           #!/bin/bash
           set -euo pipefail
-          # Check if the token has access to the repository
-          curl -sS -f -I -H "Authorization: token ${GH_TOKEN}" https://api.github.com | grep -i x-oauth-scopes
+
+          gh auth status
 
           # reviews=$(curl -s -H "Authorization: token ${GH_TOKEN}" \
           #   "https://api.github.com/repos/${GH_ORG}/${REPO}/pulls/${PULL_NUMBER}/reviews")
