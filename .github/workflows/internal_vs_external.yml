@@ -63,6 +63,12 @@ jobs:
           reviews=$(curl -s -H "Authorization: token ${GH_TOKEN}" \
             "https://api.github.com/repos/${GH_ORG}/${REPO}/pulls/${PULL_NUMBER}/reviews")
 
+          # Check if any reviews were found
+          if [ -z "$reviews" ] || [ "$reviews" == "[]" ]; then
+            echo "No reviews to dismiss"
+            exit 0
+          fi
+
           for review_id in $(echo "${reviews}" | jq -r '.[] | select(.state == "APPROVED") | .id'); do
             curl -s -X PUT -H "Authorization: token ${GH_TOKEN}" \
               -H "Accept: application/vnd.github.v3+json" \
