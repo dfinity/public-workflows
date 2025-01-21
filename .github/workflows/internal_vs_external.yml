@@ -67,10 +67,10 @@ jobs:
           fi
 
           for review_id in $(echo "${reviews}" | jq -r '.[] | select(.state == "APPROVED") | .id'); do
-            curl -s -X PUT -H "Authorization: token ${GH_TOKEN}" \
+            response=$(curl -s -o /dev/null -w "%{http_code}" -X PUT -H "Authorization: token ${GH_TOKEN}" \
               -H "Accept: application/vnd.github.v3+json" \
               -d '{"message": "Review dismissed by automation script."}' \
-              "https://api.github.com/repos/${GH_ORG}/${REPO}/pulls/${PULL_NUMBER}/reviews/${review_id}/dismissals"
+              "https://api.github.com/repos/${GH_ORG}/${REPO}/pulls/${PULL_NUMBER}/reviews/${review_id}/dismissals")
             if [ "$response" -eq 200 ]; then
               echo "Dismissed review ${review_id}"
             else
