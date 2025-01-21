@@ -9,6 +9,10 @@ on:
       - synchronize
   merge_group: # merge group is always needed for a required workflows to prevent them from getting stuck, but we then skip it below
 
+permissions:
+  contents: read
+  pull-requests: write
+
 jobs:
   # check-membership:
   #   name: Check Membership
@@ -48,13 +52,6 @@ jobs:
   #  needs: check-membership
   #  if: ${{ needs.check-membership.outputs.is_member != 'true' && needs.check-membership.result == 'success' }}
     steps:
-      - name: Create GitHub App Token
-        uses: actions/create-github-app-token@v1
-        id: app-token
-        with:
-          app-id: ${{ vars.CLA_BOT_APP_ID }}
-          private-key: ${{ secrets.CLA_BOT_PRIVATE_KEY }} # the CLA Bot has permissions to dismiss pull request reviews
-
       - name: Dismiss Pull Request Reviews
         run: |
           #!/bin/bash
@@ -83,7 +80,7 @@ jobs:
           done
         shell: bash
         env:
-          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GH_ORG: ${{ github.repository_owner }}
           REPO: ${{ github.event.repository.name }}
           PULL_NUMBER: ${{ github.event.pull_request.number }}          
