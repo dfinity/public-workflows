@@ -14,7 +14,10 @@ def test_check_repos_open_to_contributions():
     gh = mock.Mock()
     gh_repo = mock.Mock()
     file_contents = mock.Mock()
-    file_contents.decoded.decode.return_value = "one-repo\nanother-repo\n"
+    repo_list = open(
+        "reusable_workflows/tests/test_data/repo_list.txt", "r"
+    ).read()
+    file_contents.decoded.decode.return_value = repo_list
     gh_repo.file_contents.return_value = file_contents
     gh.repository.return_value = gh_repo
 
