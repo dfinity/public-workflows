@@ -16,7 +16,7 @@ def get_repos_open_to_contributions(gh: github3.login) -> List[str]:
     file_content = download_gh_file(repo, file_path)
 
     # convert .txt file to list and strip out comments
-    repo_list = [line for line in file_content.split("\n") if line and not line.startswith("#")]
+    repo_list = [line.strip() for line in file_content.split("\n") if line.strip() and not line.strip().startswith("#")]
     return repo_list
 
 
