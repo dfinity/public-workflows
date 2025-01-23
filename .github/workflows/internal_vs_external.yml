@@ -3,7 +3,7 @@
 name: Internal vs External Review
 
 on:
-  pull_request:
+  pull_request_target:
     types:
       - ready_for_review
       - synchronize
