@@ -23,7 +23,7 @@ def test_check_repos_open_to_contributions():
 
     repo_list = get_repos_open_to_contributions(gh)
 
-    assert repo_list == ["one-repo", "another-repo"]
+    assert repo_list == ["one-repo", "another-repo", "yet-another-repo"]
     gh.repository.assert_called_with(
         owner="dfinity", repository="repositories-open-to-contributions"
     )
