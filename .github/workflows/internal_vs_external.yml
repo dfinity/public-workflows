@@ -54,7 +54,6 @@ jobs:
     steps:
       - name: Dismiss Pull Request Reviews
         run: |
-          #!/bin/bash
           set -euo pipefail
 
           # get existing reviews
