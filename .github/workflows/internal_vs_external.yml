@@ -14,58 +14,60 @@ permissions:
   pull-requests: write
 
 jobs:
-  # check-membership:
-  #   name: Check Membership
-  #   runs-on: ubuntu-latest
-  #   # Dont run this workflow on merge queue
-  #   if:  ${{ github.event_name != 'merge_group' }}
-  #   outputs:
-  #     is_member: ${{ steps.check-membership.outputs.is_member}}
-  #   steps:
-  #     - name: Create GitHub App Token
-  #       uses: actions/create-github-app-token@v1
-  #       id: app-token
-  #       with:
-  #         app-id: ${{ vars.CLA_BOT_APP_ID }}
-  #         private-key: ${{ secrets.CLA_BOT_PRIVATE_KEY }}
+  check-membership:
+    name: Check Membership
+    runs-on: ubuntu-latest
+    # Dont run this workflow on merge queue
+    if:  ${{ github.event_name != 'merge_group' }}
+    outputs:
+      is_member: ${{ steps.check-membership.outputs.is_member}}
+    steps:
+      - name: Create GitHub App Token
+        uses: actions/create-github-app-token@v1
+        id: app-token
+        with:
+          app-id: ${{ vars.CLA_BOT_APP_ID }}
+          private-key: ${{ secrets.CLA_BOT_PRIVATE_KEY }}
     
-  #     - name: Checkout
-  #       uses: actions/checkout@v4
-  #       with:
-  #         repository: 'dfinity/public-workflows'
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          repository: 'dfinity/public-workflows'
 
-  #     - name: Python Setup
-  #       uses: ./.github/workflows/python-setup
+      - name: Python Setup
+        uses: ./.github/workflows/python-setup
         
-  #     - name: Check Membership
-  #       id:  check-membership
-  #       run: python reusable_workflows/check_membership/check_membership.py
-  #       shell: bash
-  #       env:
-  #         GH_TOKEN: ${{ steps.app-token.outputs.token }}
-  #         GH_ORG: ${{ github.repository_owner }}
-  #         USER: ${{ github.event.pull_request.user.login }}
+      - name: Check Membership
+        id:  check-membership
+        run: python reusable_workflows/check_membership/check_membership.py
+        shell: bash
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+          GH_ORG: ${{ github.repository_owner }}
+          USER: ${{ github.event.pull_request.user.login }}
 
   revoke-approvals:
     name: Revoke Approvals
     runs-on: ubuntu-latest
-  #  needs: check-membership
-  #  if: ${{ needs.check-membership.outputs.is_member != 'true' && needs.check-membership.result == 'success' }}
+    needs: check-membership
+    if: ${{ needs.check-membership.outputs.is_member != 'true' && needs.check-membership.result == 'success' }}
     steps:
       - name: Dismiss Pull Request Reviews
         run: |
           #!/bin/bash
           set -euo pipefail
 
+          # get existing reviews
           reviews=$(curl -s -H "Authorization: token ${GH_TOKEN}" \
             "https://api.github.com/repos/${GH_ORG}/${REPO}/pulls/${PULL_NUMBER}/reviews")
 
-          # Check if any reviews were found
+          # If no reviews were given, then exit script
           if [ -z "$reviews" ] || [ "$reviews" == "[]" ]; then
             echo "No reviews to dismiss"
             exit 0
           fi
 
+          # dismiss PR reviews
           for review_id in $(echo "${reviews}" | jq -r '.[] | select(.state == "APPROVED") | .id'); do
             response=$(curl -s -o /dev/null -w "%{http_code}" -X PUT -H "Authorization: token ${GH_TOKEN}" \
               -H "Accept: application/vnd.github.v3+json" \
@@ -80,7 +82,7 @@ jobs:
           done
         shell: bash
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }} # actor is github actions with above permissions
           GH_ORG: ${{ github.repository_owner }}
           REPO: ${{ github.event.repository.name }}
           PULL_NUMBER: ${{ github.event.pull_request.number }}          
