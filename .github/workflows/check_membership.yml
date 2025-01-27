@@ -4,6 +4,9 @@ name: Check Membership
 
 on:
   workflow_call:
+    outputs:
+      is_member:
+        value: ${{ jobs.check-membership.outputs.is_member }}
 
 jobs:
   check-membership:
