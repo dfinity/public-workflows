@@ -7,7 +7,7 @@ on:
 
 jobs:
   check-membership:
-    uses: dfinity/public-workflows/.github/workflows/check_membership.yml@main
+    uses: ./.github/workflows/check_membership.yml
     secrets: inherit
 
   check-external-contributions:
