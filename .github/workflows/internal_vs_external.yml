@@ -15,7 +15,7 @@ permissions:
 
 jobs:
   check-membership:
-    uses: ./.github/workflows/check_membership.yml@main
+    uses: ./.github/workflows/check_membership.yml
     secrets: inherit
 
   revoke-approvals:
