@@ -15,36 +15,8 @@ permissions:
 
 jobs:
   check-membership:
-    name: Check Membership
-    runs-on: ubuntu-latest
-    # Dont run this workflow on merge queue
-    if:  ${{ github.event_name != 'merge_group' }}
-    outputs:
-      is_member: ${{ steps.check-membership.outputs.is_member}}
-    steps:
-      - name: Create GitHub App Token
-        uses: actions/create-github-app-token@v1
-        id: app-token
-        with:
-          app-id: ${{ vars.CLA_BOT_APP_ID }}
-          private-key: ${{ secrets.CLA_BOT_PRIVATE_KEY }}
-    
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          repository: 'dfinity/public-workflows'
-
-      - name: Python Setup
-        uses: ./.github/workflows/python-setup
-        
-      - name: Check Membership
-        id:  check-membership
-        run: python reusable_workflows/check_membership/check_membership.py
-        shell: bash
-        env:
-          GH_TOKEN: ${{ steps.app-token.outputs.token }}
-          GH_ORG: ${{ github.repository_owner }}
-          USER: ${{ github.event.pull_request.user.login }}
+    uses: ./.github/workflows/check_membership.yml
+    secrets: inherit
 
   revoke-approvals:
     name: Revoke Approvals
