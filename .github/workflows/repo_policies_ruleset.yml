@@ -1,4 +1,4 @@
-# triggered on all repositories via rulesets
+# triggered on all repositories that use the PR creation Bot
 
 name: Repo Policies Ruleset
 
@@ -7,6 +7,45 @@ on:
   merge_group:
 
 jobs:
-  call-repo-policies:
-    uses: dfinity/public-workflows/.github/workflows/repo_policies.yml@main
-    secrets: inherit
+  check-bot-policies:
+    name: Check Bot Policies
+    runs-on: ubuntu-latest
+    # Dont run this workflow on merge queue
+    if:  ${{ github.event_name != 'merge_group' }}
+    steps:
+        # First check out code from public-workflows
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          repository: dfinity/public-workflows
+          path: public-workflows
+
+        # Then switch back to this repository to make sure it's run from current
+      - name: Checkout Original Repository
+        uses: actions/checkout@v4
+        with:
+          path: current-repo # need to specify another path to avoid overwriting the first checkout
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
+          ref: ${{ github.head_ref }}
+          fetch-depth: 50
+
+      - name: Python Setup
+        uses: ./public-workflows/.github/workflows/python-setup
+        with:
+          working-directory: public-workflows
+
+      - name: Bot Checks
+        id:  bot-checks
+        run: |
+          set -euo pipefail
+          export PYTHONPATH="$PWD/public-workflows/reusable_workflows/"
+          python public-workflows/reusable_workflows/repo_policies/bot_checks/check_bot_approved_files.py
+        shell: bash
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_ORG: ${{ github.repository_owner }}
+          USER: ${{ github.event.pull_request.user.login }}
+          REPO: ${{ github.event.repository.name }}
+          MERGE_BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          BRANCH_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          REPO_PATH: current-repo
