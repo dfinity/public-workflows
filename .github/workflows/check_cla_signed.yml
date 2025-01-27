@@ -2,6 +2,7 @@
 
 name: Check Issue Signed
 
+# this workflow is triggered from the repo https://github.com/dfinity/cla
 on:
   workflow_call:
 
