@@ -39,7 +39,7 @@ jobs:
           python public-workflows/reusable_workflows/repo_policies/bot_checks/check_bot_approved_files.py
         shell: bash
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }} # no actual token stored, read-only permissions
           GH_ORG: ${{ github.repository_owner }}
           USER: ${{ github.event.pull_request.user.login }}
           REPO: ${{ github.event.repository.name }}
