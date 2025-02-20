@@ -10,11 +10,15 @@ on:
       - 'master'
       - 'main'
   merge_group:
+
+permissions:
+  pull-requests: write
+  
 jobs:
   check-membership:
     uses: dfinity/public-workflows/.github/workflows/check_membership.yml@main
     secrets: inherit
-
+    
   check-external-contributions:
     name: Check External Contributions
     runs-on: ubuntu-latest
