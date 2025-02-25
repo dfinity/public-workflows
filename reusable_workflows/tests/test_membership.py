@@ -34,7 +34,8 @@ def test_is_approved_bot():
     assert is_approved_bot("dependabot[bot]") is True
     assert is_approved_bot("github-actions[bot]") is True
     assert is_approved_bot("sa-github-api") is True
-    assert is_approved_bot("pr-creation-bot-dfinity[bot]") is True
+    assert is_approved_bot("pr-automation-bot-public[bot]") is True
+    assert is_approved_bot("pr-automation-bot-private[bot]") is True
     assert is_approved_bot("random_user") is False
 
 
