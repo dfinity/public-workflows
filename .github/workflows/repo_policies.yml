@@ -24,7 +24,7 @@ jobs:
           path: current-repo # need to specify another path to avoid overwriting the first checkout
           repository: ${{ github.event.pull_request.head.repo.full_name }}
           ref: ${{ github.head_ref }}
-          fetch-depth: 50
+          fetch-depth: 100
 
       - name: Python Setup
         uses: ./public-workflows/.github/workflows/python-setup
