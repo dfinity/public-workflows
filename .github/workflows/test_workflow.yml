@@ -29,7 +29,7 @@ jobs:
           
           # Load the config.json file
           CONFIG_FILE=".github/workflows/config.json"
-          if echo "$file" | grep -q "$blacklist_file"; then
+          if [ ! -f "$CONFIG_FILE" ]; then
             echo "Error: $CONFIG_FILE not found!"
             exit 1
           fi
@@ -38,9 +38,9 @@ jobs:
 
           # Loop through all changed files and check against the rules
           for file in $CHANGED_FILES; do
-            for file in $BLACKLIST_FILES; do
-              if [[ cat $CHANGED_FILES | grep $file ]]; then
-                echo "No changes allowed to files $file"
+            for bfile in $BLACKLIST_FILES; do
+              if echo "$file" | grep -q "$blacklist_file"; then
+                echo "No changes allowed to files $bfile"
               fi
             done
           done
