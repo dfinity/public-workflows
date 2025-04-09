@@ -20,7 +20,7 @@ jobs:
       - name: Determine changed files
         id: determine
         run: |
-          set -euo pipefail
+          set -euox pipefail
 
           MERGE_BASE="${MERGE_BASE_SHA:-HEAD}"
           COMMIT_RANGE="$MERGE_BASE..${BRANCH_HEAD_SHA:-}"
