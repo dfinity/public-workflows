@@ -35,6 +35,7 @@ jobs:
           fi
 
           BLACKLIST_FILES=$(jq -r --arg repo "$REPO" '.[$repo] // []' "$CONFIG_FILE")
+          echo $BLACKLIST_FILES
 
           if [ -z "$BLACKLIST_FILES" ]; then
             echo "No rules found for the repository: $REPO"
