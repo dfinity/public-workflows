@@ -1,0 +1,50 @@
+name: Test Workflow
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  security-checks:
+    name: Security Checks
+    runs-on: ubuntu-latest
+    needs: check-membership
+    if: ${{ needs.check-membership.outputs.is_member != 'true' && needs.check-membership.result == 'success' }}
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Determine changed files
+        id: determine
+        run: |
+          set -euo pipefail
+
+          MERGE_BASE="${MERGE_BASE_SHA:-HEAD}"
+          COMMIT_RANGE="$MERGE_BASE..${BRANCH_HEAD_SHA:-}"
+          CHANGED_FILES=$(mktemp)
+          git diff --name-only "${COMMIT_RANGE}" | tee $CHANGED_FILES
+          
+          # Load the config.json file
+          CONFIG_FILE="config.json"
+          if [ ! -f "$CONFIG_FILE" ]; then
+            echo "Error: $CONFIG_FILE not found!"
+            exit 1
+          fi
+
+          BLACKLIST_FILES=$(jq -r --arg repo "$REPO" '.[$repo] // []' "$CONFIG_FILE")
+
+          # Loop through all changed files and check against the rules
+          for file in $CHANGED_FILES; do
+            for file in $BLACKLIST_FILES; do
+              if [[ cat $CHANGED_FILES | grep $file ]]; then
+                echo "No changes allowed to files $file"
+              fi
+            done
+          done
+
+          echo "All changed files match the rules."
+
+        env:
+          MERGE_BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          BRANCH_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          REPO: ${{ github.event.repository.name }}
