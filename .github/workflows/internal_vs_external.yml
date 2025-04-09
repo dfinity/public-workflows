@@ -1,6 +1,6 @@
 # Checks to see which reviews are required based on internal vs external contribution
 
-name: Internal vs External Review
+name: Internal vs External Review Test
 
 on:
   pull_request:
