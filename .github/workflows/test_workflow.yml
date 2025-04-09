@@ -45,7 +45,7 @@ jobs:
           # Loop through all changed files and check against the rules
           for file in $CHANGED_FILES; do
             for bfile in $BLACKLIST_FILES; do
-              if echo "$file" | grep -q "$BLACKLIST_FILES"; then
+              if echo "$file" | grep  "$BLACKLIST_FILES"; then
                 echo "No changes allowed to files $bfile"
               fi
             done
