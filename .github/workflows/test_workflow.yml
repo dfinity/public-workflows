@@ -39,13 +39,13 @@ jobs:
           # Loop through all changed files and check against the rules
           for file in $CHANGED_FILES; do
             for bfile in $BLACKLIST_FILES; do
-              if echo "$file" | grep -q "$blacklist_file"; then
+              if echo "$file" | grep -q "$BLACKLIST_FILES"; then
                 echo "No changes allowed to files $bfile"
               fi
             done
           done
 
-          echo "All changed files match the rules."
+          echo "All changed files pass conditions."
 
         env:
           MERGE_BASE_SHA: ${{ github.event.pull_request.base.sha }}
