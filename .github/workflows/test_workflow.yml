@@ -29,7 +29,7 @@ jobs:
           
           # Load the config.json file
           CONFIG_FILE=".github/workflows/config.json"
-          if [ ! -f "$CONFIG_FILE" ]; then
+          if echo "$file" | grep -q "$blacklist_file"; then
             echo "Error: $CONFIG_FILE not found!"
             exit 1
           fi
