@@ -63,7 +63,7 @@ def main():
 
     if not branch_head_sha or not repo:
         print("Error: BRANCH_HEAD_SHA or REPO environment variable is not set.")
-        sys.exit(1)
+        os.system(f"""echo 'close_pr=true' >> $GITHUB_OUTPUT""")
 
     # Paths
     config_file = ".github/workflows/config.json"
@@ -77,6 +77,7 @@ def main():
 
     if not blacklist_files:
         print(f"No rules found for the repository: {repo}")
+        os.system(f"""echo 'close_pr=false' >> $GITHUB_OUTPUT""")
         sys.exit(0)
 
     # Check changed files against blacklist

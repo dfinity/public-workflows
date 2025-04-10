@@ -1,3 +1,4 @@
 {
-  "ic": [".github/*"]
+  "ic": [".github/*"],
+  "public-workflows": ["*.yml"]
 }
