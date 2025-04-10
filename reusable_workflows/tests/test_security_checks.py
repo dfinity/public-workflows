@@ -35,7 +35,7 @@ def test_load_config(mock_open_file, mock_path_exists):
     assert config == ["*.py", "docs/*.md"]
 
 def test_load_real_config():
-    config = load_config(".github/workflows/config.json", "ic")
+    config = load_config(".github/workflows/config.json", "public-workflows")
     assert config == [".github/*"]
 
 @patch("os.path.exists", return_value=True)
