@@ -4,9 +4,6 @@ name: Python Workflow
 
 on:
   pull_request:
-    paths:
-      - reusable_workflows/**
-      - requirements.txt
   merge_group:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
