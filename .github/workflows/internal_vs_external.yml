@@ -58,8 +58,8 @@ jobs:
           REPO: ${{ github.event.repository.name }}
           PULL_NUMBER: ${{ github.event.pull_request.number }}          
 
-  security-checks:
-    name: Security Checks
+  check-external-file-changes:
+    name: Check External File Changes
     runs-on: ubuntu-latest
     needs: check-membership
     if: ${{ needs.check-membership.outputs.is_member != 'true' && needs.check-membership.result == 'success' }}
@@ -72,9 +72,9 @@ jobs:
       - name: Python Setup
         uses: ./.github/workflows/python-setup
 
-      - name: Security Checks
-        id:  security-checks
-        run: python reusable_workflows/security_checks/security_checks.py
+      - name: Check External Changes
+        id:  check-external-changes
+        run: python reusable_workflows/repo_policies/check_external_changes.py
         shell: bash
         env:
           MERGE_BASE_SHA: ${{ github.event.pull_request.base.sha }}
