@@ -15,19 +15,20 @@ def get_changed_files(
     """
     Compares the files changed in the current branch to the merge base.
     """
-    commit_range = f"{merge_base_sha}..{branch_head_sha}"
-    result = subprocess.run(
-        ["git", "diff", "--name-only", commit_range],
-        capture_output=True,
-        text=True,
-        cwd=repo_path,
-    )
-    if result.returncode != 0:
-        raise RuntimeError(
-            f"git diff failed with exit code {result.returncode}: {result.stderr}"
+    try:
+        commit_range = f"{merge_base_sha}..{branch_head_sha}"
+        result = subprocess.run(
+            ["git", "diff", "--name-only", commit_range],
+            stdout=subprocess.PIPE,
+            text=True,
+            check=True,
+            cwd=repo_path
         )
-    changed_files = result.stdout.strip().split("\n")
-    return changed_files
+        changed_files = result.stdout.strip().split("\n")
+        return [file for file in changed_files if file]  # Remove empty lines
+    except subprocess.CalledProcessError as e:
+        print(f"Error getting changed files: {e}")
+        sys.exit(1)
 
 
 def get_blacklisted_files(repo: github3.github.repo) -> str:
