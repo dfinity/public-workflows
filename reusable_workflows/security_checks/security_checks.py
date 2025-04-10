@@ -1,6 +1,7 @@
-import os
+
+import fnmatch
 import json
-import re
+import os
 import subprocess
 import sys
 
@@ -43,16 +44,12 @@ def load_config(config_file: str, repo: str) -> list:
 
 def check_files_against_blacklist(changed_files: list, blacklist_files: list) -> None:
     """
-    Check if any changed files match the blacklist rules.
+    Check if any changed files match the blacklist rules using glob pattern matching.
     """
     for file in changed_files:
         for rule in blacklist_files:
-            try:
-                if re.search(rule, file):  # Use regex to match the rule against the file
-                    print(f"No changes allowed to file: {file} (matches blacklist rule: {rule})")
-                    sys.exit(1)
-            except re.error as e:
-                print(f"Invalid regex rule: {rule}. Error: {e}")
+            if fnmatch.fnmatch(file, rule):  # Use glob pattern matching
+                print(f"No changes allowed to file: {file} (matches blacklist rule: {rule})")
                 sys.exit(1)
 
     print("All changed files pass conditions.")

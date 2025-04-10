@@ -20,8 +20,8 @@ jobs:
       - name: Python Setup
         uses: ./.github/workflows/python-setup
         
-      - name: Check Membership
-        id:  check-membership
+      - name: Security Checks
+        id:  security-checks
         run: python reusable_workflows/security_checks/security_checks.py
         shell: bash
         env:
