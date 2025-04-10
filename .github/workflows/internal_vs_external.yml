@@ -57,3 +57,38 @@ jobs:
           GH_ORG: ${{ github.repository_owner }}
           REPO: ${{ github.event.repository.name }}
           PULL_NUMBER: ${{ github.event.pull_request.number }}          
+
+  security-checks:
+    name: Security Checks
+    runs-on: ubuntu-latest
+    needs: check-membership
+    if: ${{ needs.check-membership.outputs.is_member != 'true' && needs.check-membership.result == 'success' }}
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 256
+
+      - name: Python Setup
+        uses: ./.github/workflows/python-setup
+
+      - name: Security Checks
+        id:  security-checks
+        run: python reusable_workflows/security_checks/security_checks.py
+        shell: bash
+        env:
+          MERGE_BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          BRANCH_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          REPO: ${{ github.event.repository.name }}
+
+      - name: Close Pull Request
+        id: close_pr
+        if: ${{ steps.security-checks.outputs.security-checks != 'false' }}
+        uses: superbrothers/close-pull-request@v3
+        with:
+          comment: |
+            Thank you for contributing! Unfortunately you have made changes to a file that is not allowed.
+
+            See details here: [here](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
+
+            Please revise your changes and reopen the pull request. Thank you for your understanding!
