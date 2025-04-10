@@ -12,7 +12,7 @@ def test_get_changed_files(mock_run):
         stdout="file1.py\nfile2.md\n"
     )
 
-    changed_files = get_changed_files("HEAD", "branch")
+    changed_files = get_changed_files("HEAD", "branch","repo-path")
     assert changed_files == ["file1.py", "file2.md"]
 
 
@@ -24,7 +24,7 @@ def test_get_changed_files_empty(mock_run):
         stdout=""
     )
 
-    changed_files = get_changed_files("HEAD", "branch")
+    changed_files = get_changed_files("HEAD", "branch", "repo-path")
     assert changed_files == []
 
 
