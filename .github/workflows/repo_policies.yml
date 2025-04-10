@@ -30,6 +30,11 @@ jobs:
           ref: ${{ github.head_ref }}
           fetch-depth: 100
 
+      - name: Python Setup
+        uses: ./public-workflows/.github/workflows/python-setup
+        with:
+          working-directory: public-workflows
+
       - name: Bot Checks
         id:  bot-checks
         run: |
