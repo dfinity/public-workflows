@@ -1,4 +1,4 @@
 {
   "ic": [".github/*"],
-  "public-workflows": ["test"]
+  "public-workflows": ["test/*"]
 }
