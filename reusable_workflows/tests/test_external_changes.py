@@ -1,7 +1,7 @@
 import pytest
 import subprocess
-from unittest.mock import patch, mock_open
-from repo_policies.check_external_changes import get_changed_files, load_config, check_files_against_blacklist
+from unittest.mock import patch
+from repo_policies.check_external_changes import get_changed_files, check_files_against_blacklist
 
 
 @patch("subprocess.run")
@@ -26,38 +26,6 @@ def test_get_changed_files_empty(mock_run):
 
     changed_files = get_changed_files("HEAD", "branch")
     assert changed_files == []
-
-
-@patch("os.path.exists", return_value=True)
-@patch("builtins.open", new_callable=mock_open, read_data='{"repo1": ["*.py", "docs/*.md"]}')
-def test_load_config(mock_open_file, mock_path_exists):
-    config = load_config(".github/workflows/config.json", "repo1")
-    assert config == ["*.py", "docs/*.md"]
-
-def test_load_real_config():
-    config = load_config(".github/workflows/config.json", "public-workflows")
-    assert config == [".github/*"]
-
-@patch("os.path.exists", return_value=True)
-@patch("builtins.open", new_callable=mock_open, read_data='{"repo1": ["*.py", "docs/*.md"]}')
-def test_load_config_empty(mock_open_file, mock_path_exists):
-    config = load_config(".github/workflows/config.json", "repo2")
-    assert config == []
-
-
-@patch("os.path.exists", return_value=False)
-def test_load_config_file_not_found(mock_path_exists):
-    with pytest.raises(SystemExit) as excinfo:
-        load_config(".github/workflows/config.json", "repo1")
-    assert excinfo.value.code == 1
-
-
-@patch("builtins.open", new_callable=mock_open, read_data='invalid json')
-@patch("os.path.exists", return_value=True)
-def test_load_config_invalid_json(mock_path_exists, mock_open_file):
-    with pytest.raises(SystemExit) as excinfo:
-        load_config(".github/workflows/config.json", "repo1")
-    assert excinfo.value.code == 1
 
 
 @patch("os.system")

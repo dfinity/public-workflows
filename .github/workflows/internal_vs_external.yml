@@ -64,22 +64,38 @@ jobs:
     needs: check-membership
     if: ${{ needs.check-membership.outputs.is_member != 'true' && needs.check-membership.result == 'success' }}
     steps:
-      - name: Checkout Repository
+        # First check out code from public-workflows
+      - name: Checkout
         uses: actions/checkout@v4
         with:
+          repository: dfinity/public-workflows
+          path: public-workflows
+
+        # Then switch back to this repository to make sure it's run from current
+      - name: Checkout Original Repository
+        uses: actions/checkout@v4
+        with:
+          path: current-repo # need to specify another path to avoid overwriting the first checkout
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
+          ref: ${{ github.head_ref }}
           fetch-depth: 256
 
       - name: Python Setup
-        uses: ./.github/workflows/python-setup
+        uses: ./public-workflows/.github/workflows/python-setup
+        with:
+          working-directory: public-workflows
 
       - name: Check External Changes
         id:  check-external-changes
         run: python reusable_workflows/repo_policies/check_external_changes.py
         shell: bash
         env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }} # no actual token stored, read-only permissions
+          ORG: ${{ github.repository_owner }}
+          REPO: ${{ github.event.repository.name }}
           MERGE_BASE_SHA: ${{ github.event.pull_request.base.sha }}
           BRANCH_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
-          REPO: ${{ github.event.repository.name }}
+          REPO_PATH: current-repo
 
       - name: Close Pull Request
         id: close_pr
