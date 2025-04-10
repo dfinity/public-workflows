@@ -3,7 +3,7 @@ from unittest import mock
 import github3
 import pytest
 
-from reusable_workflows.repo_policies.check_bot_approved_files import (
+from repo_policies.check_bot_approved_files import (
     BOT_APPROVED_FILES_PATH,
     check_files_in_approved_list,
     check_if_pr_is_blocked,
