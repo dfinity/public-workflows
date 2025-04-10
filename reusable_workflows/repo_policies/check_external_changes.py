@@ -51,7 +51,7 @@ def check_files_against_blacklist(changed_files: list, blacklist_files: list) ->
         for rule in blacklist_files:
             if fnmatch.fnmatch(file, rule):  # Use glob pattern matching
                 print(f"No changes allowed to file: {file} (matches blacklist rule: {rule})")
-                os.system(f"""echo 'close_pr=true' >> $GITHUB_OUTPUT""")
+                os.system("echo 'close_pr=true' >> $GITHUB_OUTPUT")
                 sys.exit(0)
 
     print("All changed files pass conditions.")
@@ -80,8 +80,8 @@ def main():
     blacklist_files = get_blacklisted_files(repo)
 
     if blacklist_files == []:
-        print(f"No blacklisted files found found.")
-        os.system(f"""echo 'close_pr=false' >> $GITHUB_OUTPUT""")
+        print("No blacklisted files found found.")
+        os.system("echo 'close_pr=false' >> $GITHUB_OUTPUT")
         sys.exit(0)
 
     # Check changed files against blacklist

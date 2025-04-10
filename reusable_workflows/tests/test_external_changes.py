@@ -33,7 +33,7 @@ def test_check_files_against_blacklist_match(os_system):
     changed_files = ["file1.py", "docs/README.md"]
     blacklist_files = ["file2.*", "docs/*.md"]
 
-    with pytest.raises(SystemExit) as excinfo:
+    with pytest.raises(SystemExit):
         check_files_against_blacklist(changed_files, blacklist_files)
     os_system.assert_called_once_with("echo 'close_pr=true' >> $GITHUB_OUTPUT")
 
