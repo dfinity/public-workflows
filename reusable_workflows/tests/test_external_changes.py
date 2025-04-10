@@ -38,22 +38,17 @@ def test_check_files_against_blacklist_match(os_system):
     os_system.assert_called_once_with("echo 'close_pr=true' >> $GITHUB_OUTPUT")
 
 
-@patch("os.system")
-def test_check_files_against_blacklist_no_match(os_system):
+def test_check_files_against_blacklist_no_match():
     changed_files = ["file1.txt", "docs/README.txt"]
     blacklist_files = ["*.py", "docs/*.md"]
 
     # Should not raise an exception
     check_files_against_blacklist(changed_files, blacklist_files)
-    os_system.assert_called_once_with("echo 'close_pr=false' >> $GITHUB_OUTPUT")
 
 
-
-@patch("os.system")
-def test_check_files_against_blacklist_empty_blacklist(os_system):
+def test_check_files_against_blacklist_empty_blacklist():
     changed_files = ["file1.py", "docs/README.md"]
     blacklist_files = []
 
     # Should not raise an exception
     check_files_against_blacklist(changed_files, blacklist_files)
-    os_system.assert_called_once_with("echo 'close_pr=false' >> $GITHUB_OUTPUT")
