@@ -1,7 +1,5 @@
 import pytest
 import subprocess
-import os
-import json
 from unittest.mock import patch, mock_open
 from security_checks import get_changed_files, load_config, check_files_against_blacklist
 
