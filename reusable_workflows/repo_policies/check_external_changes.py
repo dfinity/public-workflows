@@ -29,14 +29,14 @@ def get_changed_files(merge_base_sha: str, branch_head_sha: str, repo_path: str)
         sys.exit(1)
 
 
-def get_blacklisted_files(repo: github3.github.repo) -> str:
+def get_blacklisted_files(repo: github3.github.repo) -> list[str]:
     """
     Loads the config from the repository that contains the list of blacklisted files.
     """
     try:
         config_file = download_gh_file(repo, EXTERNAL_CONTRIB_BLACKLIST_PATH)
     except github3.exceptions.NotFoundError:
-        return None
+        return []
     blacklisted_files = [
         line for line in config_file.splitlines() if line.strip() and not line.strip().startswith("#")
     ]
@@ -79,7 +79,7 @@ def main():
 
     blacklist_files = get_blacklisted_files(repo)
 
-    if not blacklist_files:
+    if blacklist_files == []:
         print(f"No blacklisted files found found.")
         os.system(f"""echo 'close_pr=false' >> $GITHUB_OUTPUT""")
         sys.exit(0)
