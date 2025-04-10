@@ -17,42 +17,13 @@ jobs:
         with:
           fetch-depth: 256
 
-      - name: Determine changed files
-        id: determine
-        run: |
-          set -euox pipefail
-
-          MERGE_BASE="${MERGE_BASE_SHA:-HEAD}"
-          COMMIT_RANGE="$MERGE_BASE..${BRANCH_HEAD_SHA:-}"
-          CHANGED_FILES=$(mktemp)
-          git diff --name-only "${COMMIT_RANGE}" | tee $CHANGED_FILES
-          
-          # Load the config.json file
-          CONFIG_FILE=".github/workflows/config.json"
-          if [ ! -f "$CONFIG_FILE" ]; then
-            echo "Error: $CONFIG_FILE not found!"
-            exit 1
-          fi
-
-          BLACKLIST_FILES=$(jq -r --arg repo "$REPO" '.[$repo] // [] | .[]' "$CONFIG_FILE")
-
-          if [ "$BLACKLIST_FILES" = "[]" ]; then
-            echo "No rules found for the repository: $REPO"
-            exit 0
-          fi
-
-          # Loop through all changed files and check against the rules
-          for file in $CHANGED_FILES; do
-            for bfile in $BLACKLIST_FILES; do
-              echo $bfile
-              if echo "$file" | grep -q $bfile; then
-                echo "No changes allowed to files $bfile"
-              fi
-            done
-          done
-
-          echo "All changed files pass conditions."
-
+      - name: Python Setup
+        uses: ./.github/workflows/python-setup
+        
+      - name: Check Membership
+        id:  check-membership
+        run: python reusable_workflows/security_checks/security_checks.py
+        shell: bash
         env:
           MERGE_BASE_SHA: ${{ github.event.pull_request.base.sha }}
           BRANCH_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
