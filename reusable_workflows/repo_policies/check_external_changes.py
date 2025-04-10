@@ -9,9 +9,7 @@ from shared.utils import download_gh_file
 
 EXTERNAL_CONTRIB_BLACKLIST_PATH = ".github/repo_policies/EXTERNAL_CONTRIB_BLACKLIST"
 
-def get_changed_files(
-    merge_base_sha: str, branch_head_sha: str, repo_path: str = None
-) -> list[str]:
+def get_changed_files(merge_base_sha: str, branch_head_sha: str, repo_path: str) -> list[str]:
     """
     Compares the files changed in the current branch to the merge base.
     """
