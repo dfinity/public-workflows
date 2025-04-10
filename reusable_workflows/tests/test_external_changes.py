@@ -1,4 +1,3 @@
-import pytest
 import subprocess
 from unittest.mock import patch
 from repo_policies.check_external_changes import get_changed_files, check_files_against_blacklist
