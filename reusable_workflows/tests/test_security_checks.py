@@ -60,26 +60,32 @@ def test_load_config_invalid_json(mock_path_exists, mock_open_file):
     assert excinfo.value.code == 1
 
 
-def test_check_files_against_blacklist_match():
+@patch("os.system")
+def test_check_files_against_blacklist_match(os_system):
     changed_files = ["file1.py", "docs/README.md"]
     blacklist_files = ["file2.*", "docs/*.md"]
 
     with pytest.raises(SystemExit) as excinfo:
         check_files_against_blacklist(changed_files, blacklist_files)
-    assert excinfo.value.code == 1
+    os_system.assert_called_once_with("echo 'close_pr=true' >> $GITHUB_OUTPUT")
 
 
-def test_check_files_against_blacklist_no_match():
+@patch("os.system")
+def test_check_files_against_blacklist_no_match(os_system):
     changed_files = ["file1.txt", "docs/README.txt"]
     blacklist_files = ["*.py", "docs/*.md"]
 
     # Should not raise an exception
     check_files_against_blacklist(changed_files, blacklist_files)
+    os_system.assert_called_once_with("echo 'close_pr=false' >> $GITHUB_OUTPUT")
 
 
-def test_check_files_against_blacklist_empty_blacklist():
+
+@patch("os.system")
+def test_check_files_against_blacklist_empty_blacklist(os_system):
     changed_files = ["file1.py", "docs/README.md"]
     blacklist_files = []
 
     # Should not raise an exception
     check_files_against_blacklist(changed_files, blacklist_files)
+    os_system.assert_called_once_with("echo 'close_pr=false' >> $GITHUB_OUTPUT")
