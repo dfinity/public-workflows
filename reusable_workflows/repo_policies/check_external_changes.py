@@ -47,14 +47,18 @@ def check_files_against_blacklist(changed_files: list, blacklist_files: list) ->
     """
     Check if any changed files match the blacklist rules using glob pattern matching.
     """
+    violations = []
     for file in changed_files:
         for rule in blacklist_files:
             if fnmatch.fnmatch(file, rule):  # Use glob pattern matching
-                print(f"No changes allowed to file: {file} (matches blacklist rule: {rule})")
-                os.system("echo 'close_pr=true' >> $GITHUB_OUTPUT")
-                sys.exit(0)
+                violations.append(file)
 
-    print("All changed files pass conditions.")
+    if len(violations) > 0:
+        print(f"No changes allowed to files: {violations}")
+        os.system("echo 'close_pr=true' >> $GITHUB_OUTPUT")
+
+    else:
+        print("All changed files pass conditions.")
 
 
 def main():
