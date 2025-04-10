@@ -50,6 +50,7 @@ def check_files_against_blacklist(changed_files: list, blacklist_files: list) ->
         for rule in blacklist_files:
             if fnmatch.fnmatch(file, rule):  # Use glob pattern matching
                 print(f"No changes allowed to file: {file} (matches blacklist rule: {rule})")
+                os.system(f"""echo 'close_pr=true' >> $GITHUB_OUTPUT""")
                 sys.exit(1)
 
     print("All changed files pass conditions.")
@@ -63,7 +64,7 @@ def main():
 
     if not branch_head_sha or not repo:
         print("Error: BRANCH_HEAD_SHA or REPO environment variable is not set.")
-        os.system(f"""echo 'close_pr=true' >> $GITHUB_OUTPUT""")
+        sys.exit(1)
 
     # Paths
     config_file = ".github/workflows/config.json"

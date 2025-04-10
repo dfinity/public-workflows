@@ -32,6 +32,7 @@ jobs:
       - name: Close Pull Request
         id: close_pr
         if: ${{ steps.security-checks.outputs.security-checks != 'false' }}
+        continue-on-error: true
         uses: superbrothers/close-pull-request@v3
         with:
           comment: |
