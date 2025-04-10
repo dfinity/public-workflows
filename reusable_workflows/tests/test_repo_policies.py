@@ -3,7 +3,7 @@ from unittest import mock
 import github3
 import pytest
 
-from repo_policies.bot_checks.check_bot_approved_files import (
+from repo_policies.check_bot_approved_files import (
     BOT_APPROVED_FILES_PATH,
     check_files_in_approved_list,
     check_if_pr_is_blocked,
@@ -14,7 +14,7 @@ from repo_policies.bot_checks.check_bot_approved_files import (
 )
 
 
-@mock.patch("repo_policies.bot_checks.check_bot_approved_files.subprocess.run")
+@mock.patch("repo_policies.check_bot_approved_files.subprocess.run")
 def test_get_changed_files(mock_subprocess_run):
     mock_subprocess_run.return_value = mock.Mock(
         stdout="file1.py\nfile2.py\n", returncode=0, stderr=""
@@ -31,7 +31,7 @@ def test_get_changed_files(mock_subprocess_run):
     )
 
 
-@mock.patch("repo_policies.bot_checks.check_bot_approved_files.download_gh_file")
+@mock.patch("repo_policies.check_bot_approved_files.download_gh_file")
 def test_get_approved_files_config(download_gh_file):
     repo = mock.Mock()
     config_file_mock = mock.Mock()
@@ -43,7 +43,7 @@ def test_get_approved_files_config(download_gh_file):
     assert config_file == config_file_mock
 
 
-@mock.patch("repo_policies.bot_checks.check_bot_approved_files.download_gh_file")
+@mock.patch("repo_policies.check_bot_approved_files.download_gh_file")
 def test_get_approved_files_config_fails(download_gh_file):
     repo = mock.Mock()
     download_gh_file.side_effect = github3.exceptions.NotFoundError(mock.Mock())
@@ -96,9 +96,9 @@ def test_check_files_in_approved_list_fails():
     assert not check_files_in_approved_list(changed_files, approved_files)
 
 
-@mock.patch("repo_policies.bot_checks.check_bot_approved_files.get_changed_files")
+@mock.patch("repo_policies.check_bot_approved_files.get_changed_files")
 @mock.patch(
-    "repo_policies.bot_checks.check_bot_approved_files.get_approved_files_config"
+    "repo_policies.check_bot_approved_files.get_approved_files_config"
 )
 @mock.patch("github3.login")
 def test_pr_is_blocked_false(gh_login, get_approved_files_config, get_changed_files):
@@ -126,9 +126,9 @@ def test_pr_is_blocked_false(gh_login, get_approved_files_config, get_changed_fi
     get_approved_files_config.assert_called_once_with(repo)
 
 
-@mock.patch("repo_policies.bot_checks.check_bot_approved_files.get_changed_files")
+@mock.patch("repo_policies.check_bot_approved_files.get_changed_files")
 @mock.patch(
-    "repo_policies.bot_checks.check_bot_approved_files.get_approved_files_config"
+    "repo_policies.check_bot_approved_files.get_approved_files_config"
 )
 @mock.patch("github3.login")
 def test_pr_is_blocked_true(gh_login, get_approved_files_config, get_changed_files):
@@ -157,9 +157,9 @@ def test_pr_is_blocked_true(gh_login, get_approved_files_config, get_changed_fil
     get_approved_files_config.assert_called_once_with(repo)
 
 
-@mock.patch("repo_policies.bot_checks.check_bot_approved_files.load_env_vars")
-@mock.patch("repo_policies.bot_checks.check_bot_approved_files.is_approved_bot")
-@mock.patch("repo_policies.bot_checks.check_bot_approved_files.check_if_pr_is_blocked")
+@mock.patch("repo_policies.check_bot_approved_files.load_env_vars")
+@mock.patch("repo_policies.check_bot_approved_files.is_approved_bot")
+@mock.patch("repo_policies.check_bot_approved_files.check_if_pr_is_blocked")
 def test_main_succeeds(check_if_pr_is_blocked, is_approved_bot, load_env_vars, capfd):
     env_vars = {"GH_TOKEN": "token", "USER": "user"}
     load_env_vars.return_value = env_vars
@@ -172,9 +172,9 @@ def test_main_succeeds(check_if_pr_is_blocked, is_approved_bot, load_env_vars, c
     assert "" == captured.out
 
 
-@mock.patch("repo_policies.bot_checks.check_bot_approved_files.load_env_vars")
-@mock.patch("repo_policies.bot_checks.check_bot_approved_files.is_approved_bot")
-@mock.patch("repo_policies.bot_checks.check_bot_approved_files.check_if_pr_is_blocked")
+@mock.patch("repo_policies.check_bot_approved_files.load_env_vars")
+@mock.patch("repo_policies.check_bot_approved_files.is_approved_bot")
+@mock.patch("repo_policies.check_bot_approved_files.check_if_pr_is_blocked")
 def test_main_not_a_bot(check_if_pr_is_blocked, is_approved_bot, load_env_vars, capfd):
     env_vars = {"GH_TOKEN": "token", "USER": "user"}
     load_env_vars.return_value = env_vars

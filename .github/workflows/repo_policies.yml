@@ -36,7 +36,7 @@ jobs:
         run: |
           set -euo pipefail
           export PYTHONPATH="$PWD/public-workflows/reusable_workflows/"
-          python public-workflows/reusable_workflows/repo_policies/bot_checks/check_bot_approved_files.py
+          python public-workflows/reusable_workflows/repo_policies/check_bot_approved_files.py
         shell: bash
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }} # no actual token stored, read-only permissions

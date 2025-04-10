@@ -3,7 +3,7 @@
 name: Repo Policies Ruleset
 
 on:
-  pull_request:
+  pull_request_target:
   merge_group:
 
 jobs:
