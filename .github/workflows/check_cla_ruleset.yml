@@ -1,6 +1,6 @@
 # triggered on all repositories via rulesets
 
-name: CLA Check Ruleset
+name: Org CLA Check
 
 on:
   # because the cla workflow will run on worflows generated from forks, they do not have access to secrets
