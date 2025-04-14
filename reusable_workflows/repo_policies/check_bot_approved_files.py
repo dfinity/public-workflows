@@ -4,6 +4,7 @@ from typing import Optional
 
 import github3
 
+from check_membership.check_membership import is_approved_bot
 from shared.utils import download_gh_file, load_env_vars
 
 BOT_APPROVED_FILES_PATH = ".github/repo_policies/BOT_APPROVED_FILES"
@@ -104,7 +105,13 @@ def main() -> None:
         print("Skipping checks for dependabot.")
         return
 
-    check_if_pr_is_blocked(env_vars)
+    is_bot = is_approved_bot(user)
+
+    if is_bot:
+        check_if_pr_is_blocked(env_vars)
+
+    else:
+        print(f"{user} is not a bot. Skipping bot checks.")
 
 
 if __name__ == "__main__":

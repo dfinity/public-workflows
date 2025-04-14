@@ -10,6 +10,7 @@ from repo_policies.check_bot_approved_files import (
     get_approved_files,
     get_approved_files_config,
     get_changed_files,
+    main,
 )
 
 
@@ -154,3 +155,36 @@ def test_pr_is_blocked_true(gh_login, get_approved_files_config, get_changed_fil
 
     get_changed_files.assert_called_once_with("base", "head", "path")
     get_approved_files_config.assert_called_once_with(repo)
+
+
+@mock.patch("repo_policies.check_bot_approved_files.load_env_vars")
+@mock.patch("repo_policies.check_bot_approved_files.is_approved_bot")
+@mock.patch("repo_policies.check_bot_approved_files.check_if_pr_is_blocked")
+def test_main_succeeds(check_if_pr_is_blocked, is_approved_bot, load_env_vars, capfd):
+    env_vars = {"GH_TOKEN": "token", "USER": "user"}
+    load_env_vars.return_value = env_vars
+    is_approved_bot.return_value = True
+    check_if_pr_is_blocked.return_value = False
+
+    main()
+
+    captured = capfd.readouterr()
+    assert "" == captured.out
+
+
+@mock.patch("repo_policies.check_bot_approved_files.load_env_vars")
+@mock.patch("repo_policies.check_bot_approved_files.is_approved_bot")
+@mock.patch("repo_policies.check_bot_approved_files.check_if_pr_is_blocked")
+def test_main_not_a_bot(check_if_pr_is_blocked, is_approved_bot, load_env_vars, capfd):
+    env_vars = {"GH_TOKEN": "token", "USER": "user"}
+    load_env_vars.return_value = env_vars
+    is_approved_bot.return_value = False
+
+    main()
+
+    captured = capfd.readouterr()
+    assert (
+        "user is not a bot. Skipping bot checks."
+        in captured.out
+    )
+    check_if_pr_is_blocked.assert_not_called()
