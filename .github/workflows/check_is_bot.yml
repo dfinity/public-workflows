@@ -24,8 +24,6 @@ jobs:
 
       - name: Python Setup
         uses: ./.github/workflows/python-setup
-        with:
-          working-directory: public-workflows
 
       - name: Check Is Bot
         id:  check-is-bot
