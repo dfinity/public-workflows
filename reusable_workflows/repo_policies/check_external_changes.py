@@ -5,7 +5,7 @@ import sys
 
 import github3
 
-from shared.utils import download_gh_file
+from shared.utils import download_gh_file, load_env_vars
 
 EXTERNAL_CONTRIB_BLACKLIST_PATH = ".github/repo_policies/EXTERNAL_CONTRIB_BLACKLIST"
 
@@ -65,20 +65,14 @@ def main():
     # Environment variables
     merge_base_sha = os.getenv("MERGE_BASE_SHA", "HEAD")
     branch_head_sha = os.getenv("BRANCH_HEAD_SHA", "")
-    repo = os.getenv("REPO", "")
-    repo_path = os.getenv("REPO_PATH", "current-repo")
-    org = os.getenv("ORG", "dfinity")
-    gh_token = os.getenv("GH_TOKEN", "")
-
-    if not branch_head_sha or not repo:
-        print("Error: BRANCH_HEAD_SHA or REPO environment variable is not set.")
-        sys.exit(1)
+    REQUIRED_ENV_VARS = ["REPO", "REPO_PATH", "ORG", "GH_TOKEN"]
+    env_vars = load_env_vars(REQUIRED_ENV_VARS)
     
-    gh = github3.login(token=gh_token)
-    repo = gh.repository(owner=org, repository=repo)
+    gh = github3.login(token=env_vars["GH_TOKEN"])
+    repo = gh.repository(owner=env_vars["ORG"], repository=env_vars["REPO"])
 
     # Get changed files
-    changed_files = get_changed_files(merge_base_sha, branch_head_sha, repo_path)
+    changed_files = get_changed_files(merge_base_sha, branch_head_sha, env_vars["REPO_PATH"])
     print(f"Changed files: {changed_files}")
 
     blacklist_files = get_blacklisted_files(repo)
