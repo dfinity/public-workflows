@@ -24,10 +24,14 @@ jobs:
 
       - name: Python Setup
         uses: ./.github/workflows/python-setup
+        with:
+          working-directory: public-workflows
 
       - name: Check Is Bot
         id:  check-is-bot
-        run: python reusable_workflows/repo_policies/check_is_bot.py
+        run: |
+          export PYTHONPATH="$PWD/public-workflows/reusable_workflows/"
+          python reusable_workflows/repo_policies/check_is_bot.py
         shell: bash
         env:
           USER: ${{ github.event.pull_request.user.login }}
