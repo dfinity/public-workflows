@@ -10,7 +10,6 @@ from repo_policies.check_bot_approved_files import (
     get_approved_files,
     get_approved_files_config,
     get_changed_files,
-    main,
 )
 
 
