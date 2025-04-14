@@ -28,7 +28,7 @@ jobs:
       - name: Check Is Bot
         id:  check-is-bot
         run: |
-          export PYTHONPATH="$PWD/public-workflows/reusable_workflows/"
+          export PYTHONPATH="$PWD/reusable_workflows/"
           python reusable_workflows/repo_policies/check_is_bot.py
         shell: bash
         env:
