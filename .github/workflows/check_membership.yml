@@ -31,10 +31,14 @@ jobs:
 
       - name: Python Setup
         uses: ./.github/workflows/python-setup
+        with:
+          working-directory: public-workflows
         
       - name: Check Membership
         id:  check-membership
-        run: python reusable_workflows/check_membership/check_membership.py
+        run: |
+          export PYTHONPATH="$PWD/public-workflows/reusable_workflows/"
+          python reusable_workflows/check_membership/check_membership.py
         shell: bash
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
