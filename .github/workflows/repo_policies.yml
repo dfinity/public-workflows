@@ -5,7 +5,7 @@ on:
 
 jobs:
   check-is-bot:
-    uses: dfinity/public-workflows/.github/workflows/checl_is_bot.yml@main
+    uses: dfinity/public-workflows/.github/workflows/check_is_bot.yml@main
     secrets: inherit
 
   check-bot-policies:
