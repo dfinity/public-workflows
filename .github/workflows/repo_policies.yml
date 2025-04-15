@@ -4,11 +4,15 @@ on:
   workflow_call:
 
 jobs:
+  check-is-bot:
+    uses: dfinity/public-workflows/.github/workflows/check_is_bot.yml@main
+    secrets: inherit
+
   check-bot-policies:
     name: Check Bot Policies
     runs-on: ubuntu-latest
-    # Dont run this workflow on merge queue
-    if:  ${{ github.event_name != 'merge_group' }}
+    needs: check-is-bot
+    if: ${{ needs.check-is-bot.outputs.is_bot == 'true' && needs.check-is-bot.result == 'success' }}
     steps:
         # First check out code from public-workflows
       - name: Checkout
