@@ -58,15 +58,3 @@ jobs:
           MERGE_BASE_SHA: ${{ github.event.pull_request.base.sha }}
           BRANCH_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
           REPO_PATH: current-repo
-
-      - name: Close Pull Request
-        id: close_pr
-        if: ${{ steps.security-checks.outputs.security-checks != 'false' }}
-        uses: superbrothers/close-pull-request@v3
-        with:
-          comment: |
-            Thank you for contributing! Unfortunately you have made changes to a file that is not allowed.
-
-            See details here: [here](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
-
-            Please revise your changes and reopen the pull request. Thank you for your understanding!

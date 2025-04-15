@@ -55,7 +55,7 @@ def check_files_against_blacklist(changed_files: list, blacklist_files: list) ->
 
     if len(violations) > 0:
         print(f"No changes allowed to files: {violations}")
-        os.system("echo 'close_pr=true' >> $GITHUB_OUTPUT")
+        sys.exit(1)
 
     else:
         print("All changed files pass conditions.")
@@ -79,7 +79,6 @@ def main():
 
     if blacklist_files == []:
         print("No blacklisted files found found.")
-        os.system("echo 'close_pr=false' >> $GITHUB_OUTPUT")
         sys.exit(0)
 
     # Check changed files against blacklist
