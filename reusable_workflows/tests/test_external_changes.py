@@ -1,3 +1,4 @@
+import pytest
 import subprocess
 from unittest.mock import patch
 from repo_policies.check_external_changes import get_changed_files, check_files_against_blacklist
@@ -32,8 +33,8 @@ def test_check_files_against_blacklist_match(os_system):
     changed_files = ["file1.py", "docs/README.md"]
     blacklist_files = ["file2.*", "docs/*.md"]
 
-    check_files_against_blacklist(changed_files, blacklist_files)
-    os_system.assert_called_once_with("echo 'close_pr=true' >> $GITHUB_OUTPUT")
+    with pytest.raises(SystemExit):
+        check_files_against_blacklist(changed_files, blacklist_files)
 
 
 def test_check_files_against_blacklist_no_match():
