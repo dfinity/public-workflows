@@ -1,0 +1,60 @@
+# Checks files changed by external contributors
+# once tested, will be moved to an existing workflow
+
+name: Check Unallowed Changes
+
+on:
+  pull_request_target:
+    types:
+      - ready_for_review
+      - synchronize
+  merge_group: # merge group is always needed for a required workflows to prevent them from getting stuck, but we then skip it below
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  check-membership:
+    uses: dfinity/public-workflows/.github/workflows/check_membership.yml@main
+    secrets: inherit
+
+jobs:
+  check-external-file-changes:
+    name: Check Unallowed File Changes
+    runs-on: ubuntu-latest
+    needs: check-membership
+    if: ${{ needs.check-membership.outputs.is_member != 'true' && needs.check-membership.result == 'success' }}
+    steps:
+        # First check out code from public-workflows
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          repository: dfinity/public-workflows
+          path: public-workflows
+
+        # Then switch back to this repository to make sure it's run from current
+      - name: Checkout Original Repository
+        uses: actions/checkout@v4
+        with:
+          path: current-repo # need to specify another path to avoid overwriting the first checkout
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
+          ref: ${{ github.head_ref }}
+          fetch-depth: 256
+
+      - name: Python Setup
+        uses: ./public-workflows/.github/workflows/python-setup
+        with:
+          working-directory: public-workflows
+
+      - name: Check External Changes
+        id:  check-external-changes
+        run: python reusable_workflows/repo_policies/check_external_changes.py
+        shell: bash
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }} # no actual token stored, read-only permissions
+          ORG: ${{ github.repository_owner }}
+          REPO: ${{ github.event.repository.name }}
+          MERGE_BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          BRANCH_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          REPO_PATH: current-repo
