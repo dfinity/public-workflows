@@ -1,7 +1,7 @@
 # Checks files changed by external contributors
 # once tested, will be moved to an existing workflow
 
-name: Check External Files
+name: Check Unallowed Changes
 
 on:
   pull_request_target:
