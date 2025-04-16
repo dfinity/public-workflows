@@ -48,7 +48,9 @@ jobs:
 
       - name: Check External Changes
         id:  check-external-changes
-        run: python reusable_workflows/repo_policies/check_external_changes.py
+        run: |
+          export PYTHONPATH="$PWD/public-workflows/reusable_workflows/"
+          python reusable_workflows/repo_policies/check_external_changes.py
         shell: bash
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }} # no actual token stored, read-only permissions
