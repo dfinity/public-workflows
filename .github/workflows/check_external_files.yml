@@ -60,7 +60,7 @@ jobs:
 
       - name: Add PR Comment
         uses: actions/github-script@v7
-        if: ${{ steps.check-external-changes.conclusion == 'failure' }}
+        if: ${{ steps.check-external-changes.outcome == 'failure' }}
         with:
           script: |
             let message = "Changes made to unallowed files."
