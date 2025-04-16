@@ -1,6 +1,6 @@
 # Workflow to check if a user has correctly signed the CLA
 
-name: Check Issue Signed
+name: Org Issue Signed Check
 
 # this workflow is triggered from the repo https://github.com/dfinity/cla
 on:

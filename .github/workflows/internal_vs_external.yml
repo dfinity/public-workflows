@@ -1,6 +1,6 @@
 # Checks to see which reviews are required based on internal vs external contribution
 
-name: Internal vs External Review
+name: Org Internal-External Check
 
 on:
   pull_request_target:

@@ -1,6 +1,6 @@
 # triggered on all repositories via rulesets
 
-name: Repo Policies Ruleset
+name: Org Repo Policy Check
 
 on:
   pull_request_target:

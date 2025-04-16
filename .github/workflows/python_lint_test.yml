@@ -1,6 +1,6 @@
 # Workflow to run linting and tests on python code
 
-name: Python Workflow
+name: Org Python Tests
 
 on:
   pull_request:

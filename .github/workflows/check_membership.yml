@@ -1,6 +1,6 @@
 # Workflow to check if a user is a member of the org
 
-name: Check Membership
+name: Org Membership Check
 
 on:
   workflow_call:

@@ -1,4 +1,4 @@
-name: Repository Policies
+name: Org Repository Policy
 
 on:
   workflow_call:
