@@ -52,6 +52,7 @@ jobs:
           export PYTHONPATH="$PWD/public-workflows/reusable_workflows/"
           python public-workflows/reusable_workflows/repo_policies/check_external_changes.py
         shell: bash
+        continue-on-error: true
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }} # no actual token stored, read-only permissions
           ORG: ${{ github.repository_owner }}
@@ -59,3 +60,18 @@ jobs:
           MERGE_BASE_SHA: ${{ github.event.pull_request.base.sha }}
           BRANCH_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
           REPO_PATH: current-repo
+
+      - name: Add PR Comment
+        uses: actions/github-script@v7
+        if: ${{ steps.check-external-changes.conclusion == 'failure' }}
+        with:
+          script: |
+            let message = "Changes made to unallowed files."
+            message += 'Please see details here: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}\n\n'
+
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: message
+            })
