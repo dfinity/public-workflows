@@ -19,7 +19,6 @@ jobs:
     uses: dfinity/public-workflows/.github/workflows/check_membership.yml@main
     secrets: inherit
 
-jobs:
   check-external-file-changes:
     name: Check Unallowed File Changes
     runs-on: ubuntu-latest
