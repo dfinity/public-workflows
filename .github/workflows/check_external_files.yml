@@ -63,7 +63,7 @@ jobs:
         if: ${{ steps.check-external-changes.outcome == 'failure' }}
         with:
           script: |
-            let message = "Changes made to unallowed files."
+            let message = "Changes made to unallowed files. "
             message += 'Please see details here: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}\n\n'
 
             github.rest.issues.createComment({
