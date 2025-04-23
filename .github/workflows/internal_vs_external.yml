@@ -4,9 +4,6 @@ name: Internal vs External Review
 
 on:
   pull_request_target:
-    types:
-      - ready_for_review
-      - synchronize
   merge_group: # merge group is always needed for a required workflows to prevent them from getting stuck, but we then skip it below
 
 permissions:
@@ -25,6 +22,7 @@ jobs:
     if: ${{ needs.check-membership.outputs.is_member != 'true' && needs.check-membership.result == 'success' }}
     steps:
       - name: Dismiss Pull Request Reviews
+        if: ${{ github.event.pull_request_target.draft == false }}
         run: |
           set -euo pipefail
 
