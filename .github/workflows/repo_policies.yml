@@ -1,7 +1,8 @@
-name: Repository Policies
+name: Bot Policies Ruleset
 
 on:
-  workflow_call:
+  pull_request_target:
+  merge_group:
 
 jobs:
   check-is-bot:
