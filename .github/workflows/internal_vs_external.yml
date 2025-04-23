@@ -1,6 +1,6 @@
 # Checks to see which reviews are required based on internal vs external contribution
 
-name: Internal vs External Review
+name: External PR Ruleset
 
 on:
   pull_request_target:
@@ -16,7 +16,7 @@ jobs:
     secrets: inherit
 
   revoke-approvals:
-    name: Revoke Approvals
+    name: Check Revoke Approvals
     runs-on: ubuntu-latest
     needs: check-membership
     if: ${{ needs.check-membership.outputs.is_member != 'true' && needs.check-membership.result == 'success' }}
