@@ -1,12 +1,9 @@
 # Checks to see which reviews are required based on internal vs external contribution
 
-name: Internal vs External Review
+name: External PR Ruleset
 
 on:
   pull_request_target:
-    types:
-      - ready_for_review
-      - synchronize
   merge_group: # merge group is always needed for a required workflows to prevent them from getting stuck, but we then skip it below
 
 permissions:
@@ -19,12 +16,13 @@ jobs:
     secrets: inherit
 
   revoke-approvals:
-    name: Revoke Approvals
+    name: Check Revoke Approvals
     runs-on: ubuntu-latest
     needs: check-membership
     if: ${{ needs.check-membership.outputs.is_member != 'true' && needs.check-membership.result == 'success' }}
     steps:
       - name: Dismiss Pull Request Reviews
+        if: ${{ ! github.event.pull_request_target.draft }}
         run: |
           set -euo pipefail
 
@@ -57,3 +55,59 @@ jobs:
           GH_ORG: ${{ github.repository_owner }}
           REPO: ${{ github.event.repository.name }}
           PULL_NUMBER: ${{ github.event.pull_request.number }}          
+
+  check-external-file-changes:
+    name: Check Unallowed File Changes
+    runs-on: ubuntu-latest
+    needs: check-membership
+    if: ${{ needs.check-membership.outputs.is_member != 'true' && needs.check-membership.result == 'success' }}
+    steps:
+        # First check out code from public-workflows
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          repository: dfinity/public-workflows
+          path: public-workflows
+
+        # Then switch back to this repository to make sure it's run from current
+      - name: Checkout Original Repository
+        uses: actions/checkout@v4
+        with:
+          path: current-repo # need to specify another path to avoid overwriting the first checkout
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
+          ref: ${{ github.head_ref }}
+          fetch-depth: 256
+
+      - name: Python Setup
+        uses: ./public-workflows/.github/workflows/python-setup
+        with:
+          working-directory: public-workflows
+
+      - name: Check External Changes
+        id:  check-external-changes
+        run: |
+          export PYTHONPATH="$PWD/public-workflows/reusable_workflows/"
+          python public-workflows/reusable_workflows/repo_policies/check_external_changes.py
+        shell: bash
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }} # no actual token stored, read-only permissions
+          ORG: ${{ github.repository_owner }}
+          REPO: ${{ github.event.repository.name }}
+          MERGE_BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          BRANCH_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          REPO_PATH: current-repo
+
+      - name: Add PR Comment
+        uses: actions/github-script@v7
+        if: ${{ failure() }}
+        with:
+          script: |
+            let message = "Changes made to unallowed files. "
+            message += 'Please see details here: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}\n\n'
+
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: message
+            })
