@@ -22,7 +22,7 @@ jobs:
     if: ${{ needs.check-membership.outputs.is_member != 'true' && needs.check-membership.result == 'success' }}
     steps:
       - name: Dismiss Pull Request Reviews
-        if: ${{ github.event.pull_request_target.draft == false }}
+        if: ${{ ! github.event.pull_request_target.draft }}
         run: |
           set -euo pipefail
 
