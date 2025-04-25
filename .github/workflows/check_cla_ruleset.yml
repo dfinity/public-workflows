@@ -50,12 +50,6 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           REPO: ${{ github.event.repository.name }}
 
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.pull_request.head.ref }}
-          repository: ${{ github.event.pull_request.head.repo.full_name }}
-
       - name: Close Pull Request
         id: close_pr
         if: ${{ steps.accepts_external_contrib.outputs.accepts_contrib != 'true' }}
