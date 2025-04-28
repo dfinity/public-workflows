@@ -38,11 +38,14 @@ def test_get_approved_files_config_fails(download_gh_file):
     )
 
 
-def test_get_approved_files():
+@mock.patch("repo_policies.check_bot_approved_files.get_approved_files_config")
+def test_get_approved_files(get_approved_files_config):
     config_file = open(
         "reusable_workflows/tests/test_data/BOT_APPROVED_FILES", "r"
     ).read()
-    approved_files = get_approved_files(config_file)
+    get_approved_files_config.return_value = config_file
+    repo = mock.Mock()
+    approved_files = get_approved_files(repo)
 
     assert approved_files == ["file1", "file2", "folder/*.txt"]
 
