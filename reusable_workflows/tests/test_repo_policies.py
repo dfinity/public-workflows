@@ -84,13 +84,16 @@ def test_check_files_in_approved_list_fails():
 
 
 @mock.patch("repo_policies.check_bot_approved_files.get_approved_files")
-def test_pr_is_blocked_false(get_approved_files):
+@mock.patch("github3.login")
+def test_pr_is_blocked_false(gh_login, get_approved_files):
     env_vars = {
         "CHANGED_FILES": "file1,file2",
         "GH_TOKEN": "token",
         "GH_ORG": "org",
         "REPO": "repo",
     }
+    gh = mock.Mock()
+    gh_login.return_value = gh
     approved_files = get_test_approved_files()
     get_approved_files.return_value = approved_files
 
