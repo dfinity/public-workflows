@@ -91,7 +91,8 @@ def test_pr_is_blocked_false(get_approved_files):
         "GH_ORG": "org",
         "REPO": "repo",
     }
-    get_approved_files.return_value = get_test_approved_files()
+    approved_files = get_test_approved_files()
+    get_approved_files.return_value = approved_files
 
     check_if_pr_is_blocked(env_vars)
 
