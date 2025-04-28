@@ -1,6 +1,4 @@
 import fnmatch
-import subprocess
-from typing import Optional
 
 import github3
 
