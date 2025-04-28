@@ -9,25 +9,7 @@ from repo_policies.check_bot_approved_files import (
     check_if_pr_is_blocked,
     get_approved_files,
     get_approved_files_config,
-    get_changed_files,
 )
-
-
-@mock.patch("repo_policies.check_bot_approved_files.subprocess.run")
-def test_get_changed_files(mock_subprocess_run):
-    mock_subprocess_run.return_value = mock.Mock(
-        stdout="file1.py\nfile2.py\n", returncode=0, stderr=""
-    )
-
-    changed_files = get_changed_files("merge_base_sha", "branch_head_sha")
-
-    assert changed_files == ["file1.py", "file2.py"]
-    mock_subprocess_run.assert_called_once_with(
-        ["git", "diff", "--name-only", "merge_base_sha..branch_head_sha"],
-        capture_output=True,
-        text=True,
-        cwd=None,
-    )
 
 
 @mock.patch("repo_policies.check_bot_approved_files.download_gh_file")
