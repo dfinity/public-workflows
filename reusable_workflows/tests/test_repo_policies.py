@@ -100,32 +100,19 @@ def test_pr_is_blocked_false(gh_login, get_approved_files):
     check_if_pr_is_blocked(env_vars)
 
 
-@mock.patch("repo_policies.check_bot_approved_files.get_changed_files")
-@mock.patch(
-    "repo_policies.check_bot_approved_files.get_approved_files_config"
-)
+@mock.patch("repo_policies.check_bot_approved_files.get_approved_files")
 @mock.patch("github3.login")
-def test_pr_is_blocked_true(gh_login, get_approved_files_config, get_changed_files):
+def test_pr_is_blocked_true(gh_login, get_approved_files):
     env_vars = {
+        "CHANGED_FILES": "file1,file2,file3",
         "GH_TOKEN": "token",
         "GH_ORG": "org",
         "REPO": "repo",
-        "REPO_PATH": "path",
-        "MERGE_BASE_SHA": "base",
-        "BRANCH_HEAD_SHA": "head",
     }
     gh = mock.Mock()
     gh_login.return_value = gh
-    repo = mock.Mock()
-    gh.repository.return_value = repo
-    get_changed_files.return_value = ["file1", "file2", "file3"]
-    config_file = open(
-        "reusable_workflows/tests/test_data/BOT_APPROVED_FILES", "r"
-    ).read()
-    get_approved_files_config.return_value = config_file
+    approved_files = get_test_approved_files()
+    get_approved_files.return_value = approved_files
 
     with pytest.raises(SystemExit):
         check_if_pr_is_blocked(env_vars)
-
-    get_changed_files.assert_called_once_with("base", "head", "path")
-    get_approved_files_config.assert_called_once_with(repo)
