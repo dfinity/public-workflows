@@ -1,6 +1,4 @@
 import fnmatch
-import os
-import subprocess
 import sys
 
 import github3
@@ -8,25 +6,6 @@ import github3
 from shared.utils import download_gh_file, load_env_vars
 
 EXTERNAL_CONTRIB_BLACKLIST_PATH = ".github/repo_policies/EXTERNAL_CONTRIB_BLACKLIST"
-
-def get_changed_files(merge_base_sha: str, branch_head_sha: str, repo_path: str) -> list[str]:
-    """
-    Compares the files changed in the current branch to the merge base.
-    """
-    try:
-        commit_range = f"{merge_base_sha}..{branch_head_sha}"
-        result = subprocess.run(
-            ["git", "diff", "--name-only", commit_range],
-            stdout=subprocess.PIPE,
-            text=True,
-            check=True,
-            cwd=repo_path
-        )
-        changed_files = result.stdout.strip().split("\n")
-        return [file for file in changed_files if file]  # Remove empty lines
-    except subprocess.CalledProcessError as e:
-        print(f"Error getting changed files: {e}")
-        sys.exit(1)
 
 
 def get_blacklisted_files(repo: github3.github.repo) -> list[str]:
