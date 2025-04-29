@@ -15,6 +15,10 @@ jobs:
     needs: check-is-bot
     if: ${{ needs.check-is-bot.outputs.is_bot != 'false' }}
     steps:
+      - name: Debug is_bot Output
+        run: |
+          echo "is_bot output: ${{ needs.check-is-bot.outputs.is_bot }}"
+
         # First check out code from public-workflows
       - name: Checkout
         uses: actions/checkout@v4
