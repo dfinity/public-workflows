@@ -31,6 +31,8 @@ jobs:
         run: |
           set -euo pipefail
           export PYTHONPATH="$PWD/public-workflows/reusable_workflows/"
+          ls
+          pwd
           python reusable_workflows/repo_policies/check_is_bot.py
         shell: bash
         env:
