@@ -28,10 +28,7 @@ jobs:
 
       - name: Check Is Bot
         id:  check-is-bot
-        run: |
-          set -euo pipefail
-          export PYTHONPATH="$PWD/reusable_workflows/"
-          python reusable_workflows/repo_policies/check_is_bot.py
+        run: python reusable_workflows/repo_policies/check_is_bot.py
         shell: bash
         env:
           USER: ${{ github.event.pull_request.user.login }}
