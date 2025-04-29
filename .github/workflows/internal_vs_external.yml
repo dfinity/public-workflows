@@ -12,7 +12,7 @@ permissions:
 
 jobs:
   check-membership:
-    uses: dfinity/public-workflows/.github/workflows/check_membership.yml@main
+    uses: dfinity/public-workflows/.github/workflows/check_membership.yml@develop
     secrets: inherit
 
   revoke-approvals:
@@ -68,6 +68,7 @@ jobs:
         with:
           repository: dfinity/public-workflows
           path: public-workflows
+          ref: develop
 
       - name: Python Setup
         uses: ./public-workflows/.github/workflows/python-setup
