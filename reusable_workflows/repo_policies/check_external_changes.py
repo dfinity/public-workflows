@@ -1,6 +1,4 @@
 import fnmatch
-import os
-import subprocess
 import sys
 
 import github3
@@ -8,25 +6,6 @@ import github3
 from shared.utils import download_gh_file, load_env_vars
 
 EXTERNAL_CONTRIB_BLACKLIST_PATH = ".github/repo_policies/EXTERNAL_CONTRIB_BLACKLIST"
-
-def get_changed_files(merge_base_sha: str, branch_head_sha: str, repo_path: str) -> list[str]:
-    """
-    Compares the files changed in the current branch to the merge base.
-    """
-    try:
-        commit_range = f"{merge_base_sha}..{branch_head_sha}"
-        result = subprocess.run(
-            ["git", "diff", "--name-only", commit_range],
-            stdout=subprocess.PIPE,
-            text=True,
-            check=True,
-            cwd=repo_path
-        )
-        changed_files = result.stdout.strip().split("\n")
-        return [file for file in changed_files if file]  # Remove empty lines
-    except subprocess.CalledProcessError as e:
-        print(f"Error getting changed files: {e}")
-        sys.exit(1)
 
 
 def get_blacklisted_files(repo: github3.github.repo) -> list[str]:
@@ -63,16 +42,14 @@ def check_files_against_blacklist(changed_files: list, blacklist_files: list) ->
 
 def main():
     # Environment variables
-    merge_base_sha = os.getenv("MERGE_BASE_SHA", "HEAD")
-    branch_head_sha = os.getenv("BRANCH_HEAD_SHA", "")
-    REQUIRED_ENV_VARS = ["REPO", "REPO_PATH", "ORG", "GH_TOKEN"]
+    REQUIRED_ENV_VARS = ["REPO", "CHANGED_FILES", "ORG", "GH_TOKEN"]
     env_vars = load_env_vars(REQUIRED_ENV_VARS)
     
     gh = github3.login(token=env_vars["GH_TOKEN"])
     repo = gh.repository(owner=env_vars["ORG"], repository=env_vars["REPO"])
 
     # Get changed files
-    changed_files = get_changed_files(merge_base_sha, branch_head_sha, env_vars["REPO_PATH"])
+    changed_files = env_vars["CHANGED_FILES"].split(",")
     print(f"Changed files: {changed_files}")
 
     blacklist_files = get_blacklisted_files(repo)
