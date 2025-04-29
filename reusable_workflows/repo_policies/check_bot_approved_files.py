@@ -1,42 +1,11 @@
 import fnmatch
-import subprocess
-from typing import Optional
 
 import github3
 
 from shared.utils import download_gh_file, load_env_vars
 
 BOT_APPROVED_FILES_PATH = ".github/repo_policies/BOT_APPROVED_FILES"
-REQUIRED_ENV_VARS = [
-    "USER",
-    "GH_TOKEN",
-    "GH_ORG",
-    "REPO",
-    "REPO_PATH",
-    "MERGE_BASE_SHA",
-    "BRANCH_HEAD_SHA",
-]
-
-
-def get_changed_files(
-    merge_base_sha: str, branch_head_sha: str, repo_path: Optional[str] = None
-) -> list[str]:
-    """
-    Compares the files changed in the current branch to the merge base.
-    """
-    commit_range = f"{merge_base_sha}..{branch_head_sha}"
-    result = subprocess.run(
-        ["git", "diff", "--name-only", commit_range],
-        capture_output=True,
-        text=True,
-        cwd=repo_path,
-    )
-    if result.returncode != 0:
-        raise RuntimeError(
-            f"git diff failed with exit code {result.returncode}: {result.stderr}"
-        )
-    changed_files = result.stdout.strip().split("\n")
-    return changed_files
+REQUIRED_ENV_VARS = ["CHANGED_FILES", "USER", "GH_TOKEN", "GH_ORG", "REPO"]
 
 
 def get_approved_files_config(repo: github3.github.repo) -> str:
@@ -51,11 +20,11 @@ def get_approved_files_config(repo: github3.github.repo) -> str:
             f"No config file found. Make sure you have a file saved at {BOT_APPROVED_FILES_PATH} in the default branch"
         )
 
-
-def get_approved_files(config_file: str) -> list[str]:
+def get_approved_files(repo: github3.github.repo) -> list[str]:
     """
     Extracts the list of approved files from the config file.
     """
+    config_file = get_approved_files_config(repo)
     approved_files = [
         line for line in config_file.splitlines() if line.strip() and not line.strip().startswith("#")
     ]
@@ -77,12 +46,8 @@ def check_if_pr_is_blocked(env_vars: dict) -> None:
     """
     gh = github3.login(token=env_vars["GH_TOKEN"])
     repo = gh.repository(owner=env_vars["GH_ORG"], repository=env_vars["REPO"])
-    repo_path = env_vars["REPO_PATH"]
-    changed_files = get_changed_files(
-        env_vars["MERGE_BASE_SHA"], env_vars["BRANCH_HEAD_SHA"], repo_path
-    )
-    config = get_approved_files_config(repo)
-    approved_files = get_approved_files(config)
+    approved_files = get_approved_files(repo)
+    changed_files = env_vars["CHANGED_FILES"].split(",")
     block_pr = not check_files_in_approved_list(changed_files, approved_files)
     print(f"changed_files: {changed_files}")
     print(f"approved_files: {approved_files}")
