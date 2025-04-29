@@ -21,7 +21,6 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: 'dfinity/public-workflows'
-          ref: develop
 
       - name: Python Setup
         uses: ./.github/workflows/python-setup
@@ -29,7 +28,6 @@ jobs:
       - name: Check Is Bot
         id:  check-is-bot
         run: |
-          set -euo pipefail
           export PYTHONPATH="$PWD/reusable_workflows/"
           python reusable_workflows/repo_policies/check_is_bot.py
         shell: bash
