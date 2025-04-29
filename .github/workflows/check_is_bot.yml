@@ -30,6 +30,7 @@ jobs:
         id:  check-is-bot
         run: |
           export PYTHONPATH="$PWD/reusable_workflows/"
+          echo "debug: running on develop branch"
           python reusable_workflows/repo_policies/check_is_bot.py
         shell: bash
         env:
