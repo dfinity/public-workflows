@@ -63,16 +63,14 @@ def check_files_against_blacklist(changed_files: list, blacklist_files: list) ->
 
 def main():
     # Environment variables
-    merge_base_sha = os.getenv("MERGE_BASE_SHA", "HEAD")
-    branch_head_sha = os.getenv("BRANCH_HEAD_SHA", "")
-    REQUIRED_ENV_VARS = ["REPO", "REPO_PATH", "ORG", "GH_TOKEN"]
+    REQUIRED_ENV_VARS = ["REPO", "CHANGED_FILES", "ORG", "GH_TOKEN"]
     env_vars = load_env_vars(REQUIRED_ENV_VARS)
     
     gh = github3.login(token=env_vars["GH_TOKEN"])
     repo = gh.repository(owner=env_vars["ORG"], repository=env_vars["REPO"])
 
     # Get changed files
-    changed_files = get_changed_files(merge_base_sha, branch_head_sha, env_vars["REPO_PATH"])
+    changed_files = env_vars["CHANGED_FILES"].split(",")
     print(f"Changed files: {changed_files}")
 
     blacklist_files = get_blacklisted_files(repo)
