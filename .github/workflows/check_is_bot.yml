@@ -15,7 +15,7 @@ jobs:
     # Dont run this workflow on merge queue
     if:  ${{ github.event_name != 'merge_group' }}
     outputs:
-      is_bot: ${{ steps.check-is-bot.outputs.is_bot}}
+      is_member: ${{ steps.check-is-bot.outputs.is_bot}}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
