@@ -76,12 +76,6 @@ jobs:
               labels: ["external-contributor"]
             })
 
-      - name: Checkout
-        uses: actions/checkout@v4
-        if: ${{ steps.accepts_external_contrib.outputs.accepts_contrib != 'false' }}
-        with:
-          repository: 'dfinity/public-workflows'
-
       - name: Check CLA
         id:  check-cla
         run: |
