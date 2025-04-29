@@ -13,7 +13,7 @@ jobs:
     name: Check Bot Policies
     runs-on: ubuntu-latest
     needs: check-is-bot
-    if: ${{ needs.check-is-bot.outputs.is_bot == 'true' && needs.check-is-bot.result == 'success' }}
+    if: ${{ needs.check-is-bot.outputs.is_bot != 'false' }}
     steps:
         # First check out code from public-workflows
       - name: Checkout
