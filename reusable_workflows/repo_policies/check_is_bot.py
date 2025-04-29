@@ -8,6 +8,3 @@ def main() -> None:
 
     is_bot = is_approved_bot(user)
     os.system(f"""echo 'is_bot={is_bot}' >> $GITHUB_OUTPUT""")
-
-if __name__ == "__main__":
-    main()
