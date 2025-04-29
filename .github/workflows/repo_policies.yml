@@ -21,6 +21,7 @@ jobs:
         with:
           repository: dfinity/public-workflows
           path: public-workflows
+          ref: develop
 
       - name: Python Setup
         uses: ./public-workflows/.github/workflows/python-setup
