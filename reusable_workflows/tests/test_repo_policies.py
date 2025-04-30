@@ -87,7 +87,7 @@ def test_check_files_in_approved_list_fails():
 @mock.patch("github3.login")
 def test_pr_is_blocked_false(gh_login, get_approved_files):
     env_vars = {
-        "CHANGED_FILES": "file1,file2",
+        "CHANGED_FILES": "file1 file2",
         "GH_TOKEN": "token",
         "GH_ORG": "org",
         "REPO": "repo",
@@ -104,7 +104,7 @@ def test_pr_is_blocked_false(gh_login, get_approved_files):
 @mock.patch("github3.login")
 def test_pr_is_blocked_true(gh_login, get_approved_files):
     env_vars = {
-        "CHANGED_FILES": "file1,file2,file3",
+        "CHANGED_FILES": "file1 file2 file3",
         "GH_TOKEN": "token",
         "GH_ORG": "org",
         "REPO": "repo",
