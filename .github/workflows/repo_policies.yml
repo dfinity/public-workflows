@@ -6,7 +6,7 @@ on:
 
 jobs:
   check-is-bot:
-    uses: dfinity/public-workflows/.github/workflows/check_is_bot.yml@main
+    uses: dfinity/public-workflows/.github/workflows/check_is_bot.yml@develop
     secrets: inherit
 
   check-bot-policies:
@@ -21,6 +21,7 @@ jobs:
         with:
           repository: dfinity/public-workflows
           path: public-workflows
+          ref: develop
 
       - name: Python Setup
         uses: ./public-workflows/.github/workflows/python-setup
