@@ -49,7 +49,7 @@ def main():
     repo = gh.repository(owner=env_vars["ORG"], repository=env_vars["REPO"])
 
     # Get changed files
-    changed_files = env_vars["CHANGED_FILES"].split(",")
+    changed_files = env_vars["CHANGED_FILES"].split()
     print(f"Changed files: {changed_files}")
 
     blacklist_files = get_blacklisted_files(repo)
