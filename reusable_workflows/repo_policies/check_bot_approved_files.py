@@ -47,7 +47,7 @@ def check_if_pr_is_blocked(env_vars: dict) -> None:
     gh = github3.login(token=env_vars["GH_TOKEN"])
     repo = gh.repository(owner=env_vars["GH_ORG"], repository=env_vars["REPO"])
     approved_files = get_approved_files(repo)
-    changed_files = env_vars["CHANGED_FILES"].split(",")
+    changed_files = env_vars["CHANGED_FILES"].split()
     block_pr = not check_files_in_approved_list(changed_files, approved_files)
     print(f"changed_files: {changed_files}")
     print(f"approved_files: {approved_files}")
