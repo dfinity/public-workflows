@@ -3,6 +3,7 @@ name: Bot Policies Ruleset
 on:
   pull_request_target:
   merge_group:
+  workflow_call:
 
 jobs:
   check-is-bot:
