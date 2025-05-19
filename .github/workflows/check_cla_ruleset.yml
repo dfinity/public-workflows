@@ -53,7 +53,7 @@ jobs:
       - name: Close Pull Request
         id: close_pr
         if: ${{ steps.accepts_external_contrib.outputs.accepts_contrib != 'true' }}
-        uses: superbrothers/close-pull-request@v3
+        uses: superbrothers/close-pull-request@9c18513d320d7b2c7185fb93396d0c664d5d8448 #v3
         with:
           comment: |
             Thank you for contributing! Unfortunately this repository does not accept external contributions yet.
