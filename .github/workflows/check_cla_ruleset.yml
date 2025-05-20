@@ -47,7 +47,7 @@ jobs:
           python reusable_workflows/check_membership/check_external_contrib.py
         shell: bash
         env:
-          GH_TOKEN: ${{ github.token }}
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
           REPO: ${{ github.event.repository.name }}
 
       - name: Close Pull Request
@@ -68,11 +68,12 @@ jobs:
         uses: actions/github-script@v6
         if: ${{ steps.accepts_external_contrib.outputs.accepts_contrib != 'false' }}
         with:
+          github-token: ${{ steps.app-token.outputs.token }}
           script: |
             github.rest.issues.addLabels({
               issue_number: context.issue.number,
-              owner: github.event.repository.owner.login,
-              repo: github.event.repository.name,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
               labels: ["external-contributor"]
             })
 
