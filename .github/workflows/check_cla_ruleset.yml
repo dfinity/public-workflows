@@ -50,13 +50,6 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           REPO: ${{ github.event.repository.name }}
 
-      # this checkout step is required so that the PR can be closed or a label can be added
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.pull_request.base.ref }}
-          repository: ${{ github.event.pull_request.base.repo.full_name }}
-
       - name: Close Pull Request
         id: close_pr
         if: ${{ steps.accepts_external_contrib.outputs.accepts_contrib != 'true' }}
@@ -78,16 +71,10 @@ jobs:
           script: |
             github.rest.issues.addLabels({
               issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
+              owner: github.event.pull_request.base.repo.owner.login,
+              repo: github.event.pull_request.base.repo.name,
               labels: ["external-contributor"]
             })
-
-      # check out public workflow code again
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          repository: 'dfinity/public-workflows'
 
       - name: Check CLA
         id:  check-cla
