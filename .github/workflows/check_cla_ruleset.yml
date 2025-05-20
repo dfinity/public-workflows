@@ -71,8 +71,8 @@ jobs:
           script: |
             github.rest.issues.addLabels({
               issue_number: context.issue.number,
-              owner: context.github.event.pull_request_target.base.repo.owner.login,
-              repo: context.github.event.pull_request_target.base.repo.name,
+              owner: github.event.repository.owner.login,
+              repo: github.event.repository.name,
               labels: ["external-contributor"]
             })
 
