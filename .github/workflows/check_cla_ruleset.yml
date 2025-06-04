@@ -62,7 +62,7 @@ jobs:
 
             We hope you understand and will come back once we accept external PRs.
 
-            — The DFINITY Foundation"""
+            — The DFINITY Foundation
 
       - name: Add Label
         uses: actions/github-script@v6
