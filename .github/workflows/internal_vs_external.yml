@@ -54,7 +54,7 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }} # actor is github actions with above permissions
           GH_ORG: ${{ github.repository_owner }}
           REPO: ${{ github.event.repository.name }}
-          PULL_NUMBER: ${{ github.event.pull_request.number }}          
+          PULL_NUMBER: ${{ github.event.pull_request.number }}
 
   check-external-file-changes:
     name: Check Unallowed File Changes
@@ -92,14 +92,19 @@ jobs:
           ORG: ${{ github.repository_owner }}
           REPO: ${{ github.event.repository.name }}
 
-      - name: Add PR Comment
+      - name: Close PR
         uses: actions/github-script@v7
         if: ${{ failure() }}
         with:
           script: |
-            let message = "Changes made to unallowed files. "
+            github.rest.pulls.update({
+              pull_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'closed'
+            })
+            let message = "Closed Pull Request since changes were made to unallowed files. "
             message += 'Please see details here: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}\n\n'
-
             github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
