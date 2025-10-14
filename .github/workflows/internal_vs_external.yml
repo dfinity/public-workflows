@@ -59,7 +59,7 @@ jobs:
   check-external-file-changes:
     name: Check Unallowed File Changes
     runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name != github.repository
+    if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name != github.event.repository
     steps:
         # First check out code from public-workflows
       - name: Checkout
