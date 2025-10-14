@@ -18,7 +18,8 @@ jobs:
   revoke-approvals:
     name: Check Revoke Approvals
     runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request_target' && github.event.pull_request_target.head.repo.full_name != github.repository
+    needs: check-membership
+    if: ${{ needs.check-membership.outputs.is_member != 'true' && needs.check-membership.result == 'success' }}
     steps:
       - name: Dismiss Pull Request Reviews
         if: ${{ ! github.event.pull_request_target.draft }}
