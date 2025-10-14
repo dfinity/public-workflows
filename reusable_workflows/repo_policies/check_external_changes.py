@@ -1,31 +1,22 @@
 import fnmatch
+import os
 import sys
-
-import github3
-
-from shared.utils import download_gh_file, load_env_vars
-
-EXTERNAL_CONTRIB_BLACKLIST_PATH = ".github/repo_policies/EXTERNAL_CONTRIB_BLACKLIST"
+from pathlib import Path
 
 
-def get_blacklisted_files(repo: github3.github.repo) -> list[str]:
-    """
-    Loads the config from the repository that contains the list of blacklisted files.
-    """
-    try:
-        config_file = download_gh_file(repo, EXTERNAL_CONTRIB_BLACKLIST_PATH)
-    except github3.exceptions.NotFoundError:
-        return []
-    blacklisted_files = [
-        line for line in config_file.splitlines() if line.strip() and not line.strip().startswith("#")
-    ]
-    return blacklisted_files
+EXTERNAL_CONTRIB_BLACKLIST_PATH = "repo/.github/repo_policies/EXTERNAL_CONTRIB_BLACKLIST"
+
+CHANGED_FILES_PATH = ".github/outputs/added_files.txt"
 
 
-def check_files_against_blacklist(changed_files: list, blacklist_files: list) -> None:
-    """
-    Check if any changed files match the blacklist rules using glob pattern matching.
-    """
+def main():
+    changed_files = Path(CHANGED_FILES_PATH).read_text().splitlines()
+    blacklist_files = Path(EXTERNAL_CONTRIB_BLACKLIST_PATH).read_text().splitlines()
+
+    if blacklist_files == []:
+        print("No blacklisted files found.")
+        sys.exit(0)
+
     violations = []
     for file in changed_files:
         for rule in blacklist_files:
@@ -36,30 +27,7 @@ def check_files_against_blacklist(changed_files: list, blacklist_files: list) ->
         print(f"No changes allowed to files: {violations}")
         sys.exit(1)
 
-    else:
-        print("All changed files pass conditions.")
-
-
-def main():
-    # Environment variables
-    REQUIRED_ENV_VARS = ["REPO", "CHANGED_FILES", "ORG", "GH_TOKEN"]
-    env_vars = load_env_vars(REQUIRED_ENV_VARS)
-    
-    gh = github3.login(token=env_vars["GH_TOKEN"])
-    repo = gh.repository(owner=env_vars["ORG"], repository=env_vars["REPO"])
-
-    # Get changed files
-    changed_files = env_vars["CHANGED_FILES"].split()
-    print(f"Changed files: {changed_files}")
-
-    blacklist_files = get_blacklisted_files(repo)
-
-    if blacklist_files == []:
-        print("No blacklisted files found found.")
-        sys.exit(0)
-
-    # Check changed files against blacklist
-    check_files_against_blacklist(changed_files, blacklist_files)
+    print("All changed files pass conditions.")
 
 
 if __name__ == "__main__":
