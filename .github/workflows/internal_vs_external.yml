@@ -59,7 +59,8 @@ jobs:
   check-external-file-changes:
     name: Check Unallowed File Changes
     runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name != github.event.repository
+    needs: check-membership
+    if: ${{ needs.check-membership.outputs.is_member != 'true' && needs.check-membership.result == 'success' }}
     steps:
         # First check out code from public-workflows
       - name: Checkout
