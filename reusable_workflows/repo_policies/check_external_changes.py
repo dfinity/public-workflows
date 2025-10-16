@@ -11,6 +11,8 @@ def main():
         pattern for pattern in Path(os.environ['EXTERNAL_CONTRIB_BLACKLIST_PATH']).read_text().splitlines()
         if not(pattern == "" or pattern.startswith("#"))
     ]
+    print(f"Changed files: {changed_files}")
+    print(f"Blacklisted patterns: {blacklist_files}")
 
     if blacklist_files == []:
         print("No blacklisted files found.")
