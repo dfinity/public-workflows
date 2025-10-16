@@ -62,12 +62,14 @@ jobs:
         with:
           repository: dfinity/public-workflows
           path: public-workflows
+          ref: basvandijk/close-pr-if-touched-unallowed
           sparse-checkout: reusable_workflows/repo_policies/check_external_changes.py
 
       - name: Checkout
         uses: actions/checkout@v4
         with:
           path: repo
+          repository: ${{ github.event.repository.name }}
           # Checking out the PR branch would be unsafe here since this is triggered on pull_request_target,
           # so we check out the default branch (master / main / etc.) instead.
           ref: ${{ github.event.repository.default_branch }}
@@ -82,8 +84,10 @@ jobs:
 
       - name: Check External Changes
         id: check-external-changes
-        run: python3 public-workflows/reusable_workflows/repo_policies/check_external_changes.py
-        shell: bash
+        run: public-workflows/reusable_workflows/repo_policies/check_external_changes.py
+        env:
+          CHANGED_FILES_PATH: ".github/outputs/all_changed_and_modified_files.txt"
+          EXTERNAL_CONTRIB_BLACKLIST_PATH: "repo/.github/repo_policies/EXTERNAL_CONTRIB_BLACKLIST"
 
       - name: Close PR
         uses: actions/github-script@v7

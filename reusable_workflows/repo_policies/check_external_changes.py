@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import fnmatch
 import sys
 from pathlib import Path
