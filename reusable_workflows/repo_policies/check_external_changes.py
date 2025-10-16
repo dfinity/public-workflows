@@ -7,6 +7,9 @@ def main():
     changed_files = Path(".github/outputs/added_files.txt").read_text().splitlines()
     blacklist_files = Path("repo/.github/repo_policies/EXTERNAL_CONTRIB_BLACKLIST").read_text().splitlines()
 
+    print("Changed files:", changed_files)
+    print("Blacklist files:", blacklist_files)
+
     if blacklist_files == []:
         print("No blacklisted files found.")
         sys.exit(0)
