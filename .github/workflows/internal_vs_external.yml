@@ -56,9 +56,6 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request_target' && github.event.pull_request.head.repo.full_name != github.repository
     steps:
-      - run: |
-          echo 'github.event.pull_request_target.head.repo.full_name: ${{ github.event.pull_request_target.head.repo.full_name }}'
-          echo 'github.event.repository.full_name: ${{ github.event.repository.full_name }}'
       # First check out code from public-workflows
       - name: Checkout
         uses: actions/checkout@v4
