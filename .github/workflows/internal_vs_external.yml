@@ -94,7 +94,7 @@ jobs:
               repo: context.repo.repo,
               state: 'closed'
             })
-            let message = "Closed Pull Request since changes were made to [unallowed files](${{ github.server_url }}/${{ github.repository }}/blob/${{ github.event.repository.default_branch }}/.github/repo_policies/EXTERNAL_CONTRIB_BLACKLIST). "
+            let message = "Closed Pull Request since changes were made to [unallowed files](${{ github.server_url }}/${{ github.repository }}/blob/${{ github.event.repository.default_branch }}/.github/repo_policies/EXTERNAL_CONTRIB_BLACKLIST).\n\n"
             message += 'Please see details here: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}\n\n'
             github.rest.issues.createComment({
               issue_number: context.issue.number,
