@@ -4,8 +4,9 @@ from pathlib import Path
 
 
 def main():
-    changed_files = Path(".github/outputs/added_files.txt").read_text().splitlines()
+    changed_files = Path(".github/outputs/all_changed_and_modified_files.txt").read_text().splitlines()
     blacklist_files = Path("repo/.github/repo_policies/EXTERNAL_CONTRIB_BLACKLIST").read_text().splitlines()
+    blacklist_files = list(filter(lambda s: not(s.strip().startswith("#")), blacklist_files))
 
     print("Changed files:", changed_files)
     print("Blacklist files:", blacklist_files)
