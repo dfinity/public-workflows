@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
 import fnmatch
+import os
 import sys
 from pathlib import Path
 
 
 def main():
-    changed_files = Path(".github/outputs/all_changed_and_modified_files.txt").read_text().splitlines()
-    blacklist_files = Path("repo/.github/repo_policies/EXTERNAL_CONTRIB_BLACKLIST").read_text().splitlines()
+    changed_files = Path(os.environ['CHANGED_FILES_PATH']).read_text().splitlines()
+    blacklist_files = Path(os.environ['EXTERNAL_CONTRIB_BLACKLIST_PATH']).read_text().splitlines()
     def valid_pattern(s: str) -> bool:
         stripped = s.strip()
         return not(stripped == "" or stripped.startswith("#"))
