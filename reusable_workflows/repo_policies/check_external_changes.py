@@ -11,9 +11,6 @@ def main():
         return not(stripped == "" or stripped.startswith("#"))
     blacklist_files = list(filter(lambda s: valid_pattern(s), blacklist_files))
 
-    print("Changed files:", changed_files)
-    print("Blacklist files:", blacklist_files)
-
     if blacklist_files == []:
         print("No blacklisted files found.")
         sys.exit(0)
@@ -21,7 +18,6 @@ def main():
     violations = []
     for file in changed_files:
         for pattern in blacklist_files:
-            print("Checking file", file, "against pattern", pattern)
             if fnmatch.fnmatch(file, pattern):  # Use glob pattern matching
                 violations.append(file)
 
