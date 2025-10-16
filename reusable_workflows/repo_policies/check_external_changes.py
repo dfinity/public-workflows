@@ -14,6 +14,7 @@ def main():
     violations = []
     for file in changed_files:
         for rule in blacklist_files:
+            print("Checking file", file, "against rule", rule)
             if fnmatch.fnmatch(file, rule):  # Use glob pattern matching
                 violations.append(file)
 
