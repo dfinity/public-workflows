@@ -7,11 +7,10 @@ from pathlib import Path
 
 def main():
     changed_files = Path(os.environ['CHANGED_FILES_PATH']).read_text().splitlines()
-    blacklist_files = Path(os.environ['EXTERNAL_CONTRIB_BLACKLIST_PATH']).read_text().splitlines()
-    def valid_pattern(s: str) -> bool:
-        stripped = s.strip()
-        return not(stripped == "" or stripped.startswith("#"))
-    blacklist_files = list(filter(lambda s: valid_pattern(s), blacklist_files))
+    blacklist_files = [
+        pattern for pattern in Path(os.environ['EXTERNAL_CONTRIB_BLACKLIST_PATH']).read_text().splitlines()
+        if not(pattern == "" or pattern.startswith("#"))
+    ]
 
     if blacklist_files == []:
         print("No blacklisted files found.")
