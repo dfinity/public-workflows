@@ -14,7 +14,7 @@ jobs:
   revoke-approvals:
     name: Check Revoke Approvals
     runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request_target' && github.event.pull_request_target.head.repo.full_name != github.event.repository.full_name
+    if: github.event_name == 'pull_request_target' && github.event.pull_request.head.repo.full_name != github.repository
     steps:
       - name: Dismiss Pull Request Reviews
         if: ${{ ! github.event.pull_request_target.draft }}
@@ -54,7 +54,7 @@ jobs:
   check-external-file-changes:
     name: Check Unallowed File Changes
     runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request_target' && github.event.pull_request_target.head.repo.full_name != github.event.repository.full_name
+    if: github.event_name == 'pull_request_target' && github.event.pull_request.head.repo.full_name != github.repository
     steps:
       - run: |
           echo 'github.event.pull_request_target.head.repo.full_name: ${{ github.event.pull_request_target.head.repo.full_name }}'
