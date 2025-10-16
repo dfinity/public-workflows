@@ -7,9 +7,15 @@ from pathlib import Path
 
 def main():
     changed_files = Path(os.environ['CHANGED_FILES_PATH']).read_text().splitlines()
+
+    EXTERNAL_CONTRIB_BLACKLIST_PATH = os.environ['EXTERNAL_CONTRIB_BLACKLIST_PATH']
+    if not (os.path.exists(EXTERNAL_CONTRIB_BLACKLIST_PATH)):
+        print(f"Blacklist file {EXTERNAL_CONTRIB_BLACKLIST_PATH} not found, skipping checks.")
+        sys.exit(0)
+
     blacklist_files = [
-        pattern for pattern in Path(os.environ['EXTERNAL_CONTRIB_BLACKLIST_PATH']).read_text().splitlines()
-        if not(pattern == "" or pattern.startswith("#"))
+        pattern for pattern in Path(EXTERNAL_CONTRIB_BLACKLIST_PATH).read_text().splitlines()
+        if not (pattern == "" or pattern.startswith("#"))
     ]
     print(f"Changed files: {changed_files}")
     print(f"Blacklisted patterns: {blacklist_files}")
