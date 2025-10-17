@@ -62,6 +62,7 @@ jobs:
         with:
           repository: dfinity/public-workflows
           path: public-workflows
+          ref: basvandijk/close-pr-if-touched-unallowed # TODO: remove
           sparse-checkout: reusable_workflows/repo_policies/check_external_changes.py
 
       - name: Checkout
