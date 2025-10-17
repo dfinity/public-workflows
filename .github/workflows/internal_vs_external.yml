@@ -56,16 +56,7 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request_target' && github.event.pull_request.head.repo.full_name != github.repository
     steps:
-      # First check out code from public-workflows
-      - name: Checkout
-        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
-        with:
-          repository: dfinity/public-workflows
-          path: public-workflows
-          ref: basvandijk/close-pr-if-touched-unallowed # TODO: remove
-          sparse-checkout: reusable_workflows/repo_policies/check_external_changes.py
-
-      - name: Checkout
+      - name: Checkout EXTERNAL_CONTRIB_BLACKLIST from ${{ github.repository }}
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
         with:
           path: repo
@@ -74,7 +65,15 @@ jobs:
           # be explicit here.
           repository: ${{ github.repository }}
           ref: ${{ github.event.repository.default_branch }}
-          sparse-checkout: .github/repo_policies/EXTERNAL_CONTRIB_BLACKLISTX
+          sparse-checkout: .github/repo_policies/EXTERNAL_CONTRIB_BLACKLIST
+
+      - name: Checkout check_external_changes.py from dfinity/public-workflows
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+        with:
+          repository: dfinity/public-workflows
+          path: public-workflows
+          ref: basvandijk/close-pr-if-touched-unallowed # TODO: remove
+          sparse-checkout: reusable_workflows/repo_policies/check_external_changes.py
 
       - name: Get changed files
         uses: tj-actions/changed-files@ed68ef82c095e0d48ec87eccea555d944a631a4c # v46.0.5
