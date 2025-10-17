@@ -88,7 +88,7 @@ jobs:
           # populated by the action
           # https://github.com/tj-actions/changed-files/blob/d03a93c0dbfac6d6dd6a0d8a5e7daff992b07449/README.md?plain=1#L569-L572
           CHANGED_FILES_PATH: ".github/outputs/all_changed_and_modified_files.txt"
-          EXTERNAL_CONTRIB_BLACKLIST_PATH: "EXTERNAL_CONTRIB_BLACKLIST"
+          EXTERNAL_CONTRIB_BLACKLIST_PATH: "repo/.github/repo_policies/EXTERNAL_CONTRIB_BLACKLIST"
 
       - name: Close PR
         uses: actions/github-script@v7
