@@ -11,23 +11,23 @@ def main():
         print(f"Blacklist file {EXTERNAL_CONTRIB_BLACKLIST_PATH} not found, skipping checks.")
         sys.exit(0)
 
-    blacklist_files = [
-        pattern for pattern in Path(EXTERNAL_CONTRIB_BLACKLIST_PATH).read_text().splitlines()
-        if not (pattern == "" or pattern.startswith("#"))
+    blacklisted_patterns = [
+        pattern for line in Path(EXTERNAL_CONTRIB_BLACKLIST_PATH).read_text().splitlines()
+        if (pattern := line.split("#")[0].strip()) != ""
     ]
 
     changed_files = Path(os.environ['CHANGED_FILES_PATH']).read_text().splitlines()
 
     print(f"Changed files: {changed_files}")
-    print(f"Blacklisted patterns: {blacklist_files}")
+    print(f"Blacklisted patterns: {blacklisted_patterns}")
 
-    if blacklist_files == []:
-        print("No blacklisted files found.")
+    if blacklisted_patterns == []:
+        print("No blacklisted patterns found.")
         sys.exit(0)
 
     violations = []
     for file in changed_files:
-        for pattern in blacklist_files:
+        for pattern in blacklisted_patterns:
             if fnmatch.fnmatch(file, pattern):  # Use glob pattern matching
                 violations.append(file)
 
