@@ -58,14 +58,14 @@ jobs:
     steps:
       # First check out code from public-workflows
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
         with:
           repository: dfinity/public-workflows
           path: public-workflows
           sparse-checkout: reusable_workflows/repo_policies/check_external_changes.py
 
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
         with:
           path: repo
           # actions/checkout will checkout the target repo and default branch by default
