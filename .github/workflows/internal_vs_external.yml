@@ -67,6 +67,8 @@ jobs:
 
       - name: Download EXTERNAL_CONTRIB_BLACKLIST
         run: gh api /repos/${{ github.repository }}/contents/.github/repo_policies/EXTERNAL_CONTRIB_BLACKLIST -q '.content' | base64 -d > EXTERNAL_CONTRIB_BLACKLIST
+        env:
+          GH_TOKEN: ${{ github.token }}
 
       - name: Get changed files
         uses: tj-actions/changed-files@ed68ef82c095e0d48ec87eccea555d944a631a4c # v46.0.5
