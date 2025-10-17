@@ -71,7 +71,7 @@ jobs:
           # actions/checkout will checkout the target repo and default branch by default
           # when triggered by pull_request_target. However for security reasons we want to
           # be explicit here.
-          repository: ${{ github.event.repository.full_name }}
+          repository: ${{ github.repository }}
           ref: ${{ github.event.repository.default_branch }}
           sparse-checkout: .github/repo_policies/EXTERNAL_CONTRIB_BLACKLIST
 
