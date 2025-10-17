@@ -65,10 +65,16 @@ jobs:
           ref: basvandijk/close-pr-if-touched-unallowed # TODO: remove
           sparse-checkout: reusable_workflows/repo_policies/check_external_changes.py
 
-      - name: Download EXTERNAL_CONTRIB_BLACKLIST
-        run: gh api /repos/${{ github.repository }}/contents/.github/repo_policies/EXTERNAL_CONTRIB_BLACKLIST -q '.content' | base64 -d > EXTERNAL_CONTRIB_BLACKLIST
-        env:
-          GH_TOKEN: ${{ github.token }}
+      - name: Checkout
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+        with:
+          path: repo
+          # actions/checkout will checkout the target repo and default branch by default
+          # when triggered by pull_request_target. However for security reasons we want to
+          # be explicit here.
+          repository: ${{ github.repository }}
+          ref: ${{ github.event.repository.default_branch }}
+          sparse-checkout: .github/repo_policies/EXTERNAL_CONTRIB_BLACKLISTX
 
       - name: Get changed files
         uses: tj-actions/changed-files@ed68ef82c095e0d48ec87eccea555d944a631a4c # v46.0.5
