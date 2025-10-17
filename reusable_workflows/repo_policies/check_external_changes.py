@@ -25,11 +25,10 @@ def main():
         print("No blacklisted patterns found.")
         sys.exit(0)
 
-    violations = []
-    for file in changed_files:
-        for pattern in blacklisted_patterns:
-            if fnmatch.fnmatch(file, pattern):  # Use glob pattern matching
-                violations.append(file)
+    violations = [
+        file for pattern in blacklisted_patterns for file in changed_files
+        if fnmatch.fnmatch(file, pattern)
+    ]
 
     if len(violations) > 0:
         print(f"No changes allowed to files: {violations}")
