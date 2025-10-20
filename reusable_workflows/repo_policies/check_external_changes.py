@@ -15,7 +15,7 @@ def main():
 
     changed_files_content = Path(os.environ['CHANGED_FILES_PATH']).read_text()
 
-    print("changed_files_content:")
+    print(os.environ['CHANGED_FILES_PATH'])
     print(changed_files_content)
 
     changed_files = changed_files_content.splitlines()
