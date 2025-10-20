@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import fnmatch
+import json
 import os
 import sys
 from pathlib import Path
@@ -13,12 +14,8 @@ def main():
         if (pattern := line.split("#")[0].strip()) != ""
     ]
 
-    changed_files_content = Path(os.environ['CHANGED_FILES_JSON_PATH']).read_text()
-
-    print(os.environ['CHANGED_FILES_JSON_PATH'])
-    print(changed_files_content)
-
-    changed_files = changed_files_content.splitlines()
+    with open(os.environ['CHANGED_FILES_JSON_PATH'], 'r') as f:
+        changed_files = json.load(f)
 
     print(f"Changed files: {changed_files}")
     print(f"Blacklisted patterns: {blacklisted_patterns}")
