@@ -7,9 +7,6 @@ from pathlib import Path
 
 def main():
     EXTERNAL_CONTRIB_BLACKLIST_PATH = os.environ['EXTERNAL_CONTRIB_BLACKLIST_PATH']
-    if not (os.path.exists(EXTERNAL_CONTRIB_BLACKLIST_PATH)):
-        print(f"Blacklist file {EXTERNAL_CONTRIB_BLACKLIST_PATH} not found, skipping checks.")
-        sys.exit(0)
 
     blacklisted_patterns = [
         pattern for line in Path(EXTERNAL_CONTRIB_BLACKLIST_PATH).read_text().splitlines()
