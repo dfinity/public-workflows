@@ -13,7 +13,7 @@ def main():
         if (pattern := line.split("#")[0].strip()) != ""
     ]
 
-    changed_files_content = Path(os.environ['CHANGED_FILES_PATH']).read_text()
+    changed_files_content = Path(os.environ['CHANGED_FILES_JSON_PATH']).read_text()
 
     print(os.environ['CHANGED_FILES_PATH'])
     print(changed_files_content)

@@ -79,6 +79,7 @@ jobs:
         uses: tj-actions/changed-files@ed68ef82c095e0d48ec87eccea555d944a631a4c # v46.0.5
         with:
           use_rest_api: true
+          json: true
           write_output_files: true
 
       - name: Check External Changes
@@ -88,7 +89,7 @@ jobs:
         env:
           # populated by the action
           # https://github.com/tj-actions/changed-files/blob/d03a93c0dbfac6d6dd6a0d8a5e7daff992b07449/README.md?plain=1#L569-L572
-          CHANGED_FILES_PATH: ".github/outputs/all_changed_and_modified_files.txt"
+          CHANGED_FILES_JSON_PATH: ".github/outputs/all_changed_and_modified_files.json"
           EXTERNAL_CONTRIB_BLACKLIST_PATH: "repo/.github/repo_policies/EXTERNAL_CONTRIB_BLACKLIST"
 
       - name: Close PR
