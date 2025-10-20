@@ -13,7 +13,12 @@ def main():
         if (pattern := line.split("#")[0].strip()) != ""
     ]
 
-    changed_files = Path(os.environ['CHANGED_FILES_PATH']).read_text().splitlines()
+    changed_files_content = Path(os.environ['CHANGED_FILES_PATH']).read_text()
+
+    print("changed_files_content:")
+    print(changed_files_content)
+
+    changed_files = changed_files_content.splitlines()
 
     print(f"Changed files: {changed_files}")
     print(f"Blacklisted patterns: {blacklisted_patterns}")
