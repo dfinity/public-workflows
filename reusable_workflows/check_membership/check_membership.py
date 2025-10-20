@@ -10,6 +10,7 @@ APPROVED_BOT_LIST = [
     "gix-bot",
     "mergify[bot]",
     "pr-automation-bot-public[bot]",
+    "pr-creation-bot-dfinity-ic[bot]",
     "pr-creation-bot-dfinity[bot]",
     "sa-github-api",
 ]

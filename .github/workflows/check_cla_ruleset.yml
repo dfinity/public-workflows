@@ -47,13 +47,13 @@ jobs:
           python reusable_workflows/check_membership/check_external_contrib.py
         shell: bash
         env:
-          GH_TOKEN: ${{ github.token }}
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
           REPO: ${{ github.event.repository.name }}
 
       - name: Close Pull Request
         id: close_pr
         if: ${{ steps.accepts_external_contrib.outputs.accepts_contrib != 'true' }}
-        uses: superbrothers/close-pull-request@v3
+        uses: superbrothers/close-pull-request@9c18513d320d7b2c7185fb93396d0c664d5d8448 #v3
         with:
           comment: |
             Thank you for contributing! Unfortunately this repository does not accept external contributions yet.
@@ -62,12 +62,13 @@ jobs:
 
             We hope you understand and will come back once we accept external PRs.
 
-            — The DFINITY Foundation"""
+            — The DFINITY Foundation
 
       - name: Add Label
         uses: actions/github-script@v6
         if: ${{ steps.accepts_external_contrib.outputs.accepts_contrib != 'false' }}
         with:
+          github-token: ${{ steps.app-token.outputs.token }}
           script: |
             github.rest.issues.addLabels({
               issue_number: context.issue.number,
