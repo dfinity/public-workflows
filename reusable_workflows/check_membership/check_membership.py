@@ -13,6 +13,7 @@ APPROVED_BOT_LIST = [
     "pr-creation-bot-dfinity-ic[bot]",
     "pr-creation-bot-dfinity[bot]",
     "sa-github-api",
+    "droid-uexternal", # temporarily add for testing
 ]
 
 
