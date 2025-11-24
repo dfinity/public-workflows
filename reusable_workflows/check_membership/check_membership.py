@@ -13,15 +13,23 @@ APPROVED_BOT_LIST = [
     "pr-creation-bot-dfinity-ic[bot]",
     "pr-creation-bot-dfinity[bot]",
     "sa-github-api",
-    "droid-uexternal", # temporarily add for testing
 ]
 
+APPROVED_EXTERNAL_CONTRIBUTORS = [
+    "droid-uexternal"
+]
 
 def is_approved_bot(user: str) -> bool:
     """
     Return whether the user is an approved bot.
     """
     return user in APPROVED_BOT_LIST
+
+def is_approved_external_contributor(user: str) -> bool:
+    """
+    Return whether the user is an approved external contributor.
+    """
+    return user in APPROVED_EXTERNAL_CONTRIBUTORS
 
 
 def is_member_of_org(gh: github3.login, org: str, user: str) -> bool:
@@ -37,6 +45,9 @@ def is_approved_member(gh: github3.login, org: str, user: str):
         return True
     elif is_approved_bot(user):
         print(f"{user} is an approved bot and can contribute.")
+        return True
+    elif is_approved_external_contributor(user):
+        print(f"{user} is an approved external contributor and can contribute.")
         return True
     else:
         print(f"{user} is an external contributor.")
