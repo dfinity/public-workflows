@@ -15,15 +15,10 @@ permissions:
   pull-requests: write
   
 jobs:
-  check-membership:
-    uses: dfinity/public-workflows/.github/workflows/check_membership.yml@main
-    secrets: inherit
-    
   check-external-contributions:
     name: Check External Contributions
     runs-on: ubuntu-latest
-    needs: check-membership
-    if: ${{ needs.check-membership.outputs.is_member != 'true' && needs.check-membership.result == 'success' }}
+    if: github.event_name == 'pull_request_target' && github.event.pull_request.head.repo.full_name != github.repository
     steps:
       - name: Create GitHub App Token
         uses: actions/create-github-app-token@v1
@@ -44,7 +39,7 @@ jobs:
         id: accepts_external_contrib
         run: |
           export PYTHONPATH="$PWD/reusable_workflows/"
-          python reusable_workflows/check_membership/check_external_contrib.py
+          python reusable_workflows/check_cla/check_repos.py
         shell: bash
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}

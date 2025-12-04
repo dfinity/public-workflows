@@ -4,7 +4,7 @@ from unittest import mock
 import github3
 import pytest
 
-from check_membership.check_external_contrib import (
+from reusable_workflows.check_cla.check_repos import (
     get_repos_open_to_contributions,
     main,
 )  # noqa
