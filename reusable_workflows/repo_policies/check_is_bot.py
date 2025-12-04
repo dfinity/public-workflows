@@ -20,7 +20,7 @@ def is_approved_bot(user: str) -> bool:
 
 
 def main() -> None:
-    user = os.getenv("USER")
+    user = os.environ["USER"]
 
     is_bot = is_approved_bot(user)
     os.system(f"""echo 'is_bot={is_bot}' >> $GITHUB_OUTPUT""")
