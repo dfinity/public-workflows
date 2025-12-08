@@ -43,7 +43,7 @@ def test_end_to_end(os_system, github_login_mock):
 
     main()
 
-    os_system.assert_called_with("echo 'accepts_contrib=True' >> $GITHUB_OUTPUT")
+    os_system.assert_called_with("echo 'can_contribute=True' >> $GITHUB_OUTPUT")
 
 
 @mock.patch.dict(os.environ, {"REPO": "my_org", "GH_TOKEN": ""})
