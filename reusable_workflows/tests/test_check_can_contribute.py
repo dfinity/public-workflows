@@ -4,7 +4,7 @@ from unittest import mock
 import github3
 import pytest
 
-from check_cla.check_repos import (
+from reusable_workflows.check_cla.check_can_contribute import (
     get_repos_open_to_contributions,
     main,
 )  # noqa
