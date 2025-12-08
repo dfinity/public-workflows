@@ -45,7 +45,7 @@ jobs:
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
           REPO: ${{ github.event.repository.name }}
-          USER: ${{ github.event.pull_request_target.user.login }}
+          USER: ${{ github.event.pull_request.user.login }}
 
       - name: Close Pull Request
         id: close_pr
