@@ -31,7 +31,6 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: 'dfinity/public-workflows'
-          ref: add-contribution-override # test
 
       - name: Python Setup
         uses: ./.github/workflows/python-setup
