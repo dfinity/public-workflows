@@ -1,4 +1,4 @@
-# Checks to see which reviews are required based on internal vs external contribution
+# Runs various checks on pull requests coming from external contributors
 
 name: External PR Ruleset
 
