@@ -4,7 +4,7 @@ from unittest import mock
 import github3
 import pytest
 
-from check_cla.check_repos import (
+from check_cla.check_can_contribute import (
     get_repos_open_to_contributions,
     main,
 )  # noqa
@@ -43,7 +43,7 @@ def test_end_to_end(os_system, github_login_mock):
 
     main()
 
-    os_system.assert_called_with("echo 'accepts_contrib=True' >> $GITHUB_OUTPUT")
+    os_system.assert_called_with("echo 'can_contribute=True' >> $GITHUB_OUTPUT")
 
 
 @mock.patch.dict(os.environ, {"REPO": "my_org", "GH_TOKEN": ""})
