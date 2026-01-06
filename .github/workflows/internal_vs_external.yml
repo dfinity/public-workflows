@@ -180,3 +180,8 @@ jobs:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
           REPO: ${{ github.event.repository.name }}
           PR_ID: ${{ github.event.number }}
+
+  check-repo-policies:
+    uses: dfinity/public-workflows/.github/workflows/repo_policies.yml@main
+    secrets: inherit
+    
