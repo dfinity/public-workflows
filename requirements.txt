@@ -4,7 +4,7 @@
 #
 #    pip-compile requirements.in
 #
-black==24.10.0
+black==26.3.1
     # via -r requirements.in
 certifi==2024.12.14
     # via requests
@@ -36,7 +36,7 @@ packaging==24.2
     # via
     #   black
     #   pytest
-pathspec==0.12.1
+pathspec==1.0.4
     # via black
 platformdirs==4.3.6
     # via black
@@ -54,6 +54,8 @@ pytest==8.3.4
     # via -r requirements.in
 python-dateutil==2.9.0.post0
     # via github3-py
+pytokens==0.4.1
+    # via black
 requests==2.33.0
     # via github3-py
 six==1.17.0
