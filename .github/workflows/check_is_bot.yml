@@ -18,7 +18,7 @@ jobs:
       is_bot: ${{ steps.check-is-bot.outputs.is_bot}}
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
         with:
           repository: 'dfinity/public-workflows'
 
