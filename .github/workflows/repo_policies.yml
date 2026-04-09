@@ -7,7 +7,7 @@ on:
 
 jobs:
   check-is-bot:
-    uses: dfinity/public-workflows/.github/workflows/check_is_bot.yml@main
+    uses: dfinity/public-workflows/.github/workflows/check_is_bot.yml@a947962e6f00131cda27070b41e8e3a629f051c6 # main
     secrets: inherit
 
   check-bot-policies:
@@ -18,7 +18,7 @@ jobs:
     steps:
         # First check out code from public-workflows
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
         with:
           repository: dfinity/public-workflows
           path: public-workflows
