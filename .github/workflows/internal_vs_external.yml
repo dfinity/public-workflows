@@ -92,7 +92,7 @@ jobs:
           EXTERNAL_CONTRIB_BLACKLIST_PATH: "repo/.github/repo_policies/EXTERNAL_CONTRIB_BLACKLIST"
 
       - name: Close PR
-        uses: actions/github-script@v7
+        uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b # v7.1.0
         if: ${{ !cancelled() && steps.check_external_changes.conclusion == 'failure' }}
         with:
           script: |
@@ -117,14 +117,14 @@ jobs:
     if: github.event_name == 'pull_request_target' && github.event.pull_request.head.repo.full_name != github.repository
     steps:
       - name: Create GitHub App Token
-        uses: actions/create-github-app-token@v1
+        uses: actions/create-github-app-token@d72941d797fd3113feb6b93fd0dec494b13a2547 # v1.12.0
         id: app-token
         with:
           app-id: ${{ vars.CLA_BOT_APP_ID }}
           private-key: ${{ secrets.CLA_BOT_PRIVATE_KEY }}
     
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
         with:
           repository: 'dfinity/public-workflows'
 
@@ -157,7 +157,7 @@ jobs:
             — The DFINITY Foundation
 
       - name: Add Label
-        uses: actions/github-script@v6
+        uses: actions/github-script@d7906e4ad0b1822421a7e6a35d5ca353c962f410 # v6.4.1
         with:
           github-token: ${{ steps.app-token.outputs.token }}
           script: |
@@ -182,6 +182,6 @@ jobs:
           PR_ID: ${{ github.event.number }}
 
   check-repo-policies:
-    uses: dfinity/public-workflows/.github/workflows/repo_policies.yml@main
+    uses: dfinity/public-workflows/.github/workflows/repo_policies.yml@a947962e6f00131cda27070b41e8e3a629f051c6 # main
     secrets: inherit
     
