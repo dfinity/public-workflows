@@ -14,7 +14,7 @@ charset-normalizer==3.4.0
     # via requests
 click==8.1.7
     # via black
-cryptography==48.0.1
+cryptography==50.0.0
     # via pyjwt
 flake8==7.1.1
     # via -r requirements.in
